@@ -93,7 +93,9 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
         {
             while (databaseCursor.moveToNext())
             {
-                themes.add(new Theme(databaseCursor.getInt(databaseCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID))));
+                themes.add(new Theme(
+                        databaseCursor.getInt(databaseCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID)),
+                        this));
             }
             databaseCursor.close();
         }
@@ -247,7 +249,9 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                             " VALUES ('" + newThemeCursor.getInt(newThemeCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID)) + "', " + maxIndexCursor.getInt(maxIndexCursor.getColumnIndexOrThrow("max_theme_index")) + " + 1)");
 
                     hiddenThemes.put(maxIndexCursor.getInt(maxIndexCursor.getColumnIndexOrThrow("max_theme_index")), false);
-                    themes.add(new Theme(newThemeCursor.getInt(newThemeCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID))));
+                    themes.add(new Theme(
+                            newThemeCursor.getInt(newThemeCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID)),
+                            this));
 
                     newThemeCursor.close();
                     maxIndexCursor.close();
@@ -332,7 +336,6 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                         themeButton.setBackgroundResource(getResources().getIdentifier("theme_" + changedAppTheme, "drawable", getPackageName()));
                         exitButton.setBackgroundResource(getResources().getIdentifier("exit_" + changedAppTheme, "drawable", getPackageName()));
                     }, 200);
-
                     handler.postDelayed(() ->
                     {
                         for (int i = 0; i < decorations.size(); i++)
@@ -541,7 +544,8 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                     while (cursor.moveToNext())
                         if (Boolean.FALSE.equals(hiddenThemes.get(cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_INDEX)))))
                             themes.add(new Theme(
-                                    cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID))));
+                                    cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID)),
+                                    getApplicationContext()));
                     adapter.notifyDataSetChanged();
                     cursor.close();
                 }

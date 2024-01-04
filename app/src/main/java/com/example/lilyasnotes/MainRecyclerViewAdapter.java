@@ -84,7 +84,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<Theme.ThemeVie
                 }
             } else
             {
-
                 holder.isSelected = true;
                 LinearLayoutManager layoutManager;
                 View clickedView;
@@ -168,8 +167,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<Theme.ThemeVie
                 Theme themeContainer = themes.get(position - 1);
                 themes.remove(position - 1);
                 themes.add(position, themeContainer);
-
-                this.notifyDataSetChanged();
             }
         });
 
@@ -201,8 +198,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<Theme.ThemeVie
                 Theme themeContainer = themes.get(position + 1);
                 themes.remove(position + 1);
                 themes.add(position, themeContainer);
-
-                this.notifyDataSetChanged();
             }
         });
     }

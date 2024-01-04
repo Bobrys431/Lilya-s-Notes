@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,9 +69,18 @@ public class Theme extends AppCompatActivity implements Data
     private RelativeLayout actionBarLayout;
 
 
-    public Theme(int id)
+    public Theme(int id, Context context)
     {
         this.id = id;
+
+        Cursor titleCursor = SQLiteDatabaseAdapter.getDatabase(context).rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
+                " FROM " + SQLiteDatabaseAdapter.THEME +
+                " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + id, null);
+        if (titleCursor != null && titleCursor.moveToFirst())
+        {
+            title = titleCursor.getString(titleCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_TITLE));
+            titleCursor.close();
+        }
     }
 
     @Override
@@ -100,7 +110,7 @@ public class Theme extends AppCompatActivity implements Data
             while (dataCursor.moveToNext())
                 dataMap.put(
                         dataCursor.getInt(dataCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_INTO_INDEX)),
-                        new Theme(dataCursor.getInt(dataCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_INTO_THEME_IN_ID)))
+                        new Theme(dataCursor.getInt(dataCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_INTO_THEME_IN_ID)), this)
                 );
             dataCursor.close();
         }
@@ -315,10 +325,6 @@ public class Theme extends AppCompatActivity implements Data
                     decorations.add(new Decoration(decoration, decorationType));
                 }
             });
-
-            title = itemView.findViewById(R.id.title);
-            titleFrame = itemView.findViewById(R.id.title_frame);
-            basement = itemView.findViewById(R.id.basement);
         }
     }
 
