@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="splashScreenBackground">#303749</color>
+    <color name="splashScreenText">#DDDDDD</color>
+    <color name="lightThemeBackground">#FFE6FF</color>
+    <color name="lightThemeBackgroundAddition">#FFB3FF</color>
+    <color name="darkThemeBackground">#121212</color>
+    <color name="darkThemeBackgroundAddition">#2b2b2b</color>
+</resources>

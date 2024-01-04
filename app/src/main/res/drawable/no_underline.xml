@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="1dp"> <!-- Визначте тут висоту, яку ви бажаєте -->
+        <shape android:color="@android:color/transparent"/>
+    </item>
+</layer-list>

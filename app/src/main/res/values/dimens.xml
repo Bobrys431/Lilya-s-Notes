@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_elevation_value">10dp</dimen>
+    <dimen name="data_elevation_value">10dp</dimen>
+    <dimen name="title_translation_value">10dp</dimen>
+    <dimen name="data_translation_value">10dp</dimen>
+</resources>
