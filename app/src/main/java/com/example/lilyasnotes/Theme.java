@@ -157,91 +157,17 @@ public class Theme extends AppCompatActivity implements Data
         dataListView.setAdapter(adapter);
 
         dataListBackground = findViewById(R.id.data_list_background);
-        dataListView.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
-            int lastSelectedView = 0;
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
-            {
-                super.onScrolled(recyclerView, dx, dy);
-
-                // Background translation
-                float translationY = dataListBackground.getTranslationY() - dy * 0.5f;
-                dataListBackground.setTranslationY(translationY);
-
-                float scaleFactor = 1 - 0.2f * translationY / dataListBackground.getHeight();
-                dataListBackground.setScaleX(scaleFactor);
-                dataListBackground.setScaleY(scaleFactor);
-
-                // Elements cursor
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) dataListView.getLayoutManager();
-                if (linearLayoutManager != null)
-                {
-                    selectedViewPosition =
-                            (linearLayoutManager.findLastCompletelyVisibleItemPosition() == adapter.getItemCount() - 1) ?
-                                    linearLayoutManager.findLastCompletelyVisibleItemPosition() :
-                                    linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-                }
-
-                if (linearLayoutManager != null)
-                {
-                    for (int i = 0; i < adapter.getItemCount(); i++)
-                    {
-                        ThemeViewHolder themeViewHolder = (ThemeViewHolder) dataListView.findViewHolderForAdapterPosition(i);
-                        View view = linearLayoutManager.findViewByPosition(i);
-                        if (themeViewHolder != null && view != null)
-                        {
-                            float targetAlpha = (i == selectedViewPosition) ? 0.85f : 0.35f;
-                            ObjectAnimator.ofFloat(view, "alpha", view.getAlpha(), targetAlpha).setDuration(400).start();
-
-                            float targetScale = (i == selectedViewPosition) ? 1.0f : 0.7f;
-                            ObjectAnimator.ofFloat(view, "scaleX", view.getScaleX(), targetScale).setDuration(400).start();
-                            ObjectAnimator.ofFloat(view, "scaleY", view.getScaleY(), targetScale).setDuration(400).start();
-
-                            if (!isSearching)
-                            {
-                                float targetTranslation = (i == selectedViewPosition) ? 0f : -150f;
-                                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(themeViewHolder.translationFrame, "translationX", themeViewHolder.translationFrame.getTranslationX(), targetTranslation);
-                                objectAnimator.setInterpolator(new DecelerateInterpolator());
-                                objectAnimator.setDuration(200).start();
-                            }
-
-                            if (i == selectedViewPosition && lastSelectedView != selectedViewPosition)
-                            {
-                                int qQ = selectedViewPosition;
-                                new Handler().postDelayed(() -> {
-                                    if (qQ == selectedViewPosition)
-                                    {
-                                        Animation animation = AnimationUtils.loadAnimation(Theme.this, R.anim.shake);
-                                        view.startAnimation(animation);
-                                    }
-                                }, 350);
-                            }
-
-                            themeViewHolder.isSelected = i == selectedViewPosition;
-                        }
-                    }
-                    lastSelectedView = selectedViewPosition;
-                }
-            }
-        });
     }
 
 
     public static class ThemeViewHolder extends DataViewHolder
     {
         TextView title;
-        TextView subthemesTitles;
-        ImageButton translationUp;
-        ImageButton translationDown;
         RelativeLayout titleFrame;
-        RelativeLayout dataFrame;
-        RelativeLayout translationFrame;
+        ImageView mark;
         RelativeLayout basement;
 
         boolean isSelected;
-        List<Decoration> decorations;
 
 
         @SuppressLint("DiscouragedApi")
@@ -250,81 +176,11 @@ public class Theme extends AppCompatActivity implements Data
             super(itemView);
 
             title = itemView.findViewById(R.id.title);
-            subthemesTitles = itemView.findViewById(R.id.subthemes_titles);
-            translationUp = itemView.findViewById(R.id.translation_up);
-            translationDown = itemView.findViewById(R.id.translation_down);
             titleFrame = itemView.findViewById(R.id.title_frame);
-            dataFrame = itemView.findViewById(R.id.data_frame);
-            translationFrame = itemView.findViewById(R.id.translation_frame);
+            mark = itemView.findViewById(R.id.mark);
             basement = itemView.findViewById(R.id.basement);
 
             isSelected = false;
-            decorations = new ArrayList<>();
-
-            Random random = new Random();
-            Handler handler = new Handler();
-
-            final String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(itemView.getContext());
-            handler.post(() ->
-            {
-                for (int i = 0; i < 15; i++)
-                {
-                    ImageView decoration = new ImageView(itemView.getContext());
-
-                    int leftM = random.nextInt(619);
-                    int topM = random.nextInt(618);
-                    int decorationType = random.nextInt(8) + 1;
-
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.width = 120;
-                    params.height = 120;
-                    params.leftMargin = leftM;
-                    params.topMargin = topM;
-                    decoration.setZ(0);
-                    decoration.setRotation(random.nextInt(360));
-                    decoration.setAlpha(0.75f);
-
-                    decoration.setImageResource(itemView.getContext().getResources().getIdentifier(
-                            "decoration_" + decorationType + "_" + appTheme,
-                            "drawable",
-                            itemView.getContext().getPackageName()));
-
-                    dataFrame.addView(decoration, params);
-
-                    decoration.setId(View.generateViewId());
-                    decorations.add(new Decoration(decoration, decorationType));
-                }
-            });
-            handler.post(() ->
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    ImageView decoration = new ImageView(itemView.getContext());
-
-                    int leftM = random.nextInt(468);
-                    int topM = random.nextInt(194);
-                    int decorationType = random.nextInt(8) + 1;
-
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.width = 120;
-                    params.height = 120;
-                    params.leftMargin = leftM;
-                    params.topMargin = topM;
-                    decoration.setZ(0);
-                    decoration.setRotation(random.nextInt(360));
-                    decoration.setAlpha(0.75f);
-
-                    decoration.setImageResource(itemView.getContext().getResources().getIdentifier(
-                            "decoration_" + decorationType + "_" + appTheme,
-                            "drawable",
-                            itemView.getContext().getPackageName()));
-
-                    titleFrame.addView(decoration, params);
-
-                    decoration.setId(View.generateViewId());
-                    decorations.add(new Decoration(decoration, decorationType));
-                }
-            });
         }
     }
 

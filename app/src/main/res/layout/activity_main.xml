@@ -15,14 +15,14 @@
 
         <RelativeLayout
             android:id="@+id/search_bar_layout"
-            android:layout_width="168dp"
+            android:layout_width="235dp"
             android:layout_height="37dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="22dp"
             android:translationZ="1dp">
 
             <RelativeLayout
-                android:layout_width="168dp"
+                android:layout_width="match_parent"
                 android:layout_height="29dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/serch_field_light" />
@@ -48,46 +48,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"/>
         </RelativeLayout>
-
-        <ImageButton
-            android:id="@+id/add_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@id/delete_button"
-            android:layout_centerVertical="true"
-            android:background="@drawable/add_light"
-            android:translationZ="1dp"/>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/add_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/add_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
-            android:translationZ="1dp"/>
-
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@id/theme_button"
-            android:layout_centerVertical="true"
-            android:background="@drawable/delete_light"
-            android:translationZ="1dp"/>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/delete_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/delete_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
-            android:translationZ="1dp"/>
 
         <ImageButton
             android:id="@+id/theme_button"
@@ -128,6 +88,61 @@
             android:layout_marginRight="-22dp"
             android:layout_centerVertical="true"
             android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/add_button_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/light_theme_button_frame_bg"
+        android:translationZ="1dp"
+        android:layout_marginVertical="10dp">
+
+        <ImageButton
+            android:id="@+id/add_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/add_light"
+            android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/delete_button_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/light_theme_button_frame_bg"
+        android:translationZ="1dp"
+        android:layout_below="@id/add_button_frame"
+        android:layout_alignParentRight="true">
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/delete_light"
+            android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/click_me_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/click_button_bg_light"
+        android:layout_alignParentRight="true"
+        android:translationZ="35dp">
+
+        <ImageView
+            android:id="@+id/click_me_image"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/click_light"
+            android:layout_margin="10dp"/>
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView

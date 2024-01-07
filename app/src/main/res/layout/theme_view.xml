@@ -1,81 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/basement"
-    android:layout_width="match_parent"
-    android:layout_height="275dp"
-    android:alpha="0.85"
-    android:layout_marginVertical="40dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha="0.80"
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="7dp">
 
     <RelativeLayout
         android:id="@+id/title_frame"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
         android:background="@color/lightThemeBackground"
-        android:layout_centerHorizontal="true"
-        android:translationZ="15dp">
+        android:translationZ="15dp"
+        android:elevation="5dp">
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:fontFamily="@font/advent_pro_bold"
-            android:textColor="@color/black"
-            android:text="It's the title, cool"
-            android:translationZ="1dp"
-            android:layout_margin="20dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/data_frame"
-        android:layout_width="225dp"
-        android:layout_height="match_parent"
-        android:background="@color/lightThemeBackground"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:layout_alignTop="@id/title_frame"
-        android:translationZ="10dp">
-
-        <TextView
-            android:id="@+id/subthemes_titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:fontFamily="@font/advent_pro_bold"
+            android:text="It's a title, lol"
             android:textColor="@color/black"
-            android:layout_margin="20dp"
-            android:translationZ="1dp"
-            android:text="Some subtitles. . .\nMore and more.\nBobrys top"/>
+            android:fontFamily="@font/advent_pro_bold"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:textSize="20dp"/>
     </RelativeLayout>
-    
-    <RelativeLayout
-        android:id="@+id/translation_frame"
+
+    <ImageView
+        android:id="@+id/mark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:translationZ="5dp"
-        android:orientation="vertical"
-        android:background="@color/lightThemeBackground"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/data_frame">
-        
-        <ImageButton
-            android:id="@+id/translation_up"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginHorizontal="5dp"
-            android:background="@drawable/translate_light"/>
-
-        <ImageButton
-            android:id="@+id/translation_down"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:rotation="180"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginHorizontal="5dp"
-            android:background="@drawable/translate_light"/>
-    </RelativeLayout>
-
+        android:layout_toRightOf="@id/title_frame"
+        android:src="@drawable/mark_light"
+        android:translationZ="15dp"
+        android:elevation="5dp"/>
 </RelativeLayout>

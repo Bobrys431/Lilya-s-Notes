@@ -15,13 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,27 +40,35 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDialogListener
 {
-    static List<Theme> themes;
-    SQLiteDatabase database;
+    public static float density;
 
-    RecyclerView themesListView;
+    static List<Theme> themes;
+    static SQLiteDatabase database;
+
+    static RecyclerView themesListView;
     MainRecyclerViewAdapter adapter;
     ImageView themesListBackground;
     NestedScrollView backgroundScrollView;
-    int selectedViewPosition;
+    public static int selectedViewPosition;
+
+    @SuppressLint("StaticFieldLeak")
+    static RelativeLayout clickMeButton;
+    ImageView clickMeImage;
 
     ImageButton addButton;
-    GifImageView addSplash;
+    @SuppressLint("StaticFieldLeak")
+    static RelativeLayout addButtonFrame;
     ImageButton deleteButton;
-    GifImageView deleteSplash;
+    @SuppressLint("StaticFieldLeak")
+    static RelativeLayout deleteButtonFrame;
     ImageButton themeButton;
     GifImageView themeSplash;
     ImageButton exitButton;
     GifImageView exitSplash;
 
     EditText searchBar;
-    Map<Integer, Boolean> hiddenThemes;
-    boolean isSearching;
+    static Map<Integer, Boolean> hiddenThemes;
+    static boolean isSearching;
 
     List<Decoration> decorations;
     RelativeLayout actionBarLayout;
@@ -80,6 +87,7 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
         decorations = new ArrayList<>();
         isSearching = false;
         hiddenThemes = new HashMap<>();
+        density = this.getResources().getDisplayMetrics().density;
 
         SQLiteDatabaseAdapter.printTable(null, this);
 
@@ -132,7 +140,6 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
         themesListBackground = findViewById(R.id.themes_list_background);
         themesListView.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
-            int lastSelectedView = 0;
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
@@ -146,57 +153,6 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                 float scaleFactor = 1 - 0.2f * translationY / themesListBackground.getHeight();
                 themesListBackground.setScaleX(scaleFactor);
                 themesListBackground.setScaleY(scaleFactor);
-
-                // Elements cursor
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) themesListView.getLayoutManager();
-                if (linearLayoutManager != null)
-                {
-                    selectedViewPosition =
-                            (linearLayoutManager.findLastCompletelyVisibleItemPosition() == adapter.getItemCount() - 1) ?
-                                    linearLayoutManager.findLastCompletelyVisibleItemPosition() :
-                                    linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-                }
-
-                if (linearLayoutManager != null)
-                {
-                    for (int i = 0; i < adapter.getItemCount(); i++)
-                    {
-                        Theme.ThemeViewHolder themeViewHolder = (Theme.ThemeViewHolder) themesListView.findViewHolderForAdapterPosition(i);
-                        View view = linearLayoutManager.findViewByPosition(i);
-                        if (themeViewHolder != null && view != null)
-                        {
-                            float targetAlpha = (i == selectedViewPosition) ? 0.85f : 0.35f;
-                            ObjectAnimator.ofFloat(view, "alpha", view.getAlpha(), targetAlpha).setDuration(400).start();
-
-                            float targetScale = (i == selectedViewPosition) ? 1.0f : 0.7f;
-                            ObjectAnimator.ofFloat(view, "scaleX", view.getScaleX(), targetScale).setDuration(400).start();
-                            ObjectAnimator.ofFloat(view, "scaleY", view.getScaleY(), targetScale).setDuration(400).start();
-
-                            if (!isSearching)
-                            {
-                                float targetTranslation = (i == selectedViewPosition) ? 0f : -150f;
-                                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(themeViewHolder.translationFrame, "translationX", themeViewHolder.translationFrame.getTranslationX(), targetTranslation);
-                                objectAnimator.setInterpolator(new DecelerateInterpolator());
-                                objectAnimator.setDuration(200).start();
-                            }
-
-                            if (i == selectedViewPosition && lastSelectedView != selectedViewPosition)
-                            {
-                                int qQ = selectedViewPosition;
-                                new Handler().postDelayed(() -> {
-                                    if (qQ == selectedViewPosition)
-                                    {
-                                        Animation animation = AnimationUtils.loadAnimation(Main.this, R.anim.shake);
-                                        view.startAnimation(animation);
-                                    }
-                                }, 350);
-                            }
-
-                            themeViewHolder.isSelected = i == selectedViewPosition;
-                        }
-                    }
-                    lastSelectedView = selectedViewPosition;
-                }
             }
         });
 
@@ -207,8 +163,6 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
         themeButton = findViewById(R.id.theme_button);
         exitButton = findViewById(R.id.exit_button);
 
-        addSplash = findViewById(R.id.add_splash);
-        deleteSplash = findViewById(R.id.delete_splash);
         themeSplash = findViewById(R.id.theme_splash);
         exitSplash = findViewById(R.id.exit_splash);
 
@@ -223,6 +177,8 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
         }
 
 
+        addButtonFrame = findViewById(R.id.add_button_frame);
+        addButtonFrame.setBackgroundResource(getResources().getIdentifier(appTheme + "_theme_button_frame_bg", "drawable", getPackageName()));
         addButton.setBackgroundResource(getResources().getIdentifier("add_" + appTheme, "drawable", getPackageName()));
         addButton.setOnClickListener(view ->
         {
@@ -259,14 +215,11 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                 adapter.notifyDataSetChanged();
             });
             themeViewDialog.show(getSupportFragmentManager(), "ThemeViewDialog");
-
-            final String changedAppTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-            if (changedAppTheme != null)
-                addSplash.setImageResource(getResources().getIdentifier("splash_" + changedAppTheme, "drawable", getPackageName()));
-            new Handler().postDelayed(() -> addSplash.setImageDrawable(null), duration);
         });
-        addSplash.setImageDrawable(null);
 
+        deleteButtonFrame = findViewById(R.id.delete_button_frame);
+        deleteButtonFrame.setTranslationX(50 * density);
+        deleteButtonFrame.setBackgroundResource(getResources().getIdentifier(appTheme + "_theme_button_frame_bg", "drawable", getPackageName()));
         deleteButton.setBackgroundResource(getResources().getIdentifier("delete_" + appTheme, "drawable", getPackageName()));
         deleteButton.setOnClickListener(view ->
         {
@@ -279,13 +232,7 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                 confirmDialog.show(getSupportFragmentManager(), "Confirm to delete Theme dialog");
                 themeToDelete.close();
             }
-
-            final String changedAppTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-            if (changedAppTheme != null)
-                deleteSplash.setImageResource(getResources().getIdentifier("splash_" + changedAppTheme, "drawable", getPackageName()));
-            new Handler().postDelayed(() -> deleteSplash.setImageDrawable(null), duration);
         });
-        deleteSplash.setImageDrawable(null);
 
         themeButton.setBackgroundResource(getResources().getIdentifier("theme_" + appTheme, "drawable", getPackageName()));
         themeButton.setOnClickListener(view ->
@@ -332,9 +279,14 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                     handler.postDelayed(() ->
                     {
                         addButton.setBackgroundResource(getResources().getIdentifier("add_" + changedAppTheme, "drawable", getPackageName()));
+                        addButtonFrame.setBackgroundResource(getResources().getIdentifier(changedAppTheme + "_theme_button_frame_bg", "drawable", getPackageName()));
                         deleteButton.setBackgroundResource(getResources().getIdentifier("delete_" + changedAppTheme, "drawable", getPackageName()));
+                        deleteButtonFrame.setBackgroundResource(getResources().getIdentifier(changedAppTheme + "_theme_button_frame_bg", "drawable", getPackageName()));
                         themeButton.setBackgroundResource(getResources().getIdentifier("theme_" + changedAppTheme, "drawable", getPackageName()));
                         exitButton.setBackgroundResource(getResources().getIdentifier("exit_" + changedAppTheme, "drawable", getPackageName()));
+
+                        clickMeButton.setBackgroundResource(getResources().getIdentifier("click_button_bg_" + changedAppTheme, "drawable", getPackageName()));
+                        clickMeImage.setImageResource(getResources().getIdentifier("click_" + changedAppTheme, "drawable", getPackageName()));
                     }, 200);
                     handler.postDelayed(() ->
                     {
@@ -351,8 +303,7 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                             ObjectAnimator.ofArgb(themeViewHolder.titleFrame, "backgroundColor", notCurrentTheme, currentTheme).setDuration(500).start();
                             handler.postDelayed(() -> themeViewHolder.titleFrame.setBackgroundColor(currentTheme), 500);
 
-                            ObjectAnimator.ofArgb(themeViewHolder.dataFrame, "backgroundColor", notCurrentTheme, currentTheme).setDuration(500).start();
-                            handler.postDelayed(() -> themeViewHolder.dataFrame.setBackgroundColor(currentTheme), 500);
+                            handler.postDelayed(() -> themeViewHolder.mark.setImageResource(getResources().getIdentifier("mark_" + changedAppTheme, "drawable", getPackageName())), 200);
 
                             int startColor = getResources().getColor(
                                     changedAppTheme.equals("light") ?
@@ -368,27 +319,6 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                             textAnimator.addUpdateListener(valueAnimator -> themeViewHolder.title.setTextColor((int) textAnimator.getAnimatedValue()));
                             textAnimator.start();
                             handler.postDelayed(() -> themeViewHolder.title.setTextColor(startColor), 500);
-
-                            handler.postDelayed(() ->
-                            {
-                                for (int j = 0; j < themeViewHolder.decorations.size(); j++)
-                                    themeViewHolder.decorations.get(j).getImageView().setImageResource(getResources().getIdentifier("decoration_" + themeViewHolder.decorations.get(j).getImageType() + "_" + changedAppTheme, "drawable", getPackageName()));
-                            }, 200);
-
-                            ObjectAnimator.ofArgb(themeViewHolder.translationFrame, "backgroundColor", notCurrentTheme, currentTheme).setDuration(500).start();
-                            handler.postDelayed(() -> themeViewHolder.translationFrame.setBackgroundColor(currentTheme), 500);
-
-                            handler.postDelayed(() ->
-                            {
-                                themeViewHolder.translationUp.setBackgroundResource(
-                                        changedAppTheme.equals("light") ?
-                                                R.drawable.translate_light :
-                                                R.drawable.translate_dark);
-                                themeViewHolder.translationDown.setBackgroundResource(
-                                        changedAppTheme.equals("light") ?
-                                                R.drawable.translate_light :
-                                                R.drawable.translate_dark);
-                            }, 200);
                         }
                     }
                     handler.postDelayed(adapter::notifyDataSetChanged, 500);
@@ -412,6 +342,18 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
             this.finish();
         });
         exitSplash.setImageDrawable(null);
+
+
+        clickMeImage = findViewById(R.id.click_me_image);
+        clickMeImage.setImageResource(getResources().getIdentifier("click_" + appTheme, "drawable", getPackageName()));
+        clickMeButton = findViewById(R.id.click_me_button);
+        clickMeButton.setBackgroundResource(getResources().getIdentifier("click_button_bg_" + appTheme, "drawable", getPackageName()));
+        clickMeButton.setTranslationX(100 * density);
+        clickMeButton.setOnClickListener(view ->
+        {
+            Toast toast = Toast.makeText(this, "CLICKED !!!", Toast.LENGTH_LONG);
+            toast.show();
+        });
 
 
         Cursor hiddenCursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX +
@@ -525,12 +467,6 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
                     }
 
                     isSearching = true;
-                    for (int j = 0; j < adapter.getItemCount(); j++)
-                    {
-                        Theme.ThemeViewHolder themeViewHolder = (Theme.ThemeViewHolder) themesListView.findViewHolderForAdapterPosition(j);
-                        if (themeViewHolder != null)
-                            themeViewHolder.translationFrame.setTranslationX(-150f);
-                    }
                 }
                 Cursor cursor = database.rawQuery("SELECT " +
                         SQLiteDatabaseAdapter.THEMES_THEME_ID + ", " +
@@ -621,6 +557,40 @@ public class Main extends AppCompatActivity implements ConfirmDialog.ConfirmDial
             }
 
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    public static void translateDeleteButton(int start, int end) {
+        if (deleteButtonFrame != null) {
+            @SuppressLint("Recycle") ValueAnimator translationAnimator = ValueAnimator.ofInt(start, end);
+            translationAnimator.setDuration(500);
+            translationAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            translationAnimator.addUpdateListener(valueAnimator ->
+                    deleteButtonFrame.setTranslationX(((int) valueAnimator.getAnimatedValue() * density)));
+            translationAnimator.start();
+        }
+    }
+
+    public static void translateClickMeButton(int start, int end, boolean isActive) {
+        if (clickMeButton != null) {
+            @SuppressLint("Recycle") ValueAnimator translationAnimator = ValueAnimator.ofInt(start, end);
+            translationAnimator.setDuration(700);
+            translationAnimator.addUpdateListener(valueAnimator ->
+                    clickMeButton.setTranslationX(((int) valueAnimator.getAnimatedValue() * density)));
+            translationAnimator.start();
+
+            float rotationStart = 0f;
+            float rotationEnd = 90f;
+            if (isActive) {
+                rotationStart = 90f;
+                rotationEnd = 0f;
+            }
+            @SuppressLint("Recycle") ValueAnimator rotationAnimator = ValueAnimator.ofFloat(rotationStart, rotationEnd);
+            rotationAnimator.setDuration(700);
+            rotationAnimator.addUpdateListener(valueAnimator ->
+                    clickMeButton.setRotation(((float) valueAnimator.getAnimatedValue() * density)));
+            rotationAnimator.start();
+
         }
     }
 }

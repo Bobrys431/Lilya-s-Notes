@@ -3,12 +3,10 @@ package com.example.lilyasnotes;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -73,10 +71,6 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
                             R.color.black :
                             R.color.white, context.getTheme()));
 
-            themeViewHolder.subthemesTitles.setText(( (Theme) data.get(position)).title);
-            themeViewHolder.subthemesTitles.setTypeface(ResourcesCompat.getFont(context, R.font.advent_pro_bold));
-            themeViewHolder.subthemesTitles.setAlpha(0.75f);
-
             themeViewHolder.titleFrame.setBackgroundColor(context.getResources().getColor(
                     appTheme.equals("light") ?
                             R.color.lightThemeBackground :
@@ -117,78 +111,6 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
                 }
             });
 
-            themeViewHolder.dataFrame.setBackgroundColor(context.getResources().getColor(
-                    appTheme.equals("light") ?
-                            R.color.lightThemeBackground :
-                            R.color.darkThemeBackground, context.getTheme()));
-            themeViewHolder.dataFrame.setOnClickListener(view ->
-            {
-                if (themeViewHolder.isSelected)
-                {
-                    Toast.makeText(context, "CLICKED", Toast.LENGTH_SHORT).show();
-                } else
-                {
-                    themeViewHolder.isSelected = true;
-                    LinearLayoutManager layoutManager;
-                    View clickedView;
-                    if (
-                            (layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager()) != null &&
-                                    (clickedView = layoutManager.findViewByPosition(position)) != null
-                    )
-                    {
-                        float targetAlpha = 0.85f;
-                        ObjectAnimator.ofFloat(clickedView, "alpha", clickedView.getAlpha(), targetAlpha).setDuration(400).start();
-
-                        float targetScale = 1.0f;
-                        ObjectAnimator.ofFloat(clickedView, "scaleX", clickedView.getScaleX(), targetScale).setDuration(400).start();
-                        ObjectAnimator.ofFloat(clickedView, "scaleY", clickedView.getScaleY(), targetScale).setDuration(400).start();
-                    }
-                }
-            });
-
-            for (int j = 0; j < themeViewHolder.decorations.size(); j++)
-                themeViewHolder.decorations.get(j).getImageView().setImageResource(context.getResources().getIdentifier(
-                        "decoration_" + themeViewHolder.decorations.get(j).getImageType() + "_" + appTheme,
-                        "drawable",
-                        context.getPackageName()));
-
-            themeViewHolder.translationFrame.setBackgroundColor(context.getResources().getColor(
-                    appTheme.equals("light") ?
-                            R.color.lightThemeBackground :
-                            R.color.darkThemeBackground, context.getTheme()));
-
-            themeViewHolder.translationUp.setBackgroundResource(
-                    appTheme.equals("light") ?
-                            R.drawable.translate_light :
-                            R.drawable.translate_dark);
-            themeViewHolder.translationUp.setOnClickListener(view ->
-            {
-                if (themeViewHolder.isSelected && position != 0)
-                {
-                    Cursor themeToSwap =  database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_ID +
-                            " FROM " + SQLiteDatabaseAdapter.THEMES +
-                            " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " = " + position + " - 1", null);
-
-                    if (themeToSwap != null && themeToSwap.moveToNext())
-                    {
-                        database.execSQL("UPDATE " + SQLiteDatabaseAdapter.THEMES +
-                                " SET " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " = " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " - 1" +
-                                " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " = " + position);
-
-                        database.execSQL("UPDATE " + SQLiteDatabaseAdapter.THEMES +
-                                " SET " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " = " + position +
-                                " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_ID + " = " + themeToSwap.getInt(themeToSwap.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_ID)));
-
-                        themeToSwap.close();
-                    }
-
-                    Theme themeContainer = (Theme) data.get(position - 1);
-                    data.remove(position - 1);
-                    data.add(position, themeContainer);
-
-                    this.notifyDataSetChanged();
-                }
-            });
         } else if (holder instanceof Note.NoteViewHolder) // NoteViewHolder setup
         {
             // IN THE FUTURE
