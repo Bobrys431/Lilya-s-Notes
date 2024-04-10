@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main">
+    tools:context=".Activities.MainActivity">
 
     <RelativeLayout
         android:id="@+id/action_bar_layout"
@@ -15,14 +15,14 @@
 
         <RelativeLayout
             android:id="@+id/search_bar_layout"
-            android:layout_width="168dp"
+            android:layout_width="235dp"
             android:layout_height="37dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="22dp"
             android:translationZ="1dp">
 
             <RelativeLayout
-                android:layout_width="168dp"
+                android:layout_width="match_parent"
                 android:layout_height="29dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/serch_field_light" />
@@ -50,46 +50,6 @@
         </RelativeLayout>
 
         <ImageButton
-            android:id="@+id/add_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@id/delete_button"
-            android:layout_centerVertical="true"
-            android:background="@drawable/add_light"
-            android:translationZ="1dp"/>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/add_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/add_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
-            android:translationZ="1dp"/>
-
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@id/theme_button"
-            android:layout_centerVertical="true"
-            android:background="@drawable/delete_light"
-            android:translationZ="1dp"/>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/delete_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/delete_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
-            android:translationZ="1dp"/>
-
-        <ImageButton
             android:id="@+id/theme_button"
             android:layout_width="26dp"
             android:layout_height="26dp"
@@ -97,16 +57,6 @@
             android:layout_toLeftOf="@id/exit_button"
             android:layout_centerVertical="true"
             android:background="@drawable/theme_light"
-            android:translationZ="1dp"/>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/theme_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/theme_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
             android:translationZ="1dp"/>
 
         <ImageButton
@@ -118,15 +68,104 @@
             android:layout_centerVertical="true"
             android:background="@drawable/exit_light"
             android:translationZ="1dp"/>
+    </RelativeLayout>
 
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/exit_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/exit_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
+    <RelativeLayout
+        android:id="@+id/theme_title_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignRight="@id/action_bar_layout"
+        android:layout_below="@id/action_bar_layout"
+        android:background="@drawable/theme_title_light"
+        android:translationZ="1dp">
+
+        <TextView
+            android:id="@+id/theme_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23dp"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="7dp"
+            android:text="title of theme"
+            android:fontFamily="@font/advent_pro_bold"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/add_button_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp">
+
+        <ImageButton
+            android:id="@+id/add_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/add_light"
+            android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/delete_button_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp"
+        android:layout_below="@id/add_button_frame"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/delete_light"
+            android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/transition_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp"
+        android:layout_below="@id/delete_button_frame"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/transition_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/translate_light"
+            android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rename_button_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp"
+        android:layout_below="@id/transition_frame"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/rename_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rename_light"
+            android:layout_centerInParent="true"
             android:translationZ="1dp"/>
     </RelativeLayout>
 
@@ -137,7 +176,7 @@
         android:layout_below="@id/action_bar_layout">
 
         <ImageView
-            android:id="@+id/data_list_background"
+            android:id="@+id/themes_list_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
@@ -149,31 +188,12 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/data_list_view"
+        android:id="@+id/themes_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/action_bar_layout"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:inputType="textMultiLine"
         android:singleLine="false"/>
-
-    <RelativeLayout
-        android:id="@+id/title_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:background="@color/lightThemeBackground">
-
-        <TextView
-            android:id="@+id/theme_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:fontFamily="@font/advent_pro_bold"
-            android:text="Лілічка"
-            android:layout_margin="10dp" />
-    </RelativeLayout>
 
 </RelativeLayout>

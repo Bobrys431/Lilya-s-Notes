@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main">
+    tools:context=".Activities.MainActivity">
 
     <RelativeLayout
         android:id="@+id/action_bar_layout"
@@ -59,16 +59,6 @@
             android:background="@drawable/theme_light"
             android:translationZ="1dp"/>
 
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/theme_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/theme_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
-            android:translationZ="1dp"/>
-
         <ImageButton
             android:id="@+id/exit_button"
             android:layout_width="26dp"
@@ -78,16 +68,6 @@
             android:layout_centerVertical="true"
             android:background="@drawable/exit_light"
             android:translationZ="1dp"/>
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/exit_splash"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/splash_light"
-            android:layout_alignRight="@id/exit_button"
-            android:layout_marginRight="-22dp"
-            android:layout_centerVertical="true"
-            android:translationZ="1dp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -96,9 +76,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/light_theme_button_frame_bg"
-        android:translationZ="1dp"
-        android:layout_marginVertical="10dp">
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp">
 
         <ImageButton
             android:id="@+id/add_button"
@@ -113,10 +92,11 @@
         android:id="@+id/delete_button_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/light_theme_button_frame_bg"
+        android:background="@color/lightThemeBackground"
         android:translationZ="1dp"
         android:layout_below="@id/add_button_frame"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp">
 
         <ImageButton
             android:id="@+id/delete_button"
@@ -129,20 +109,43 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/click_me_button"
+        android:id="@+id/transition_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:background="@drawable/click_button_bg_light"
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp"
+        android:layout_below="@id/delete_button_frame"
         android:layout_alignParentRight="true"
-        android:translationZ="35dp">
+        android:layout_marginTop="10dp">
 
-        <ImageView
-            android:id="@+id/click_me_image"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/click_light"
-            android:layout_margin="10dp"/>
+        <ImageButton
+            android:id="@+id/transition_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/translate_light"
+            android:translationZ="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rename_button_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/lightThemeBackground"
+        android:translationZ="1dp"
+        android:layout_below="@id/transition_frame"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/rename_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rename_light"
+            android:layout_centerInParent="true"
+            android:translationZ="1dp"/>
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
