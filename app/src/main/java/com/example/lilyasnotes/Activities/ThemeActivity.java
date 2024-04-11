@@ -85,4 +85,8 @@ public class ThemeActivity extends AppCompatActivity {
 
     public void reloadThemesFromDatabaseIntoThemesList() {
     }
+
+    public SearchBarHelper getSearchBar() {
+        return searchBar;
+    }
 }

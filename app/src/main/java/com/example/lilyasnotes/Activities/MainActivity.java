@@ -295,40 +295,6 @@ public class MainActivity extends AppCompatActivity {
         buttonsManager.updateButtonsDisplay();
     }
 
-    public int getSelectedThemePosition() {
-        Cursor themeIdToPosition = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX +
-                " FROM " + SQLiteDatabaseAdapter.THEMES +
-                " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_ID + " = " + selectedViewId, null);
-
-        int position;
-
-        if (themeIdToPosition != null && themeIdToPosition.moveToFirst()) {
-            position = themeIdToPosition.getInt(themeIdToPosition.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_INDEX));
-            themeIdToPosition.close();
-        } else {
-            throw new NoSuchElementException("There is no Theme with id " + selectedViewId + " in " + SQLiteDatabaseAdapter.THEMES);
-        }
-
-        return position;
-    }
-
-    public String getSelectedThemeTitle() {
-        Cursor themeIdToTitle = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
-                " FROM " + SQLiteDatabaseAdapter.THEME +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + selectedViewId, null);
-
-        String title;
-
-        if (themeIdToTitle != null && themeIdToTitle.moveToFirst()) {
-            title = themeIdToTitle.getString(themeIdToTitle.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_TITLE));
-            themeIdToTitle.close();
-        } else {
-            throw new NoSuchElementException("There is no Theme with id " + selectedViewId + " in " + SQLiteDatabaseAdapter.THEMES);
-        }
-
-        return title;
-    }
-
     public SearchBarHelper getSearchBar() {
         return searchBar;
     }

@@ -1,5 +1,6 @@
 package com.example.lilyasnotes.ButtonManagers;
 
+import android.database.Cursor;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +15,11 @@ import com.example.lilyasnotes.Widgets.Buttons.DeleteButton;
 import com.example.lilyasnotes.Widgets.Buttons.RenameButton;
 import com.example.lilyasnotes.Widgets.Buttons.TransitionButton;
 import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
-import com.example.lilyasnotes.Widgets.Dialogs.MainAddingChoise;
+import com.example.lilyasnotes.Widgets.Dialogs.MainAddingChoice;
 import com.example.lilyasnotes.Widgets.Dialogs.TextEnterer;
-import com.example.lilyasnotes.Widgets.Dialogs.TransitionChoise;
+import com.example.lilyasnotes.Widgets.Dialogs.TransitionChoice;
+
+import java.util.NoSuchElementException;
 
 public class MainButtonsManager extends ButtonsManager {
 
@@ -61,15 +64,15 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void addButtonRealization() {
-        MainAddingChoise choise = new MainAddingChoise(activity);
-        choise.setOnChoiseSelectedListener(() -> {
-            int choiseType = choise.getChoiseType();
+        MainAddingChoice choice = new MainAddingChoice(activity);
+        choice.setOnChoiceSelectedListener(() -> {
+            int choiceType = choice.getChoiceType();
 
-            if (choiseType == MainAddingChoise.THEME_CHOISE) {
+            if (choiceType == MainAddingChoice.THEME_CHOICE) {
                 getTitleAndAddNewTheme();
             }
         });
-        choise.show();
+        choice.show();
     }
 
     private void getTitleAndAddNewTheme() {
@@ -79,8 +82,6 @@ public class MainButtonsManager extends ButtonsManager {
             ThemeManager.addNewTheme(title);
             ThemesManager.addNewTheme(ThemeManager.getLastThemeId());
             activity.reloadThemesFromDatabaseIntoThemesList();
-            SQLiteDatabaseAdapter.printTable(SQLiteDatabaseAdapter.THEME, activity);
-            SQLiteDatabaseAdapter.printTable(SQLiteDatabaseAdapter.THEMES, activity);
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");
     }
@@ -95,7 +96,7 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void deleteButtonRealization() {
-        String title = activity.getSelectedThemeTitle();
+        String title = getSelectedThemeTitle();
         ConfirmDialog deletingConfirmationDialog = new ConfirmDialog();
 
         deletingConfirmationDialog.setTitle("Підтвердити видалення\n" + title);
@@ -104,10 +105,26 @@ public class MainButtonsManager extends ButtonsManager {
 
             ThemeManager.deleteTheme(activity.selectedViewId);
             activity.reloadThemesFromDatabaseIntoThemesList();
-            System.out.println("Succesfully deleted. " + activity.themes.size());
         });
 
         deletingConfirmationDialog.show(activity.getSupportFragmentManager(), "Deleting Confirmation Dialog");
+    }
+
+    private String getSelectedThemeTitle() {
+        Cursor themeIdToTitle = SQLiteDatabaseAdapter.getDatabase(activity).rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
+                " FROM " + SQLiteDatabaseAdapter.THEME +
+                " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + activity.selectedViewId, null);
+
+        String title;
+
+        if (themeIdToTitle != null && themeIdToTitle.moveToFirst()) {
+            title = themeIdToTitle.getString(themeIdToTitle.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_TITLE));
+            themeIdToTitle.close();
+        } else {
+            throw new NoSuchElementException("There is no Theme with id " + activity.selectedViewId + " in " + SQLiteDatabaseAdapter.THEME);
+        }
+
+        return title;
     }
 
     private void addAndSetupTransitionButton() {
@@ -120,22 +137,24 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void transitionButtonRealization() {
-        TransitionChoise transitionChoise = new TransitionChoise(activity);
-        transitionChoise.setOnDismissListener(dialogInterface -> {
+        TransitionChoice transitionChoice = new TransitionChoice(activity);
+        transitionChoice.setOnDismissListener(dialogInterface -> {
+            int index = ThemesManager.getThemeIndex(activity.selectedViewId);
             if (
-                    transitionChoise.getChoiseType() == TransitionChoise.TRANSITION_UP &&
-                    ThemesManager.getThemeIndex(activity.selectedViewId) != 0) {
-                System.out.println("UP");
+                    transitionChoice.getChoiseType() == TransitionChoice.TRANSITION_UP &&
+                    index != 0
+            ) {
                 ThemesManager.translateThemeUp(activity.selectedViewId);
+
             } else if (
-                    transitionChoise.getChoiseType() == TransitionChoise.TRANSITION_DOWN &&
-                    ThemesManager.getThemeIndex(activity.selectedViewId) != activity.themes.size() - 1) {
-                System.out.println("DOWN");
+                    transitionChoice.getChoiseType() == TransitionChoice.TRANSITION_DOWN &&
+                    index != activity.themes.size() - 1
+            ) {
                 ThemesManager.translateThemeDown(activity.selectedViewId);
             }
             activity.reloadThemesFromDatabaseIntoThemesList();
         });
-        transitionChoise.show();
+        transitionChoice.show();
     }
 
     private void addAndSetupRenameButton() {
@@ -150,7 +169,7 @@ public class MainButtonsManager extends ButtonsManager {
     private void renameButtonRealization() {
         TextEnterer enterer = new TextEnterer();
         enterer.setOnDismissListener(dialogInterface -> {
-            ThemeManager.setThemeTitle(activity.selectedViewId, enterer.getText());
+            ThemeManager.setTitle(activity.selectedViewId, enterer.getText());
             activity.reloadThemesFromDatabaseIntoThemesList();
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");

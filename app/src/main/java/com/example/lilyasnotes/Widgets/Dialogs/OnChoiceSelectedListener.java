@@ -1,5 +1,5 @@
 package com.example.lilyasnotes.Widgets.Dialogs;
 
-public interface OnChoiseSelectedListener {
+public interface OnChoiceSelectedListener {
     void onChoiseSelected();
 }

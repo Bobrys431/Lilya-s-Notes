@@ -85,7 +85,7 @@ public class ThemeViewHolder extends DataViewHolder {
     }
 
     private void setupTitle(int id, String appTheme) {
-        title.setText(ThemeManager.getThemeTitle(id));
+        title.setText(ThemeManager.getTitle(id));
         title.setTypeface(ResourcesCompat.getFont(context, R.font.advent_pro_bold));
         title.setTextColor(context.getResources().getColor(
                 appTheme.equals("light") ?

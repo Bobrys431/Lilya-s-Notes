@@ -14,7 +14,7 @@ public class ThemeManager {
         database = SQLiteDatabaseAdapter.getDatabase(context);
     }
 
-    public static String getThemeTitle(int id) {
+    public static String getTitle(int id) {
         Cursor titleById = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
                 " FROM " + SQLiteDatabaseAdapter.THEME +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + id, null);
@@ -27,7 +27,7 @@ public class ThemeManager {
         throw new NoSuchElementException("Missing Theme with id " + id);
     }
 
-    public static void setThemeTitle(int id, String title) {
+    public static void setTitle(int id, String title) {
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.THEME +
                 " SET " + SQLiteDatabaseAdapter.THEME_TITLE + " = ?" +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + id, new Object[]{title});

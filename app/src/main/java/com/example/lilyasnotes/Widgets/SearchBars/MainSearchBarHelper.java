@@ -82,7 +82,7 @@ public class MainSearchBarHelper extends SearchBarHelper {
     }
 
     private boolean isThemeTitleFoundBySequence(CharSequence charSequence, int id) {
-        String title = ThemeManager.getThemeTitle(id);
+        String title = ThemeManager.getTitle(id);
 
         if (title == null) return false;
         System.out.println(title + " = " + title.contains(charSequence));
