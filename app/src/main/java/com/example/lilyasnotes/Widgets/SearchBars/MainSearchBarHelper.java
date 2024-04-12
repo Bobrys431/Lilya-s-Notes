@@ -5,10 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.EditText;
 
 import com.example.lilyasnotes.Activities.MainActivity;
-import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class MainSearchBarHelper extends SearchBarHelper {
 
@@ -20,137 +22,72 @@ public class MainSearchBarHelper extends SearchBarHelper {
     }
 
     @Override
-    protected void insertAllThemesFromDatabaseToVisibleData() {
-        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
-
-        Cursor allThemesId = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_ID +
-                " FROM " + SQLiteDatabaseAdapter.THEMES +
-                " ORDER BY " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " ASC", null);
-
-        if (allThemesId != null) {
-            while (allThemesId.moveToNext()) {
-                visibleData.add(new Theme(
-                        allThemesId.getInt(allThemesId.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_ID)),
-                        context));
-            }
-            allThemesId.close();
-        }
+    protected void insertAllDataFromDatabaseToVisibleData() {
+        Theme[] themes = getAllThemes();
+        Collections.addAll(visibleData, themes);
     }
 
     @Override
-    protected void compareThemesFromDatabaseAndInsertToVisibleData(CharSequence charSequence) {
-        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
+    protected void compareDataFromDatabaseAndInsertToVisibleData(CharSequence charSequence) {
+        Theme[] themes = getAllThemes();
 
-        Cursor themeByMain = database.rawQuery("SELECT " +
-                SQLiteDatabaseAdapter.THEME_ID +
-                " FROM " + SQLiteDatabaseAdapter.THEME +
-                " INNER JOIN " + SQLiteDatabaseAdapter.THEMES + " USING(" + SQLiteDatabaseAdapter.THEME_ID + ")" +
-                " ORDER BY " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " ASC", null);
-
-        while (themeByMain.moveToNext()) {
-            int themeToCheckId = themeByMain.getInt(themeByMain.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID));
-
+        for (Theme theme : themes) {
             if (isThemeTitleFoundBySequence(
-                    charSequence,
-                    themeToCheckId
+                    theme.id,
+                    charSequence
             )) {
-                addThemeToVisibleData(themeToCheckId);
-                continue;
+                visibleData.add(theme);
             }
-
-            if (isInThemeTitleFoundBySequence(
-                    charSequence,
-                    themeToCheckId
-            )) {
-                addThemeToVisibleData(themeToCheckId);
-                continue;
-            }
-
-            if (isInThemeTextFoundBySequence(
-                    charSequence,
-                    themeToCheckId
-            )) {
-                addThemeToVisibleData(themeToCheckId);
-            }
-        }
-        themeByMain.close();
-
-        for (Data data : visibleData) {
-            Theme theme = (Theme) data;
-            System.out.println(theme.title + " has recorded!");
         }
     }
 
-    private boolean isThemeTitleFoundBySequence(CharSequence charSequence, int id) {
+    private boolean isThemeTitleFoundBySequence(int id, CharSequence charSequence) {
         String title = ThemeManager.getTitle(id);
 
         if (title == null) return false;
-        System.out.println(title + " = " + title.contains(charSequence));
         return title.contains(charSequence);
     }
 
-    private boolean isInThemeTitleFoundBySequence(CharSequence charSequence, int id) {
-        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
+    private Theme[] getAllThemes() {
+        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(activity);
 
-        Cursor titlesInTheme = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
-                " FROM " + SQLiteDatabaseAdapter.THEME +
-                " INNER JOIN " + SQLiteDatabaseAdapter.THEME_INTO +
-                " ON " + SQLiteDatabaseAdapter.THEME_INTO + "." + SQLiteDatabaseAdapter.THEME_INTO_IN_ID +
-                " = " + SQLiteDatabaseAdapter.THEME + "." + SQLiteDatabaseAdapter.THEME_ID +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_INTO + "." + SQLiteDatabaseAdapter.THEME_INTO_THEME_ID + " = " + id +
+        Cursor allThemesCursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_ID +
+                ", " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX +
+                " FROM " + SQLiteDatabaseAdapter.THEMES +
                 " ORDER BY " + SQLiteDatabaseAdapter.THEME_INTO_INDEX + " ASC", null);
 
-        boolean isTitleFoundBySequence = false;
+        Theme[] themes = new Theme[getThemesLength()];
 
-        while (titlesInTheme.moveToNext()) {
-            String titleIn = titlesInTheme.getString(titlesInTheme.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_TITLE));
-
-            if (titleIn.contains(charSequence)) {
-                isTitleFoundBySequence = true;
-                break;
+        if (allThemesCursor != null) {
+            while (allThemesCursor.moveToNext()) {
+                themes[allThemesCursor.getInt(allThemesCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_INDEX))]
+                        = new Theme(allThemesCursor.getInt(allThemesCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_ID)), activity);
             }
+            allThemesCursor.close();
         }
 
-        titlesInTheme.close();
-        return isTitleFoundBySequence;
+        return themes;
     }
 
-    private boolean isInThemeTextFoundBySequence(CharSequence charSequence, int id) {
+    private int getThemesLength() {
+        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(activity);
 
-        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
+        Cursor themeCount = database.rawQuery("SELECT COUNT(" + SQLiteDatabaseAdapter.THEMES_ID + ") AS count" +
+                " FROM " + SQLiteDatabaseAdapter.THEMES, null);
 
-        Cursor notesInTheme = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID +
-                " FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID + " = " + id +
-                " ORDER BY " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " ASC", null);
-
-        boolean isTitleFoundBySequence = false;
-
-        while (notesInTheme.moveToNext()) {
-            String textIn = notesInTheme.getString(notesInTheme.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_NOTE_IN_ID));
-
-            if (textIn.contains(charSequence)) {
-                isTitleFoundBySequence = true;
-                break;
+        int count = 0;
+        if (themeCount != null) {
+            if (themeCount.moveToFirst()) {
+                count += themeCount.getInt(themeCount.getColumnIndexOrThrow("count"));
             }
+            themeCount.close();
         }
-
-        notesInTheme.close();
-        return isTitleFoundBySequence;
-    }
-
-    private void addThemeToVisibleData(int id) {
-        Theme theme = new Theme(id, context);
-        visibleData.add(theme);
+        return count;
     }
 
     @Override
     protected void recordToRecordingList() {
         activity.themes.clear();
-
-        for (Data data : visibleData) {
-            Theme theme = (Theme) data;
-            activity.themes.add(theme);
-        }
+        activity.themes.addAll((Collection<? extends Theme>) visibleData);
     }
 }

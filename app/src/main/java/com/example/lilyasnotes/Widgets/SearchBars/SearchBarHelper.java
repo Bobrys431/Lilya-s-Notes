@@ -66,17 +66,17 @@ public abstract class SearchBarHelper {
         visibleData.clear();
 
         if (charSequence.length() == 0) {
-            insertAllThemesFromDatabaseToVisibleData();
+            insertAllDataFromDatabaseToVisibleData();
             isSearching = false;
         } else {
-            compareThemesFromDatabaseAndInsertToVisibleData(charSequence);
+            compareDataFromDatabaseAndInsertToVisibleData(charSequence);
             isSearching = true;
         }
     }
 
-    protected abstract void insertAllThemesFromDatabaseToVisibleData();
+    protected abstract void insertAllDataFromDatabaseToVisibleData();
 
-    protected abstract void compareThemesFromDatabaseAndInsertToVisibleData(CharSequence charSequence);
+    protected abstract void compareDataFromDatabaseAndInsertToVisibleData(CharSequence charSequence);
 
     protected abstract void recordToRecordingList();
 }
