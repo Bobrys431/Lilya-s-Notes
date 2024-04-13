@@ -14,10 +14,6 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
-import com.example.lilyasnotes.Database.ThemeIntoManager;
-import com.example.lilyasnotes.Database.ThemeManager;
-import com.example.lilyasnotes.Database.ThemeNoteManager;
-import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
 
 import java.util.List;
@@ -75,7 +71,10 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
                     @Override
                     public void onSingleTapConfirmed() {
                         if (holder.isSelected) {
-                            activity.reloadThemesFromDatabaseIntoThemesList();
+                            if (activity.getSearchBar().isSearching)
+                                activity.getSearchBar().reloadData();
+                            else
+                                activity.reloadData();
                         } else {
                             selectViewHolder(holder.getAdapterPosition());
                             activity.buttonsManager.updateButtonsDisplay();
@@ -98,7 +97,10 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
                     @Override
                     public void onSingleTapConfirmed() {
                         if (holder.isSelected) {
-                            activity.reloadThemesFromDatabaseIntoThemesList();
+                            if (activity.getSearchBar().isSearching)
+                                activity.getSearchBar().reloadData();
+                            else
+                                activity.reloadData();
                         } else {
                             selectViewHolder(holder.getAdapterPosition());
                             activity.buttonsManager.updateButtonsDisplay();
@@ -108,7 +110,10 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
                     @Override
                     public void onDoubleTap() {
                         if (holder.isSelected) {
-                            activity.reloadThemesFromDatabaseIntoThemesList();
+                            if (activity.getSearchBar().isSearching)
+                                activity.getSearchBar().reloadData();
+                            else
+                                activity.reloadData();
                         } else {
                             selectViewHolder(holder.getAdapterPosition());
                             activity.buttonsManager.updateButtonsDisplay();
@@ -130,11 +135,11 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
         deselectSelectedViewHolder();
 
         if (data.get(position) instanceof Theme) {
-            activity.selectedViewId = ThemeIntoManager.getThemeId(activity.theme.id, position);
+            activity.selectedViewId = ((Theme) data.get(position)).id;
             activity.selectedViewType = ThemeActivity.THEME_TYPE;
 
         } else if (data.get(position) instanceof Note) {
-            activity.selectedViewId = ThemeNoteManager.getNoteId(activity.theme.id, position);
+            activity.selectedViewId = ((Note) data.get(position)).id;
             activity.selectedViewType = ThemeActivity.NOTE_TYPE;
         }
 

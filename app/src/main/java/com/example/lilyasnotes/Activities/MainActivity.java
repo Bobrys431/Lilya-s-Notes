@@ -34,7 +34,6 @@ import com.example.lilyasnotes.Widgets.SearchBars.SearchBarHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -286,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void reloadThemesFromDatabaseIntoThemesList() {
+    public void reloadThemes() {
         themes.clear();
         loadThemesFromDatabaseIntoThemesList();
 

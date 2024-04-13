@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/title_frame"
-        android:src="@drawable/mark_light"
+        android:background="@drawable/mark_light"
         android:translationZ="15dp"
         android:elevation="5dp"/>
 </RelativeLayout>

@@ -75,7 +75,12 @@ public class ThemeNoteManager {
     }
 
     public static void deleteConnection(int id) {
-        int index = getNoteIndex(id);
+        int index;
+        try {
+            index = getNoteIndex(id);
+        } catch (NoSuchElementException e) {
+            return;
+        }
 
         database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID + " = " + id);

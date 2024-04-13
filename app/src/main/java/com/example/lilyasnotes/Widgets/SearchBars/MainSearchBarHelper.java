@@ -1,5 +1,6 @@
 package com.example.lilyasnotes.Widgets.SearchBars;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.EditText;
@@ -9,7 +10,6 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 
-import java.util.Collection;
 import java.util.Collections;
 
 public class MainSearchBarHelper extends SearchBarHelper {
@@ -85,9 +85,12 @@ public class MainSearchBarHelper extends SearchBarHelper {
         return count;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void recordToRecordingList() {
         activity.themes.clear();
-        activity.themes.addAll((Collection<? extends Theme>) visibleData);
+        for (int i = 0; i < visibleData.size(); i++) {
+            activity.themes.add((Theme) visibleData.get(i));
+        }
     }
 }

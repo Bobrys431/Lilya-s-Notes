@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lilyasnotes.Activities.MainActivity;
+import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Database.ThemesManager;
@@ -79,9 +80,12 @@ public class MainButtonsManager extends ButtonsManager {
         TextEnterer enterer = new TextEnterer();
         enterer.setOnDismissListener(dialogInterface -> {
             String title = enterer.getText();
+
             ThemeManager.addNewTheme(title);
             ThemesManager.addNewTheme(ThemeManager.getLastThemeId());
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            activity.getSearchBar().removeText();
+            activity.reloadThemes();
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");
     }
@@ -104,7 +108,12 @@ public class MainButtonsManager extends ButtonsManager {
             deletingConfirmationDialog.dismiss();
 
             ThemeManager.deleteTheme(activity.selectedViewId);
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            if (activity.getSearchBar().isSearching) {
+                activity.getSearchBar().updateVisibleData();
+                activity.getSearchBar().reloadData();
+            } else
+                activity.reloadThemes();
         });
 
         deletingConfirmationDialog.show(activity.getSupportFragmentManager(), "Deleting Confirmation Dialog");
@@ -152,7 +161,8 @@ public class MainButtonsManager extends ButtonsManager {
             ) {
                 ThemesManager.translateThemeDown(activity.selectedViewId);
             }
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            activity.reloadThemes();
         });
         transitionChoice.show();
     }
@@ -170,7 +180,11 @@ public class MainButtonsManager extends ButtonsManager {
         TextEnterer enterer = new TextEnterer();
         enterer.setOnDismissListener(dialogInterface -> {
             ThemeManager.setTitle(activity.selectedViewId, enterer.getText());
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            if (activity.getSearchBar().isSearching)
+                activity.getSearchBar().reloadData();
+            else
+                activity.reloadThemes();
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");
     }
@@ -197,11 +211,7 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void updateAddButton() {
-        if (activity.getSearchBar().isSearching) {
-            hide(AddButton.class);
-        } else {
-            show(AddButton.class);
-        }
+        show(AddButton.class);
     }
 
     private void updateDeleteButton() {

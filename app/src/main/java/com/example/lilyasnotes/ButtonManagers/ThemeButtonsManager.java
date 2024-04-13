@@ -78,9 +78,12 @@ public class ThemeButtonsManager extends ButtonsManager {
         TextEnterer enterer = new TextEnterer();
         enterer.setOnDismissListener(dialogInterface -> {
             String title = enterer.getText();
+
             ThemeManager.addNewTheme(title);
             ThemeIntoManager.addConnection(activity.theme.id, ThemeManager.getLastThemeId());
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            activity.getSearchBar().removeText();
+            activity.reloadData();
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");
     }
@@ -89,9 +92,12 @@ public class ThemeButtonsManager extends ButtonsManager {
         TextEnterer enterer = new TextEnterer();
         enterer.setOnDismissListener(dialogInterface -> {
             String title = enterer.getText();
+
             NoteManager.addNewNote(title);
             ThemeNoteManager.addConnection(activity.theme.id, NoteManager.getLastNoteId());
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            activity.getSearchBar().removeText();
+            activity.reloadData();
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");
     }
@@ -119,7 +125,11 @@ public class ThemeButtonsManager extends ButtonsManager {
                 NoteManager.deleteNote(activity.selectedViewId);
             }
 
-            activity.reloadThemesFromDatabaseIntoThemesList();
+            if (activity.getSearchBar().isSearching) {
+                activity.getSearchBar().updateVisibleData();
+                activity.getSearchBar().reloadData();
+            } else
+                activity.reloadData();
         });
 
         deletingConfirmationDialog.show(activity.getSupportFragmentManager(), "Deleting Confirmation Dialog");
@@ -169,7 +179,8 @@ public class ThemeButtonsManager extends ButtonsManager {
                     ThemeNoteManager.translateNoteDown(activity.theme.id, activity.selectedViewId);
                 }
             }
-            activity.reloadThemesFromDatabaseIntoThemesList();
+
+            activity.reloadData();
         });
         transitionChoice.show();
     }
@@ -192,7 +203,10 @@ public class ThemeButtonsManager extends ButtonsManager {
                 NoteManager.setTitle(activity.selectedViewId, enterer.getText());
             }
 
-            activity.reloadThemesFromDatabaseIntoThemesList();
+            if (activity.getSearchBar().isSearching)
+                activity.getSearchBar().reloadData();
+            else
+                activity.reloadData();
         });
         enterer.show(activity.getSupportFragmentManager(), "Get text");
     }
@@ -220,11 +234,7 @@ public class ThemeButtonsManager extends ButtonsManager {
     }
 
     private void updateAddButton() {
-        if (activity.getSearchBar().isSearching) {
-            hide(AddButton.class);
-        } else {
-            show(AddButton.class);
-        }
+        show(AddButton.class);
     }
 
     private void updateDeleteButton() {

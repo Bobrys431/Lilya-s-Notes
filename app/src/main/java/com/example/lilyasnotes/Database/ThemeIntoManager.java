@@ -75,7 +75,12 @@ public class ThemeIntoManager {
     }
 
     public static void deleteConnection(int id) {
-        int index = getThemeIndex(id);
+        int index;
+        try {
+            index = getThemeIndex(id);
+        } catch (NoSuchElementException e) {
+            return;
+        }
 
         database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_INTO +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_INTO_IN_ID + " = " + id);

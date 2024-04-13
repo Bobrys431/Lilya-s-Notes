@@ -58,8 +58,12 @@ public class ThemesManager {
     }
 
     public static void deleteThemeFromThemes(int id) {
-        int index = getThemeIndex(id);
-        if (index == -1) return;
+        int index;
+        try {
+            index = getThemeIndex(id);
+        } catch (NoSuchElementException e) {
+            return;
+        }
 
         database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEMES +
                 " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_ID + " = " + id);

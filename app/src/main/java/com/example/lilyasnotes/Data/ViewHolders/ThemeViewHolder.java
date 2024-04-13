@@ -237,6 +237,7 @@ public class ThemeViewHolder extends DataViewHolder {
     @SuppressLint("DiscouragedApi")
     private void changeMarkColor() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(context);
+        System.out.println(appTheme);
 
         mark.setBackgroundResource(context.getResources().getIdentifier(
                 "mark_" + appTheme,

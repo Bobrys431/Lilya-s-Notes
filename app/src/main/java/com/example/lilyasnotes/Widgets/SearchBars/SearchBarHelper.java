@@ -5,8 +5,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import com.example.lilyasnotes.Activities.MainActivity;
+import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.ButtonManagers.ButtonsManagerUpdater;
 import com.example.lilyasnotes.Data.DTO.Data;
+import com.example.lilyasnotes.Data.DTO.Note;
+import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.RecyclerViews.Additions.RecyclerViewUpdater;
 
 import java.util.ArrayList;
@@ -44,17 +48,9 @@ public abstract class SearchBarHelper {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (recyclerViewUpdater != null) {
-                    recyclerViewUpdater.updateAdapterDataSet();
-                }
                 updateVisibleDataAccordingSequence(charSequence);
                 recordToRecordingList();
-                if (recyclerViewUpdater != null) {
-                    recyclerViewUpdater.updateAdapterDataSet();
-                }
-                if (buttonsManagerUpdater != null) {
-                    buttonsManagerUpdater.updateButtons();
-                }
+                reloadData();
             }
 
             @Override
@@ -79,4 +75,23 @@ public abstract class SearchBarHelper {
     protected abstract void compareDataFromDatabaseAndInsertToVisibleData(CharSequence charSequence);
 
     protected abstract void recordToRecordingList();
+
+    public void reloadData() {
+        if (recyclerViewUpdater != null) {
+            recyclerViewUpdater.updateAdapterDataSet();
+        }
+        if (buttonsManagerUpdater != null) {
+            buttonsManagerUpdater.updateButtons();
+        }
+    }
+
+    public void updateVisibleData() {
+        updateVisibleDataAccordingSequence(searchBar.getText());
+        recordToRecordingList();
+    }
+
+    public void removeText() {
+        searchBar.setText("");
+        updateVisibleData();
+    }
 }

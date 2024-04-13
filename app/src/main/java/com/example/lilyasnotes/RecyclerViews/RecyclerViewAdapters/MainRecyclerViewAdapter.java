@@ -12,7 +12,6 @@ import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
-import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
 
 import java.util.List;
@@ -45,7 +44,10 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
                     @Override
                     public void onSingleTapConfirmed() {
                         if (holder.isSelected) {
-                            activity.reloadThemesFromDatabaseIntoThemesList();
+                            if (activity.getSearchBar().isSearching)
+                                activity.getSearchBar().reloadData();
+                            else
+                                activity.reloadThemes();
                         } else {
                             selectViewHolder(holder.getAdapterPosition());
                             activity.buttonsManager.updateButtonsDisplay();
@@ -73,7 +75,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
 
     public void selectViewHolder(int position) {
         deselectSelectedViewHolder();
-        activity.selectedViewId = ThemesManager.getThemeId(position);
+        activity.selectedViewId = themes.get(position).id;
 
         ThemeViewHolder holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
