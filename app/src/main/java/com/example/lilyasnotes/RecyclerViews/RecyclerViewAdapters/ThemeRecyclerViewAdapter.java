@@ -1,8 +1,8 @@
 package com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +14,8 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
+import com.example.lilyasnotes.Database.ThemeIntoManager;
+import com.example.lilyasnotes.Database.ThemeNoteManager;
 import com.example.lilyasnotes.R;
 
 import java.util.List;
@@ -67,7 +69,7 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         switch (holder.getItemViewType()) {
             case THEME_TYPE:
-                holder.setup(((Theme) data.get(position)).id, new DataViewHolder.OnTouchEvents() {
+                holder.setup(((Theme) data.get(holder.getAdapterPosition())).id, new DataViewHolder.OnTouchEvents() {
                     @Override
                     public void onSingleTapConfirmed() {
                         if (holder.isSelected) {
@@ -83,17 +85,12 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
 
                     @Override
                     public void onDoubleTap() {
-                        if (holder.isSelected) {
-                            Toast.makeText(activity, "Clicked", Toast.LENGTH_LONG).show();
-                        } else {
-                            selectViewHolder(holder.getAdapterPosition());
-                            Toast.makeText(activity, "Clicked", Toast.LENGTH_LONG).show();
-                        }
+                        openTheme(holder.getAdapterPosition());
                     }
                 });
                 break;
             case NOTE_TYPE:
-                holder.setup(((Note) data.get(position)).id, new DataViewHolder.OnTouchEvents() {
+                holder.setup(((Note) data.get(holder.getAdapterPosition())).id, new DataViewHolder.OnTouchEvents() {
                     @Override
                     public void onSingleTapConfirmed() {
                         if (holder.isSelected) {
@@ -126,6 +123,12 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
         }
     }
 
+    private void openTheme(int position) {
+        Intent intent = new Intent(activity, ThemeActivity.class);
+        intent.putExtra("themeId", ((Theme) data.get(position)).id);
+        activity.startActivity(intent);
+    }
+
     @Override
     public int getItemCount() {
         return data.size();
@@ -137,10 +140,12 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
         if (data.get(position) instanceof Theme) {
             activity.selectedViewId = ((Theme) data.get(position)).id;
             activity.selectedViewType = ThemeActivity.THEME_TYPE;
+            System.out.println(ThemeIntoManager.getParentId(((Theme) data.get(position)).id));
 
         } else if (data.get(position) instanceof Note) {
             activity.selectedViewId = ((Note) data.get(position)).id;
             activity.selectedViewType = ThemeActivity.NOTE_TYPE;
+            System.out.println(ThemeNoteManager.getParentId(((Note) data.get(position)).id));
         }
 
         DataViewHolder holder = (DataViewHolder) recyclerView.findViewHolderForAdapterPosition(position);

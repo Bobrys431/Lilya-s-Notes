@@ -12,8 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:background="@color/lightThemeBackground"
-        android:translationZ="15dp"
-        android:elevation="5dp">
+        android:translationZ="5dp">
 
         <TextView
             android:id="@+id/title"
@@ -33,6 +32,5 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/title_frame"
         android:background="@drawable/mark_light"
-        android:translationZ="15dp"
-        android:elevation="5dp"/>
+        android:translationZ="5dp" />
 </RelativeLayout>

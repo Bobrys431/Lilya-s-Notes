@@ -11,6 +11,7 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Database.NoteManager;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
+import com.example.lilyasnotes.Utilities.Tools;
 
 import java.util.Collections;
 
@@ -83,7 +84,7 @@ public class ThemeSearchBarHelper extends SearchBarHelper {
                 " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID + " = " + activity.theme.id +
                 " ORDER BY " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " ASC", null);
 
-        Data[] jointData = new Data[getDataLength()];
+        Data[] jointData = new Data[Tools.getDataLength(activity, activity.theme.id)];
 
         if (allThemesCursor != null && allNotesCursor != null) {
             while (allThemesCursor.moveToNext()) {
@@ -99,31 +100,6 @@ public class ThemeSearchBarHelper extends SearchBarHelper {
         }
 
         return jointData;
-    }
-
-    private int getDataLength() {
-        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(activity);
-
-        Cursor themeCount = database.rawQuery("SELECT COUNT(" + SQLiteDatabaseAdapter.THEME_INTO_ID + ") AS count" +
-                " FROM " + SQLiteDatabaseAdapter.THEME_INTO +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_INTO_THEME_ID + " = " + activity.theme.id, null);
-
-        Cursor noteCount = database.rawQuery("SELECT COUNT(" + SQLiteDatabaseAdapter.THEME_NOTE_ID + ") AS count" +
-                " FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID + " = " + activity.theme.id, null);
-
-        int count = 0;
-        if (themeCount != null && noteCount != null) {
-            if (themeCount.moveToFirst()) {
-                count += themeCount.getInt(themeCount.getColumnIndexOrThrow("count"));
-            }
-            if (noteCount.moveToFirst()) {
-                count += noteCount.getInt(noteCount.getColumnIndexOrThrow("count"));
-            }
-            themeCount.close();
-            noteCount.close();
-        }
-        return count;
     }
 
     @Override

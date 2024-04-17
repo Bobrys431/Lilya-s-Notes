@@ -5,11 +5,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +25,15 @@ import com.example.lilyasnotes.R;
 public class TextEnterer extends DialogFragment {
 
     private EditText text;
-    private TextView title;
-    private RelativeLayout basement;
     private DialogInterface.OnDismissListener onDismissListener;
 
+    private String startText;
+
     public TextEnterer() {
+    }
+
+    public TextEnterer(String text) {
+        startText = text;
     }
 
     @NonNull
@@ -45,15 +52,31 @@ public class TextEnterer extends DialogFragment {
                 appTheme.equals("light") ?
                         R.color.black :
                         R.color.white, view.getContext().getTheme()));
+        text.setText(startText);
+        text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { /* **NOTHING** */ }
 
-        title = view.findViewById(R.id.title);
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 20) {
+                    Toast.makeText(getContext(), "Максимальна довжина - 20 символів", Toast.LENGTH_SHORT).show();
+                    text.setText(charSequence.subSequence(0, 20));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { /* **NOTHING** */ }
+        });
+
+        TextView title = view.findViewById(R.id.title);
         title.setTypeface(ResourcesCompat.getFont(view.getContext(), R.font.advent_pro_bold));
         title.setTextColor(view.getContext().getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.black :
                         R.color.white, view.getContext().getTheme()));
 
-        basement = view.findViewById(R.id.basement);
+        RelativeLayout basement = view.findViewById(R.id.basement);
         basement.setBackgroundColor(view.getContext().getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeBackground :

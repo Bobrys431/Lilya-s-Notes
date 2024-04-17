@@ -41,6 +41,19 @@ public class ThemeNoteManager {
         throw new NoSuchElementException("Missing Theme with id " + id + " or index " + index);
     }
 
+    public static int getParentId(int id) {
+        Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID +
+                " FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
+                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID + " = " + id, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int parentId = cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID));
+            cursor.close();
+            return parentId;
+        }
+        throw new NoSuchElementException("Missing NoteIn with id " + id);
+    }
+
     public static void addConnection(int id, int inId) {
         database.execSQL("INSERT INTO " + SQLiteDatabaseAdapter.THEME_NOTE +
                 "(" + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID +
@@ -82,12 +95,18 @@ public class ThemeNoteManager {
             return;
         }
 
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID + " = " + id);
-
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.THEME_NOTE +
                 " SET " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " = " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " - 1" +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " > " + index);
+                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " > " + index +
+                " AND " + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID + " = " + getParentId(id));
+
+        database.execSQL("UPDATE " + SQLiteDatabaseAdapter.THEME_INTO +
+                " SET " + SQLiteDatabaseAdapter.THEME_INTO_INDEX + " = " + SQLiteDatabaseAdapter.THEME_INTO_INDEX + " - 1" +
+                " WHERE " + SQLiteDatabaseAdapter.THEME_INTO_INDEX + " > " + index +
+                " AND " + SQLiteDatabaseAdapter.THEME_INTO_THEME_ID + " = " + getParentId(id));
+
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
+                " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID + " = " + id);
     }
 
     public static void translateNoteUp(int id, int inId) {

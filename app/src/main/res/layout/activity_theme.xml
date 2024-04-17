@@ -54,19 +54,19 @@
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@id/exit_button"
+            android:layout_toLeftOf="@id/return_button"
             android:layout_centerVertical="true"
             android:background="@drawable/theme_light"
             android:translationZ="1dp"/>
 
         <ImageButton
-            android:id="@+id/exit_button"
+            android:id="@+id/return_button"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/exit_light"
+            android:background="@drawable/return_light"
             android:translationZ="1dp"/>
     </RelativeLayout>
 
@@ -176,7 +176,7 @@
         android:layout_below="@id/action_bar_layout">
 
         <ImageView
-            android:id="@+id/themes_list_background"
+            android:id="@+id/data_list_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
@@ -188,7 +188,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/themes_list_view"
+        android:id="@+id/data_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/action_bar_layout"

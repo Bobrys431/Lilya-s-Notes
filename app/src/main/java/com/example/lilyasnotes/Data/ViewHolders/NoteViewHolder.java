@@ -2,9 +2,13 @@ package com.example.lilyasnotes.Data.ViewHolders;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -93,6 +97,19 @@ public class NoteViewHolder extends DataViewHolder {
                 appTheme.equals("light") ?
                         R.color.black :
                         R.color.white, context.getTheme()));
+
+        note.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { /* **NOTHING** */ }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                NoteManager.setText(id, charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { /* **NOTHING** */ }
+        });
     }
 
     private void setupNoteFrame(String appTheme) {
@@ -110,39 +127,42 @@ public class NoteViewHolder extends DataViewHolder {
             animateMarginsUp();
             animateScaleUp();
             animateAlphaUp();
-            showNoteFrame();
+
+            animateTitleWidthUp();
+            animateNoteAreaUp();
         }
     }
 
     private void animateMarginsUp() {
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        ValueAnimator marginAnimator = ValueAnimator.ofInt(6, 20);
+        ValueAnimator topAnimator = ValueAnimator.ofInt(6, 20);
+        ValueAnimator bottomAnimator = ValueAnimator.ofInt(6, 40);
+        topAnimator.setDuration(400);
+        bottomAnimator.setDuration(400);
 
-        marginAnimator.setDuration(400);
-        marginAnimator.addUpdateListener(valueAnimator -> {
-
-            params.setMargins(
-                    0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context)),
-                    0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context)));
+        topAnimator.addUpdateListener(valueAnimator -> {
+            params.topMargin = (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context));
+            basement.setLayoutParams(params);
+        });
+        bottomAnimator.addUpdateListener(valueAnimator -> {
+            params.bottomMargin = (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context));
             basement.setLayoutParams(params);
         });
 
-        marginAnimator.start();
+        topAnimator.start();
+        bottomAnimator.start();
     }
 
     private void animateScaleUp() {
-        basement.setPivotX(0f);
         basement.setPivotY(50f);
 
         ValueAnimator scaleAnimator = ValueAnimator.ofFloat(1.0f, 1.35f);
 
         scaleAnimator.setDuration(400);
         scaleAnimator.addUpdateListener(valueAnimator -> {
-
-            basement.setScaleX((float) valueAnimator.getAnimatedValue());
             basement.setScaleY((float) valueAnimator.getAnimatedValue());
+            title.setScaleX((float) valueAnimator.getAnimatedValue());
+            note.setTextScaleX((float) valueAnimator.getAnimatedValue());
         });
 
         scaleAnimator.start();
@@ -150,18 +170,59 @@ public class NoteViewHolder extends DataViewHolder {
 
     private void animateAlphaUp() {
         ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0.75f, 0.9f);
-
         alphaAnimator.setDuration(400);
+
         alphaAnimator.addUpdateListener(valueAnimator ->
                 basement.setAlpha((float) valueAnimator.getAnimatedValue()));
 
         alphaAnimator.start();
     }
 
-    private void showNoteFrame() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) noteFrame.getLayoutParams();
-        params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-        noteFrame.setLayoutParams(params);
+    private void animateTitleWidthUp() {
+        ValueAnimator widthAnimator = ValueAnimator.ofFloat(titleFrame.getWidth(), Tools.getDensity(context) * 300);
+        widthAnimator.setDuration(400);
+
+        widthAnimator.addUpdateListener(valueAnimator -> {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    (int) ((float) valueAnimator.getAnimatedValue()),
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            titleFrame.setLayoutParams(layoutParams);
+        });
+
+        widthAnimator.start();
+    }
+
+    private void animateNoteAreaUp() {
+        RelativeLayout.LayoutParams wrapParams = new RelativeLayout.LayoutParams(
+                titleFrame.getWidth(),
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        noteFrame.setLayoutParams(wrapParams);
+
+        new Handler().postDelayed(() -> {
+            ValueAnimator areaAnimator = ValueAnimator.ofFloat(0, noteFrame.getHeight());
+            areaAnimator.setDuration(400);
+
+            areaAnimator.addUpdateListener(valueAnimator -> {
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        titleFrame.getWidth(),
+                        (int) ((float) valueAnimator.getAnimatedValue())
+                );
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.title_frame);
+                noteFrame.setLayoutParams(layoutParams);
+            });
+
+            areaAnimator.start();
+
+            new Handler().postDelayed(() -> {
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        titleFrame.getWidth(),
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.title_frame);
+                noteFrame.setLayoutParams(layoutParams);
+            }, 401);
+        }, 0);
     }
 
     @Override
@@ -172,39 +233,42 @@ public class NoteViewHolder extends DataViewHolder {
             animateMarginsDown();
             animateScaleDown();
             animateAlphaDown();
-            hideNoteFrame();
+
+            animateTitleWidthDown();
+            animateNoteAreaDown();
         }
     }
 
     private void animateMarginsDown() {
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        ValueAnimator marginAnimator = ValueAnimator.ofInt(20, 6);
+        ValueAnimator topAnimator = ValueAnimator.ofInt(20, 6);
+        ValueAnimator bottomAnimator = ValueAnimator.ofInt(40, 6);
+        topAnimator.setDuration(400);
+        bottomAnimator.setDuration(400);
 
-        marginAnimator.setDuration(400);
-        marginAnimator.addUpdateListener(valueAnimator -> {
-
-            params.setMargins(
-                    0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context)),
-                    0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context)));
+        topAnimator.addUpdateListener(valueAnimator -> {
+            params.topMargin = (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context));
+            basement.setLayoutParams(params);
+        });
+        bottomAnimator.addUpdateListener(valueAnimator -> {
+            params.bottomMargin = (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(context));
             basement.setLayoutParams(params);
         });
 
-        marginAnimator.start();
+        topAnimator.start();
+        bottomAnimator.start();
     }
 
     private void animateScaleDown() {
-        basement.setPivotX(0f);
         basement.setPivotY(50f);
 
         ValueAnimator scaleAnimator = ValueAnimator.ofFloat(1.35f, 1.0f);
 
         scaleAnimator.setDuration(400);
         scaleAnimator.addUpdateListener(valueAnimator -> {
-
-            basement.setScaleX((float) valueAnimator.getAnimatedValue());
             basement.setScaleY((float) valueAnimator.getAnimatedValue());
+            title.setScaleX((float) valueAnimator.getAnimatedValue());
+            note.setTextScaleX((float) valueAnimator.getAnimatedValue());
         });
 
         scaleAnimator.start();
@@ -220,10 +284,49 @@ public class NoteViewHolder extends DataViewHolder {
         alphaAnimator.start();
     }
 
-    private void hideNoteFrame() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) noteFrame.getLayoutParams();
-        params.height = 0;
-        noteFrame.setLayoutParams(params);
+    private void animateTitleWidthDown() {
+        RelativeLayout.LayoutParams wrapParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        titleFrame.setLayoutParams(wrapParams);
+
+        new Handler().postDelayed(() -> {
+            ValueAnimator widthAnimator = ValueAnimator.ofFloat(Tools.getDensity(context) * 300, titleFrame.getWidth());
+            widthAnimator.setDuration(400);
+
+            widthAnimator.addUpdateListener(valueAnimator -> {
+                RelativeLayout.LayoutParams secondLayoutParams = new RelativeLayout.LayoutParams(
+                        (int) ((float) valueAnimator.getAnimatedValue()),
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                titleFrame.setLayoutParams(secondLayoutParams);
+            });
+
+            widthAnimator.start();
+
+            new Handler().postDelayed(() -> {
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                titleFrame.setLayoutParams(layoutParams);
+            }, 401);
+        }, 0);
+    }
+
+    private void animateNoteAreaDown() {
+        ValueAnimator areaAnimator = ValueAnimator.ofFloat(noteFrame.getHeight(), 0);
+        areaAnimator.setDuration(400);
+
+        areaAnimator.addUpdateListener(valueAnimator -> {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    titleFrame.getWidth(),
+                    (int) ((float) valueAnimator.getAnimatedValue())
+            );
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.title_frame);
+            noteFrame.setLayoutParams(layoutParams);
+        });
+
+        areaAnimator.start();
     }
 
     @Override

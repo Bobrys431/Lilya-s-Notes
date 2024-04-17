@@ -1,14 +1,15 @@
 package com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.MainActivity;
+import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
@@ -38,7 +39,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
     @Override
     public void onBindViewHolder(@NonNull ThemeViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.setup(
-                themes.get(position).id,
+                themes.get(holder.getAdapterPosition()).id,
 
                 new DataViewHolder.OnTouchEvents() {
                     @Override
@@ -56,16 +57,16 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
 
                     @Override
                     public void onDoubleTap() {
-                        if (holder.isSelected) {
-                            Toast.makeText(activity, "Clicked", Toast.LENGTH_LONG).show();
-                        } else {
-                            selectViewHolder(holder.getAdapterPosition());
-                            Toast.makeText(activity, "Clicked", Toast.LENGTH_LONG).show();
-                        }
+                        openTheme(holder.getAdapterPosition());
                     }
                 });
     }
 
+    private void openTheme(int position) {
+        Intent intent = new Intent(activity, ThemeActivity.class);
+        intent.putExtra("themeId", themes.get(position).id);
+        activity.startActivity(intent);
+    }
 
     @Override
     public int getItemCount() {

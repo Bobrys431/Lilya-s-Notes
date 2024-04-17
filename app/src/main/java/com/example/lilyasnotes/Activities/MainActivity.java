@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         buildScrollingBackground();
         buildButtons();
         buildSearchBar();
-        getAndSetAppTheme();
+        setStatusAndActionBarAppTheme();
 
         buttonsManager.updateButtonsDisplay();
     }
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         if (databaseCursor != null) {
             while (databaseCursor.moveToNext()) {
                 themes.add(new Theme(
-                        databaseCursor.getInt(databaseCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_ID)),
+                        databaseCursor.getInt(databaseCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_ID)),
                         this));
             }
             databaseCursor.close();
@@ -143,7 +143,10 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("DiscouragedApi")
     private void changeAppTheme() {
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + " SET " + SQLiteDatabaseAdapter.APP_THEME + " = CASE WHEN " + SQLiteDatabaseAdapter.APP_THEME + " = 'LIGHT' THEN 'DARK' ELSE 'LIGHT' END");
+        changeToAppTheme();
+    }
 
+    private void changeToAppTheme() {
         changeWindowColorToAppTheme();
         changeActionBarColorToAppTheme();
         changeStatusBarColorToAppTheme();
@@ -253,14 +256,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getAndSetAppTheme() {
-        final String appTheme;
-        if (SQLiteDatabaseAdapter.getCurrentAppTheme(this) != null) {
-            appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-        } else {
-            database.execSQL("INSERT INTO " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + "(" + SQLiteDatabaseAdapter.APP_THEME + ") VALUES ('LIGHT')");
-            appTheme = "light";
-        }
+    private void setStatusAndActionBarAppTheme() {
+        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
 
         setStatusBarAppTheme(appTheme);
         setActionBarAppTheme(appTheme);
@@ -296,5 +293,12 @@ public class MainActivity extends AppCompatActivity {
 
     public SearchBarHelper getSearchBar() {
         return searchBar;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadThemes();
+        changeToAppTheme();
     }
 }

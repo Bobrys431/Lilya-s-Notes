@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lilyasnotes.Activities.MainActivity;
-import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Database.ThemesManager;
@@ -177,7 +176,7 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void renameButtonRealization() {
-        TextEnterer enterer = new TextEnterer();
+        TextEnterer enterer = new TextEnterer(ThemeManager.getTitle(activity.selectedViewId));
         enterer.setOnDismissListener(dialogInterface -> {
             ThemeManager.setTitle(activity.selectedViewId, enterer.getText());
 

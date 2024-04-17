@@ -72,6 +72,7 @@ public class ThemeButtonsManager extends ButtonsManager {
                 getTitleAndAddNewNote();
             }
         });
+        choice.show();
     }
 
     private void getTitleAndAddNewTheme() {
@@ -153,6 +154,7 @@ public class ThemeButtonsManager extends ButtonsManager {
     private void transitionButtonRealization() {
         TransitionChoice transitionChoice = new TransitionChoice(activity);
         transitionChoice.setOnDismissListener(dialogInterface -> {
+            System.out.println(activity.selectedViewType);
 
             int index =
                     activity.selectedViewType == ThemeActivity.THEME_TYPE ?
@@ -195,11 +197,13 @@ public class ThemeButtonsManager extends ButtonsManager {
     }
 
     private void renameButtonRealization() {
-        TextEnterer enterer = new TextEnterer();
+        TextEnterer enterer = new TextEnterer(activity.selectedViewType == ThemeActivity.THEME_TYPE ?
+                ThemeManager.getTitle(activity.selectedViewId) :
+                NoteManager.getTitle(activity.selectedViewId));
         enterer.setOnDismissListener(dialogInterface -> {
             if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
                 ThemeManager.setTitle(activity.selectedViewId, enterer.getText());
-            } if (activity.selectedViewId == ThemeActivity.NOTE_TYPE) {
+            } if (activity.selectedViewType == ThemeActivity.NOTE_TYPE) {
                 NoteManager.setTitle(activity.selectedViewId, enterer.getText());
             }
 

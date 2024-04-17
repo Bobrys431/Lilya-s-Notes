@@ -6,12 +6,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.example.lilyasnotes.Database.NoteManager;
+import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeIntoManager;
 import com.example.lilyasnotes.Database.ThemeManager;
+import com.example.lilyasnotes.Database.ThemeNoteManager;
 import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
-// import com.example.lilyasnotes.Utilities.Tools;
+import com.example.lilyasnotes.Utilities.Tools;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -21,14 +26,24 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        Tools.clearDB(this);
+
         ThemeManager.build(this);
         ThemesManager.build(this);
         ThemeIntoManager.build(this);
+        NoteManager.build(this);
+        ThemeNoteManager.build(this);
 
-        // Tools.clearDB(this);
+        if (SQLiteDatabaseAdapter.getCurrentAppTheme(this) == null) {
+            SQLiteDatabaseAdapter.getDatabase(this).execSQL("INSERT INTO " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + "(" + SQLiteDatabaseAdapter.APP_THEME + ") VALUES ('LIGHT')");
+        }
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getColor(R.color.splashScreenBackground));
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }, 2000);

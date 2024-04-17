@@ -12,6 +12,7 @@ public class ThemeManager {
 
     public static void build(Context context) {
         database = SQLiteDatabaseAdapter.getDatabase(context);
+        System.out.println(database);
     }
 
     public static String getTitle(int id) {
