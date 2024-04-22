@@ -1,6 +1,6 @@
-package com.example.lilyasnotes.ButtonManagers;
+package com.example.lilyasnotes.Buttons.ButtonManagers;
 
-import com.example.lilyasnotes.Widgets.Buttons.*;
+import com.example.lilyasnotes.Buttons.DTO.Button;
 
 import java.util.ArrayList;
 import java.util.List;

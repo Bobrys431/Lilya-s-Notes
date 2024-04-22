@@ -11,17 +11,6 @@ public class Tools {
         return context.getResources().getDisplayMetrics().density;
     }
 
-    public static void clearDB(Context context) {
-        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
-
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.ADDITIONAL_DATA);
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME);
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.NOTE);
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEMES);
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_NOTE);
-        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_INTO);
-    }
-
     public static int getDataLength(Context context, int id) {
         SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
 

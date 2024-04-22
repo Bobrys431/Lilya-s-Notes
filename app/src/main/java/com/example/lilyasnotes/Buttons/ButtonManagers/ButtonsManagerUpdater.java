@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.ButtonManagers;
+package com.example.lilyasnotes.Buttons.ButtonManagers;
 
 public interface ButtonsManagerUpdater {
     void updateButtons();

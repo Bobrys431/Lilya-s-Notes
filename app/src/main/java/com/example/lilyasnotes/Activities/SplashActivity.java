@@ -16,7 +16,7 @@ import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Database.ThemeNoteManager;
 import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
-import com.example.lilyasnotes.Utilities.Tools;
+import com.example.lilyasnotes.Utilities.ActionsSimulator;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -26,13 +26,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Tools.clearDB(this);
-
         ThemeManager.build(this);
         ThemesManager.build(this);
         ThemeIntoManager.build(this);
         NoteManager.build(this);
         ThemeNoteManager.build(this);
+
+        ActionsSimulator.build(this);
 
         if (SQLiteDatabaseAdapter.getCurrentAppTheme(this) == null) {
             SQLiteDatabaseAdapter.getDatabase(this).execSQL("INSERT INTO " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + "(" + SQLiteDatabaseAdapter.APP_THEME + ") VALUES ('LIGHT')");
@@ -46,6 +46,6 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-        }, 2000);
+        }, 5000);
     }
 }

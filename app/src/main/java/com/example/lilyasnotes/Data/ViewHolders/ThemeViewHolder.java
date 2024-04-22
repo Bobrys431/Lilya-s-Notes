@@ -21,6 +21,8 @@ import com.example.lilyasnotes.Utilities.Tools;
 
 public class ThemeViewHolder extends DataViewHolder {
 
+    private int id;
+
     public RelativeLayout basement;
     public ImageView mark;
     public TextView title;
@@ -41,9 +43,11 @@ public class ThemeViewHolder extends DataViewHolder {
         final String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(context);
         assert appTheme != null : "ThemeViewHolder: appTheme = null";
 
+        this.id = id;
+
         setupBasement(onTouchEvents);
         setupMark(appTheme);
-        setupTitle(id, appTheme);
+        setupTitle(appTheme);
         setupTitleFrame(appTheme);
     }
 
@@ -84,7 +88,7 @@ public class ThemeViewHolder extends DataViewHolder {
         mark.setLayoutParams(markLayoutParams);
     }
 
-    private void setupTitle(int id, String appTheme) {
+    private void setupTitle(String appTheme) {
         title.setText(ThemeManager.getTitle(id));
         title.setTypeface(ResourcesCompat.getFont(context, R.font.advent_pro_bold));
         title.setTextColor(context.getResources().getColor(
@@ -157,7 +161,6 @@ public class ThemeViewHolder extends DataViewHolder {
     public void deselect() {
         if (isSelected) {
             isSelected = false;
-
 
             animateMarginsDown();
             animateScaleDown();

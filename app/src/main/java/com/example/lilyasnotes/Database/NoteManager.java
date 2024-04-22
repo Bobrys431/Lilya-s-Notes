@@ -52,11 +52,11 @@ public class NoteManager {
                 " WHERE " + SQLiteDatabaseAdapter.NOTE_ID + " = " + id, new Object[]{text});
     }
 
-    public static void addNewNote(String title) {
+    public static void addNewNote(String title, String text) {
         database.execSQL("INSERT INTO " + SQLiteDatabaseAdapter.NOTE + "(" +
                 SQLiteDatabaseAdapter.NOTE_TITLE + ", " +
                 SQLiteDatabaseAdapter.NOTE_TEXT + ")" +
-                " VALUES (?, '')", new Object[]{title});
+                " VALUES (?, ?)", new Object[]{title, text});
     }
 
     public static int getLastNoteId() {

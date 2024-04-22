@@ -9,29 +9,25 @@
         android:id="@+id/theme_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:background="@color/lightThemeBackgroundAddition">
+        android:layout_margin="6dp">
 
         <ImageButton
             android:id="@+id/add_theme"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/theme_choice_light"
-            android:layout_margin="5dp"/>
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/theme_choice_light" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/note_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:background="@color/lightThemeBackgroundAddition">
+        android:layout_margin="6dp">
 
         <ImageButton
             android:id="@+id/add_note"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/note_choice_light"
-            android:layout_margin="5dp"/>
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/note_choice_light" />
     </RelativeLayout>
 </LinearLayout>

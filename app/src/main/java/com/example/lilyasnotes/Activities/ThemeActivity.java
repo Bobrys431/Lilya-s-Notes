@@ -19,8 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.ButtonManagers.ButtonsManager;
-import com.example.lilyasnotes.ButtonManagers.ThemeButtonsManager;
+import com.example.lilyasnotes.Buttons.ButtonManagers.ButtonsManager;
+import com.example.lilyasnotes.Buttons.ButtonManagers.ThemeButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Note;
 import com.example.lilyasnotes.Data.DTO.Theme;
@@ -29,11 +29,11 @@ import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters.ThemeRecyclerViewAdapter;
 import com.example.lilyasnotes.Utilities.Tools;
-import com.example.lilyasnotes.Widgets.Buttons.AddButton;
-import com.example.lilyasnotes.Widgets.Buttons.Button;
-import com.example.lilyasnotes.Widgets.Buttons.DeleteButton;
-import com.example.lilyasnotes.Widgets.Buttons.RenameButton;
-import com.example.lilyasnotes.Widgets.Buttons.TransitionButton;
+import com.example.lilyasnotes.Buttons.DTO.AddButton;
+import com.example.lilyasnotes.Buttons.DTO.Button;
+import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
+import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.Widgets.SearchBars.SearchBarHelper;
 import com.example.lilyasnotes.Widgets.SearchBars.ThemeSearchBarHelper;
 
@@ -154,7 +154,7 @@ public class ThemeActivity extends AppCompatActivity {
                 AddButton.class,
                 DeleteButton.class,
                 TransitionButton.class,
-                RenameButton.class);
+                EditButton.class);
     }
 
     @SuppressLint("DiscouragedApi")

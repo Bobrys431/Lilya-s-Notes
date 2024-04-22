@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 
@@ -45,12 +44,6 @@ public class ThemeAddingChoice extends Dialog {
             dismiss();
         });
 
-        RelativeLayout themeFrame = findViewById(R.id.theme_frame);
-        themeFrame.setBackgroundColor(getContext().getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackgroundAddition :
-                        R.color.darkThemeBackgroundAddition, getContext().getTheme()));
-
         ImageButton addNoteButton = findViewById(R.id.add_note);
         addNoteButton.setBackgroundResource(getContext().getResources().getIdentifier(
                 "note_choice_" + appTheme,
@@ -62,12 +55,6 @@ public class ThemeAddingChoice extends Dialog {
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });
-
-        RelativeLayout noteFrame = findViewById(R.id.note_frame);
-        noteFrame.setBackgroundColor(getContext().getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackgroundAddition :
-                        R.color.darkThemeBackgroundAddition, getContext().getTheme()));
 
         LinearLayout basement = findViewById(R.id.basement);
         basement.setBackgroundColor(getContext().getResources().getColor(

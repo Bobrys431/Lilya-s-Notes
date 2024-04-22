@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.Buttons;
+package com.example.lilyasnotes.Buttons.DTO;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
-public abstract class RenameButton extends Button {
+public abstract class TransitionButton extends Button {
 
-    public RenameButton(AppCompatActivity activity) {
+    public TransitionButton(AppCompatActivity activity) {
         super(
-                activity.findViewById(R.id.rename_button),
-                activity.findViewById(R.id.rename_button_frame));
+                activity.findViewById(R.id.transition_button),
+                activity.findViewById(R.id.transition_frame));
 
         changeByAppTheme();
     }
@@ -25,7 +25,7 @@ public abstract class RenameButton extends Button {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(context);
 
         button.setBackgroundResource(context.getResources().getIdentifier(
-                "rename_" + appTheme,
+                "translate_" + appTheme,
                 "drawable",
                 context.getPackageName()
         ));

@@ -1,5 +1,6 @@
-package com.example.lilyasnotes.ButtonManagers;
+package com.example.lilyasnotes.Buttons.ButtonManagers;
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.view.View;
 
@@ -9,15 +10,15 @@ import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Database.ThemesManager;
-import com.example.lilyasnotes.Widgets.Buttons.AddButton;
-import com.example.lilyasnotes.Widgets.Buttons.Button;
-import com.example.lilyasnotes.Widgets.Buttons.DeleteButton;
-import com.example.lilyasnotes.Widgets.Buttons.RenameButton;
-import com.example.lilyasnotes.Widgets.Buttons.TransitionButton;
+import com.example.lilyasnotes.Buttons.DTO.AddButton;
+import com.example.lilyasnotes.Buttons.DTO.Button;
+import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
+import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
 import com.example.lilyasnotes.Widgets.Dialogs.MainAddingChoice;
-import com.example.lilyasnotes.Widgets.Dialogs.TextEnterer;
 import com.example.lilyasnotes.Widgets.Dialogs.TransitionChoice;
+import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
 import java.util.NoSuchElementException;
 
@@ -44,8 +45,8 @@ public class MainButtonsManager extends ButtonsManager {
                 addAndSetupTransitionButton();
             }
 
-            if (isSuitable(buttonType, RenameButton.class)) {
-                addAndSetupRenameButton();
+            if (isSuitable(buttonType, EditButton.class)) {
+                addAndSetupEditButton();
             }
         }
     }
@@ -76,17 +77,18 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void getTitleAndAddNewTheme() {
-        TextEnterer enterer = new TextEnterer();
-        enterer.setOnDismissListener(dialogInterface -> {
-            String title = enterer.getText();
+        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity);
 
-            ThemeManager.addNewTheme(title);
-            ThemesManager.addNewTheme(ThemeManager.getLastThemeId());
+        DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
+            ThemeManager.addNewTheme(themeEditor.getTitle());
+            ThemesManager.addConnection(ThemeManager.getLastThemeId());
 
             activity.getSearchBar().removeText();
             activity.reloadThemes();
-        });
-        enterer.show(activity.getSupportFragmentManager(), "Get text");
+        };
+
+        themeEditor.setOnDismissListener(onDismiss);
+        themeEditor.show();
     }
 
     private void addAndSetupDeleteButton() {
@@ -166,26 +168,29 @@ public class MainButtonsManager extends ButtonsManager {
         transitionChoice.show();
     }
 
-    private void addAndSetupRenameButton() {
-        buttons.add(new RenameButton(activity) {
+    private void addAndSetupEditButton() {
+        buttons.add(new EditButton(activity) {
             @Override
             public void onClick(View view) {
-                renameButtonRealization();
+                editButtonRealization();
             }
         });
     }
 
-    private void renameButtonRealization() {
-        TextEnterer enterer = new TextEnterer(ThemeManager.getTitle(activity.selectedViewId));
-        enterer.setOnDismissListener(dialogInterface -> {
-            ThemeManager.setTitle(activity.selectedViewId, enterer.getText());
+    private void editButtonRealization() {
+        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);
+
+        DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
+            ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());
 
             if (activity.getSearchBar().isSearching)
                 activity.getSearchBar().reloadData();
             else
                 activity.reloadThemes();
-        });
-        enterer.show(activity.getSupportFragmentManager(), "Get text");
+        };
+
+        themeEditor.setOnDismissListener(onDismiss);
+        themeEditor.show();
     }
 
     @Override
@@ -200,7 +205,7 @@ public class MainButtonsManager extends ButtonsManager {
             if (button instanceof TransitionButton) {
                 updateTransitionButton();
             }
-            if (button instanceof RenameButton) {
+            if (button instanceof EditButton) {
                 updateRenameButton();
             }
         }
@@ -233,9 +238,9 @@ public class MainButtonsManager extends ButtonsManager {
 
     private void updateRenameButton() {
         if (activity.selectedViewId == -1) {
-            hide(RenameButton.class);
+            hide(EditButton.class);
         } else {
-            show(RenameButton.class);
+            show(EditButton.class);
         }
     }
 }

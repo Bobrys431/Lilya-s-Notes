@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.Buttons;
+package com.example.lilyasnotes.Buttons.DTO;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

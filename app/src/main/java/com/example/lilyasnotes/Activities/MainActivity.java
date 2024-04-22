@@ -17,15 +17,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.ButtonManagers.ButtonsManager;
-import com.example.lilyasnotes.ButtonManagers.MainButtonsManager;
+import com.example.lilyasnotes.Buttons.ButtonManagers.ButtonsManager;
+import com.example.lilyasnotes.Buttons.ButtonManagers.MainButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
-import com.example.lilyasnotes.Widgets.Buttons.AddButton;
-import com.example.lilyasnotes.Widgets.Buttons.Button;
-import com.example.lilyasnotes.Widgets.Buttons.DeleteButton;
-import com.example.lilyasnotes.Widgets.Buttons.RenameButton;
-import com.example.lilyasnotes.Widgets.Buttons.TransitionButton;
+import com.example.lilyasnotes.Buttons.DTO.AddButton;
+import com.example.lilyasnotes.Buttons.DTO.Button;
+import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
+import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters.MainRecyclerViewAdapter;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 AddButton.class,
                 DeleteButton.class,
                 TransitionButton.class,
-                RenameButton.class);
+                EditButton.class);
     }
 
 

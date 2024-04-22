@@ -40,7 +40,7 @@ public class ThemesManager {
         throw new NoSuchElementException("Missing Theme with index " + index);
     }
 
-    public static void addNewTheme(int id) {
+    public static void addConnection(int id) {
         database.execSQL("INSERT INTO " + SQLiteDatabaseAdapter.THEMES + "(" + SQLiteDatabaseAdapter.THEMES_THEME_ID + ", " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + ")" +
                 "VALUES " + "(" + id + ", " + generateNewIndex() + ")");
     }

@@ -5,12 +5,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.example.lilyasnotes.Activities.MainActivity;
-import com.example.lilyasnotes.Activities.ThemeActivity;
-import com.example.lilyasnotes.ButtonManagers.ButtonsManagerUpdater;
+import com.example.lilyasnotes.Buttons.ButtonManagers.ButtonsManagerUpdater;
 import com.example.lilyasnotes.Data.DTO.Data;
-import com.example.lilyasnotes.Data.DTO.Note;
-import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.RecyclerViews.Additions.RecyclerViewUpdater;
 
 import java.util.ArrayList;

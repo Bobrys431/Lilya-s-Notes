@@ -1,5 +1,6 @@
-package com.example.lilyasnotes.ButtonManagers;
+package com.example.lilyasnotes.Buttons.ButtonManagers;
 
+import android.content.DialogInterface;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,15 +10,16 @@ import com.example.lilyasnotes.Database.NoteManager;
 import com.example.lilyasnotes.Database.ThemeIntoManager;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Database.ThemeNoteManager;
-import com.example.lilyasnotes.Widgets.Buttons.AddButton;
-import com.example.lilyasnotes.Widgets.Buttons.Button;
-import com.example.lilyasnotes.Widgets.Buttons.DeleteButton;
-import com.example.lilyasnotes.Widgets.Buttons.RenameButton;
-import com.example.lilyasnotes.Widgets.Buttons.TransitionButton;
+import com.example.lilyasnotes.Buttons.DTO.AddButton;
+import com.example.lilyasnotes.Buttons.DTO.Button;
+import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
+import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
-import com.example.lilyasnotes.Widgets.Dialogs.TextEnterer;
 import com.example.lilyasnotes.Widgets.Dialogs.ThemeAddingChoice;
 import com.example.lilyasnotes.Widgets.Dialogs.TransitionChoice;
+import com.example.lilyasnotes.Widgets.WidgetEditors.NoteWidgetEditor;
+import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
 public class ThemeButtonsManager extends ButtonsManager {
 
@@ -42,8 +44,8 @@ public class ThemeButtonsManager extends ButtonsManager {
                 addAndSetupTransitionButton();
             }
 
-            if (isSuitable(buttonType, RenameButton.class)) {
-                addAndSetupRenameButton();
+            if (isSuitable(buttonType, EditButton.class)) {
+                addAndSetupEditButton();
             }
         }
     }
@@ -76,31 +78,33 @@ public class ThemeButtonsManager extends ButtonsManager {
     }
 
     private void getTitleAndAddNewTheme() {
-        TextEnterer enterer = new TextEnterer();
-        enterer.setOnDismissListener(dialogInterface -> {
-            String title = enterer.getText();
+        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity);
 
-            ThemeManager.addNewTheme(title);
+        DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
+            ThemeManager.addNewTheme(themeEditor.getTitle());
             ThemeIntoManager.addConnection(activity.theme.id, ThemeManager.getLastThemeId());
 
             activity.getSearchBar().removeText();
             activity.reloadData();
-        });
-        enterer.show(activity.getSupportFragmentManager(), "Get text");
+        };
+
+        themeEditor.setOnDismissListener(onDismiss);
+        themeEditor.show();
     }
 
     private void getTitleAndAddNewNote() {
-        TextEnterer enterer = new TextEnterer();
-        enterer.setOnDismissListener(dialogInterface -> {
-            String title = enterer.getText();
+        NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity);
 
-            NoteManager.addNewNote(title);
+        DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
+            NoteManager.addNewNote(noteEditor.getTitle(), noteEditor.getText());
             ThemeNoteManager.addConnection(activity.theme.id, NoteManager.getLastNoteId());
 
             activity.getSearchBar().removeText();
             activity.reloadData();
-        });
-        enterer.show(activity.getSupportFragmentManager(), "Get text");
+        };
+
+        noteEditor.setOnDismissListener(onDismiss);
+        noteEditor.show();
     }
 
     private void addAndSetupDeleteButton() {
@@ -187,32 +191,47 @@ public class ThemeButtonsManager extends ButtonsManager {
         transitionChoice.show();
     }
 
-    private void addAndSetupRenameButton() {
-        buttons.add(new RenameButton(activity) {
+    private void addAndSetupEditButton() {
+        buttons.add(new EditButton(activity) {
             @Override
             public void onClick(View view) {
-                renameButtonRealization();
+                editButtonRealization();
             }
         });
     }
 
-    private void renameButtonRealization() {
-        TextEnterer enterer = new TextEnterer(activity.selectedViewType == ThemeActivity.THEME_TYPE ?
-                ThemeManager.getTitle(activity.selectedViewId) :
-                NoteManager.getTitle(activity.selectedViewId));
-        enterer.setOnDismissListener(dialogInterface -> {
-            if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
-                ThemeManager.setTitle(activity.selectedViewId, enterer.getText());
-            } if (activity.selectedViewType == ThemeActivity.NOTE_TYPE) {
-                NoteManager.setTitle(activity.selectedViewId, enterer.getText());
-            }
+    private void editButtonRealization() {
+        if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
+            ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);
 
-            if (activity.getSearchBar().isSearching)
-                activity.getSearchBar().reloadData();
-            else
-                activity.reloadData();
-        });
-        enterer.show(activity.getSupportFragmentManager(), "Get text");
+            DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
+                ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());
+
+                if (activity.getSearchBar().isSearching)
+                    activity.getSearchBar().reloadData();
+                else
+                    activity.reloadData();
+            };
+
+            themeEditor.setOnDismissListener(onDismiss);
+            themeEditor.show();
+
+        } else if (activity.selectedViewType == ThemeActivity.NOTE_TYPE) {
+            NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity, activity.selectedViewId);
+
+            DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
+                NoteManager.setTitle(activity.selectedViewId, noteEditor.getTitle());
+                NoteManager.setText(activity.selectedViewId, noteEditor.getText());
+
+                if (activity.getSearchBar().isSearching)
+                    activity.getSearchBar().reloadData();
+                else
+                    activity.reloadData();
+            };
+
+            noteEditor.setOnDismissListener(onDismiss);
+            noteEditor.show();
+        }
     }
 
 
@@ -228,7 +247,7 @@ public class ThemeButtonsManager extends ButtonsManager {
             if (button instanceof TransitionButton) {
                 updateTransitionButton();
             }
-            if (button instanceof RenameButton) {
+            if (button instanceof EditButton) {
                 updateRenameButton();
             }
         }
@@ -261,9 +280,9 @@ public class ThemeButtonsManager extends ButtonsManager {
 
     private void updateRenameButton() {
         if (activity.selectedViewType == ThemeActivity.NO_TYPE) {
-            hide(RenameButton.class);
+            hide(EditButton.class);
         } else {
-            show(RenameButton.class);
+            show(EditButton.class);
         }
     }
 }

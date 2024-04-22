@@ -23,6 +23,8 @@ import com.example.lilyasnotes.Utilities.Tools;
 
 public class NoteViewHolder extends DataViewHolder {
 
+    private int id;
+
     public RelativeLayout basement;
     public TextView title;
     public RelativeLayout titleFrame;
@@ -44,10 +46,12 @@ public class NoteViewHolder extends DataViewHolder {
         final String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(context);
         assert appTheme != null : "NoteViewHolder: appTheme = null";
 
+        this.id = id;
+
         setupBasement(onTouchEvents);
-        setupTitle(id, appTheme);
+        setupTitle(appTheme);
         setupTitleFrame(appTheme);
-        setupNote(id, appTheme);
+        setupNote(appTheme);
         setupNoteFrame(appTheme);
     }
 
@@ -73,7 +77,7 @@ public class NoteViewHolder extends DataViewHolder {
         });
     }
 
-    private void setupTitle(int id, String appTheme) {
+    private void setupTitle(String appTheme) {
         title.setText(NoteManager.getTitle(id));
         title.setTypeface(ResourcesCompat.getFont(context, R.font.advent_pro_bold));
         title.setTextColor(context.getResources().getColor(
@@ -90,7 +94,7 @@ public class NoteViewHolder extends DataViewHolder {
                 context.getPackageName()));
     }
 
-    private void setupNote(int id, String appTheme) {
+    private void setupNote(String appTheme) {
         note.setText(NoteManager.getText(id));
         note.setTypeface(ResourcesCompat.getFont(context, R.font.advent_pro_bold));
         note.setTextColor(context.getResources().getColor(
