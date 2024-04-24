@@ -12,8 +12,8 @@ public abstract class EditButton extends Button {
 
     public EditButton(AppCompatActivity activity) {
         super(
-                activity.findViewById(R.id.rename_button),
-                activity.findViewById(R.id.rename_button_frame));
+                activity.findViewById(R.id.edit_button),
+                activity.findViewById(R.id.edit_button_frame));
 
         changeByAppTheme();
     }
@@ -25,7 +25,7 @@ public abstract class EditButton extends Button {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(context);
 
         button.setBackgroundResource(context.getResources().getIdentifier(
-                "rename_" + appTheme,
+                "edit_" + appTheme,
                 "drawable",
                 context.getPackageName()
         ));

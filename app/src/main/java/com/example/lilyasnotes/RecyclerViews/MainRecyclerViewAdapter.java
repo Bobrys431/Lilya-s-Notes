@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters;
+package com.example.lilyasnotes.RecyclerViews;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,11 +13,14 @@ import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
+import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
 
+import java.util.Collections;
 import java.util.List;
 
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolder> {
+public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolder>
+        implements RecyclerViewMoveCallback.RecyclerViewTouchHelperContract {
 
     MainActivity activity;
     List<Theme> themes;
@@ -95,5 +98,25 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
                 holder.deselect();
             }
         }
+    }
+
+    @Override
+    public void onMoved(int type, int from, int to) {
+        if (type == ThemeActivity.NO_TYPE) return;
+
+        int id = ThemesManager.getThemeId(from);
+
+        if (from < to) {
+            for (int i = from; i < to; i++) {
+                Collections.swap(themes, i, i + 1);
+                ThemesManager.translateThemeDown(id);
+            }
+        } else {
+            for (int i = from; i > to; i--) {
+                Collections.swap(themes, i, i - 1);
+                ThemesManager.translateThemeUp(id);
+            }
+        }
+        notifyItemMoved(from, to);
     }
 }

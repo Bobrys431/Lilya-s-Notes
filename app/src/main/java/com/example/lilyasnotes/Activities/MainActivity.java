@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,10 +26,10 @@ import com.example.lilyasnotes.Buttons.DTO.AddButton;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
-import com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters.MainRecyclerViewAdapter;
+import com.example.lilyasnotes.RecyclerViews.MainRecyclerViewAdapter;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.RecyclerViews.RecyclerViewMoveCallback;
 import com.example.lilyasnotes.Widgets.SearchBars.MainSearchBarHelper;
 import com.example.lilyasnotes.Widgets.SearchBars.SearchBarHelper;
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public List<Theme> themes;
     public RecyclerView themesListView;
     public ButtonsManager buttonsManager;
-    public MainRecyclerViewAdapter adapter;
+    private MainRecyclerViewAdapter adapter;
     private SQLiteDatabase database;
     private SearchBarHelper searchBar;
 
@@ -89,11 +90,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void buildRecyclerView() {
         themesListView = findViewById(R.id.themes_list_view);
-        themesListView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        themesListView.setLayoutManager(layoutManager);
+
         adapter = new MainRecyclerViewAdapter(themes, this);
+
+        ItemTouchHelper.Callback callback = new RecyclerViewMoveCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(themesListView);
+
         themesListView.setAdapter(adapter);
     }
 
@@ -105,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                // Background translation
                 float translationY = themesListBackground.getTranslationY() - dy * 0.5f;
                 themesListBackground.setTranslationY(translationY);
 
@@ -126,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         buttonsManager.addAndSetupButtonsByType(
                 AddButton.class,
                 DeleteButton.class,
-                TransitionButton.class,
                 EditButton.class);
     }
 
@@ -293,6 +299,10 @@ public class MainActivity extends AppCompatActivity {
 
     public SearchBarHelper getSearchBar() {
         return searchBar;
+    }
+
+    public MainRecyclerViewAdapter getAdapter() {
+        return adapter;
     }
 
     @Override

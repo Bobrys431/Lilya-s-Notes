@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.example.lilyasnotes.Buttons.ButtonManagers.ButtonsManagerUpdater;
 import com.example.lilyasnotes.Data.DTO.Data;
-import com.example.lilyasnotes.RecyclerViews.Additions.RecyclerViewUpdater;
+import com.example.lilyasnotes.RecyclerViews.RecyclerViewUpdater;
 
 import java.util.ArrayList;
 import java.util.List;

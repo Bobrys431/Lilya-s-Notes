@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.RecyclerViews.Additions;
+package com.example.lilyasnotes.RecyclerViews;
 
 public interface RecyclerViewUpdater {
     void updateAdapterDataSet();

@@ -14,10 +14,8 @@ import com.example.lilyasnotes.Buttons.DTO.AddButton;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
 import com.example.lilyasnotes.Widgets.Dialogs.ThemeAddingChoice;
-import com.example.lilyasnotes.Widgets.Dialogs.TransitionChoice;
 import com.example.lilyasnotes.Widgets.WidgetEditors.NoteWidgetEditor;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
@@ -38,10 +36,6 @@ public class ThemeButtonsManager extends ButtonsManager {
 
             if (isSuitable(buttonType, DeleteButton.class)) {
                 addAndSetupDeleteButton();
-            }
-
-            if (isSuitable(buttonType, TransitionButton.class)) {
-                addAndSetupTransitionButton();
             }
 
             if (isSuitable(buttonType, EditButton.class)) {
@@ -146,51 +140,6 @@ public class ThemeButtonsManager extends ButtonsManager {
                 NoteManager.getTitle(activity.selectedViewId);
     }
 
-    private void addAndSetupTransitionButton() {
-        buttons.add(new TransitionButton(activity) {
-            @Override
-            public void onClick(View view) {
-                transitionButtonRealization();
-            }
-        });
-    }
-
-    private void transitionButtonRealization() {
-        TransitionChoice transitionChoice = new TransitionChoice(activity);
-        transitionChoice.setOnDismissListener(dialogInterface -> {
-            System.out.println(activity.selectedViewType);
-
-            int index =
-                    activity.selectedViewType == ThemeActivity.THEME_TYPE ?
-                            ThemeIntoManager.getThemeIndex(activity.selectedViewId) :
-                            ThemeNoteManager.getNoteIndex(activity.selectedViewId);
-
-            if (
-                    transitionChoice.getChoiseType() == TransitionChoice.TRANSITION_UP &&
-                    index != 0
-            ) {
-                if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
-                    ThemeIntoManager.translateThemeUp(activity.theme.id, activity.selectedViewId);
-                } else {
-                    ThemeNoteManager.translateNoteUp(activity.theme.id, activity.selectedViewId);
-                }
-
-            } else if (
-                    transitionChoice.getChoiseType() == TransitionChoice.TRANSITION_DOWN &&
-                    index != activity.data.size() - 1
-            ) {
-                if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
-                    ThemeIntoManager.translateThemeDown(activity.theme.id, activity.selectedViewId);
-                } else {
-                    ThemeNoteManager.translateNoteDown(activity.theme.id, activity.selectedViewId);
-                }
-            }
-
-            activity.reloadData();
-        });
-        transitionChoice.show();
-    }
-
     private void addAndSetupEditButton() {
         buttons.add(new EditButton(activity) {
             @Override
@@ -244,9 +193,6 @@ public class ThemeButtonsManager extends ButtonsManager {
             if (button instanceof DeleteButton) {
                 updateDeleteButton();
             }
-            if (button instanceof TransitionButton) {
-                updateTransitionButton();
-            }
             if (button instanceof EditButton) {
                 updateRenameButton();
             }
@@ -265,16 +211,6 @@ public class ThemeButtonsManager extends ButtonsManager {
             hide(DeleteButton.class);
         } else {
             show(DeleteButton.class);
-        }
-    }
-
-    private void updateTransitionButton() {
-        if (activity.selectedViewType == ThemeActivity.NO_TYPE) {
-            hide(TransitionButton.class);
-        } else if (activity.getSearchBar().isSearching) {
-            hide(TransitionButton.class);
-        } else {
-            show(TransitionButton.class);
         }
     }
 

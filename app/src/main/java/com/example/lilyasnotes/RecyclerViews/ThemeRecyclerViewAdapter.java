@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters;
+package com.example.lilyasnotes.RecyclerViews;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,9 +18,11 @@ import com.example.lilyasnotes.Database.ThemeIntoManager;
 import com.example.lilyasnotes.Database.ThemeNoteManager;
 import com.example.lilyasnotes.R;
 
+import java.util.Collections;
 import java.util.List;
 
-public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolder> {
+public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolder>
+        implements RecyclerViewMoveCallback.RecyclerViewTouchHelperContract {
 
     private static final int THEME_TYPE = 1;
     private static final int NOTE_TYPE = 2;
@@ -166,5 +168,39 @@ public class ThemeRecyclerViewAdapter extends RecyclerView.Adapter<DataViewHolde
                 holder.deselect();
             }
         }
+    }
+
+    @Override
+    public void onMoved(int type, int from, int to) {
+        if (type == ThemeActivity.NO_TYPE) return;
+
+        int id;
+        if (type == ThemeActivity.THEME_TYPE)
+            id = ThemeIntoManager.getThemeId(activity.theme.id, from);
+        else
+            id = ThemeNoteManager.getNoteId(activity.theme.id, from);
+
+        if (from < to) {
+            for (int i = from; i < to; i++) {
+                Collections.swap(data, i, i + 1);
+
+                if (type == ThemeActivity.THEME_TYPE) {
+                    ThemeIntoManager.translateThemeDown(activity.theme.id, id);
+                } else {
+                    ThemeNoteManager.translateNoteDown(activity.theme.id, id);
+                }
+            }
+        } else {
+            for (int i = from; i > to; i--) {
+                Collections.swap(data, i, i - 1);
+
+                if (type == ThemeActivity.THEME_TYPE) {
+                    ThemeIntoManager.translateThemeUp(activity.theme.id, id);
+                } else {
+                    ThemeNoteManager.translateNoteUp(activity.theme.id, id);
+                }
+            }
+        }
+        notifyItemMoved(from, to);
     }
 }

@@ -109,7 +109,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/transition_frame"
+        android:id="@+id/edit_button_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/lightThemeBackground"
@@ -119,31 +119,11 @@
         android:layout_marginTop="10dp">
 
         <ImageButton
-            android:id="@+id/transition_button"
+            android:id="@+id/edit_button"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_margin="10dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/translate_light"
-            android:translationZ="1dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rename_button_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/lightThemeBackground"
-        android:translationZ="1dp"
-        android:layout_below="@id/transition_frame"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp">
-
-        <ImageButton
-            android:id="@+id/rename_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/rename_light"
+            android:background="@drawable/edit_light"
             android:layout_centerInParent="true"
             android:translationZ="1dp"/>
     </RelativeLayout>
@@ -159,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/lilya_background"
+            android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
             android:adjustViewBounds="true"/>
 

@@ -14,10 +14,8 @@ import com.example.lilyasnotes.Buttons.DTO.AddButton;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
 import com.example.lilyasnotes.Widgets.Dialogs.MainAddingChoice;
-import com.example.lilyasnotes.Widgets.Dialogs.TransitionChoice;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
 import java.util.NoSuchElementException;
@@ -39,10 +37,6 @@ public class MainButtonsManager extends ButtonsManager {
 
             if (isSuitable(buttonType, DeleteButton.class)) {
                 addAndSetupDeleteButton();
-            }
-
-            if (isSuitable(buttonType, TransitionButton.class)) {
-                addAndSetupTransitionButton();
             }
 
             if (isSuitable(buttonType, EditButton.class)) {
@@ -137,37 +131,6 @@ public class MainButtonsManager extends ButtonsManager {
         return title;
     }
 
-    private void addAndSetupTransitionButton() {
-        buttons.add(new TransitionButton(activity) {
-            @Override
-            public void onClick(View view) {
-                transitionButtonRealization();
-            }
-        });
-    }
-
-    private void transitionButtonRealization() {
-        TransitionChoice transitionChoice = new TransitionChoice(activity);
-        transitionChoice.setOnDismissListener(dialogInterface -> {
-            int index = ThemesManager.getThemeIndex(activity.selectedViewId);
-            if (
-                    transitionChoice.getChoiseType() == TransitionChoice.TRANSITION_UP &&
-                    index != 0
-            ) {
-                ThemesManager.translateThemeUp(activity.selectedViewId);
-
-            } else if (
-                    transitionChoice.getChoiseType() == TransitionChoice.TRANSITION_DOWN &&
-                    index != activity.themes.size() - 1
-            ) {
-                ThemesManager.translateThemeDown(activity.selectedViewId);
-            }
-
-            activity.reloadThemes();
-        });
-        transitionChoice.show();
-    }
-
     private void addAndSetupEditButton() {
         buttons.add(new EditButton(activity) {
             @Override
@@ -202,9 +165,6 @@ public class MainButtonsManager extends ButtonsManager {
             if (button instanceof DeleteButton) {
                 updateDeleteButton();
             }
-            if (button instanceof TransitionButton) {
-                updateTransitionButton();
-            }
             if (button instanceof EditButton) {
                 updateRenameButton();
             }
@@ -223,16 +183,6 @@ public class MainButtonsManager extends ButtonsManager {
             hide(DeleteButton.class);
         } else {
             show(DeleteButton.class);
-        }
-    }
-
-    private void updateTransitionButton() {
-        if (activity.selectedViewId == -1) {
-            hide(TransitionButton.class);
-        } else if (activity.getSearchBar().isSearching) {
-            hide(TransitionButton.class);
-        } else {
-            show(TransitionButton.class);
         }
     }
 

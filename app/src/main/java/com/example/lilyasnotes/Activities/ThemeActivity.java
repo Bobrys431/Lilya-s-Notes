@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,13 +28,13 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
-import com.example.lilyasnotes.RecyclerViews.RecyclerViewAdapters.ThemeRecyclerViewAdapter;
+import com.example.lilyasnotes.RecyclerViews.RecyclerViewMoveCallback;
+import com.example.lilyasnotes.RecyclerViews.ThemeRecyclerViewAdapter;
 import com.example.lilyasnotes.Utilities.Tools;
 import com.example.lilyasnotes.Buttons.DTO.AddButton;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.Buttons.DTO.TransitionButton;
 import com.example.lilyasnotes.Widgets.SearchBars.SearchBarHelper;
 import com.example.lilyasnotes.Widgets.SearchBars.ThemeSearchBarHelper;
 
@@ -122,8 +123,16 @@ public class ThemeActivity extends AppCompatActivity {
 
     private void buildRecyclerView() {
         dataListView = findViewById(R.id.data_list_view);
-        dataListView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        dataListView.setLayoutManager(layoutManager);
+
         adapter = new ThemeRecyclerViewAdapter(data, this);
+
+        ItemTouchHelper.Callback callback = new RecyclerViewMoveCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(dataListView);
+
         dataListView.setAdapter(adapter);
     }
 
@@ -153,7 +162,6 @@ public class ThemeActivity extends AppCompatActivity {
         buttonsManager.addAndSetupButtonsByType(
                 AddButton.class,
                 DeleteButton.class,
-                TransitionButton.class,
                 EditButton.class);
     }
 
