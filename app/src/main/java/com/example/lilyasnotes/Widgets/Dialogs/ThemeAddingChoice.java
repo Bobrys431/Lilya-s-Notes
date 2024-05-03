@@ -8,19 +8,16 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import com.example.lilyasnotes.Activities.ThemeActivity;
+import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
 public class ThemeAddingChoice extends Dialog {
 
-    public static final int THEME_CHOICE = 1;
-    public static final int NOTE_CHOICE = 2;
-
     private int choiceType;
     private OnChoiceSelectedListener onChoiceSelectedListener;
 
-    public ThemeAddingChoice(@NonNull ThemeActivity activity) {
+    public ThemeAddingChoice(@NonNull AbstractActivity activity) {
         super(activity);
     }
 
@@ -39,7 +36,7 @@ public class ThemeAddingChoice extends Dialog {
                 getContext().getPackageName()
         ));
         addThemeButton.setOnClickListener((view) -> {
-            choiceType = THEME_CHOICE;
+            choiceType = AbstractActivity.THEME_TYPE;
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });
@@ -51,7 +48,7 @@ public class ThemeAddingChoice extends Dialog {
                 getContext().getPackageName()
         ));
         addNoteButton.setOnClickListener((view) -> {
-            choiceType = NOTE_CHOICE;
+            choiceType = AbstractActivity.NOTE_TYPE;
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });

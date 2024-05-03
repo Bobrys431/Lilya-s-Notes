@@ -3,8 +3,12 @@ package com.example.lilyasnotes.Utilities;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.R;
 
 public class Tools {
     public static float getDensity(Context context) {
@@ -34,5 +38,23 @@ public class Tools {
             noteCount.close();
         }
         return count;
+    }
+
+    public static int[] getNoteWrapParams(ThemeActivity activity, String title, String note) {
+        int[] params = new int[2];
+
+        RelativeLayout titleFrame = activity.findViewById(R.id.title_frame_wrap);
+        TextView titleView = activity.findViewById(R.id.title_wrap);
+
+        titleView.setText(title);
+        params[0] = titleFrame.getWidth();
+
+        RelativeLayout noteFrame = activity.findViewById(R.id.note_frame_wrap);
+        TextView noteView = activity.findViewById(R.id.note_wrap);
+
+        noteView.setText(note);
+        params[1] = noteFrame.getHeight();
+
+        return params;
     }
 }

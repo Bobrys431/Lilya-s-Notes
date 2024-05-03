@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import com.example.lilyasnotes.Activities.MainActivity;
+import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
@@ -19,7 +19,7 @@ public class MainAddingChoice extends Dialog {
     private int choiceType;
     private OnChoiceSelectedListener onChoiceSelectedListener;
 
-    public MainAddingChoice(@NonNull MainActivity activity) {
+    public MainAddingChoice(@NonNull AbstractActivity activity) {
         super(activity);
     }
 

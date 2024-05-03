@@ -15,6 +15,8 @@ public class ThemeNoteManager {
     }
 
     public static int getNoteIndex(int id) {
+        System.out.println("ThemeNoteManager getNoteIndex");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX +
                 " FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID + " = " + id, null);
@@ -28,6 +30,8 @@ public class ThemeNoteManager {
     }
 
     public static int getNoteId(int id, int index) {
+        System.out.println("ThemeNoteManager getNoteId");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID +
                 " FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_INDEX + " = " + index +
@@ -42,6 +46,8 @@ public class ThemeNoteManager {
     }
 
     public static int getParentId(int id) {
+        System.out.println("ThemeNoteManager getParentId");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_NOTE_THEME_ID +
                 " FROM " + SQLiteDatabaseAdapter.THEME_NOTE +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_NOTE_IN_ID + " = " + id, null);

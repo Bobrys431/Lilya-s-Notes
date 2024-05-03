@@ -15,6 +15,8 @@ public class NoteManager {
     }
 
     public static String getTitle(int id) {
+        System.out.println("NoteManager getTitle");
+
         Cursor titleById = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.NOTE_TITLE +
                 " FROM " + SQLiteDatabaseAdapter.NOTE +
                 " WHERE " + SQLiteDatabaseAdapter.NOTE_ID + " = " + id, null);
@@ -28,6 +30,8 @@ public class NoteManager {
     }
 
     public static String getText(int id) {
+        System.out.println("NoteManager getText");
+
         Cursor titleById = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.NOTE_TEXT +
                 " FROM " + SQLiteDatabaseAdapter.NOTE +
                 " WHERE " + SQLiteDatabaseAdapter.NOTE_ID + " = " + id, null);
@@ -41,12 +45,16 @@ public class NoteManager {
     }
 
     public static void setTitle(int id, String title) {
+        System.out.println("NoteManager setTitle");
+
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.NOTE +
                 " SET " + SQLiteDatabaseAdapter.NOTE_TITLE + " = ?" +
                 " WHERE " + SQLiteDatabaseAdapter.NOTE_ID + " = " + id, new Object[]{title});
     }
 
     public static void setText(int id, String text) {
+        System.out.println("NoteManager setText");
+
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.NOTE +
                 " SET " + SQLiteDatabaseAdapter.NOTE_TEXT + " = ?" +
                 " WHERE " + SQLiteDatabaseAdapter.NOTE_ID + " = " + id, new Object[]{text});

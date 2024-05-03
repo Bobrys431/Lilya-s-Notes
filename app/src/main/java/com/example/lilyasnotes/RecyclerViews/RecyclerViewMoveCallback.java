@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.ThemeActivity;
-import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
 
@@ -35,7 +35,7 @@ public class RecyclerViewMoveCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        if (viewHolder instanceof DataViewHolder) {
+        if (viewHolder instanceof AbstractViewHolder) {
             int type = ThemeActivity.NO_TYPE;
             if (viewHolder instanceof ThemeViewHolder) {
                 type = ThemeActivity.THEME_TYPE;

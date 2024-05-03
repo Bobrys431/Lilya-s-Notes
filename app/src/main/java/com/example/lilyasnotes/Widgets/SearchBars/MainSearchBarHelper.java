@@ -1,9 +1,7 @@
 package com.example.lilyasnotes.Widgets.SearchBars;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.EditText;
 
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Data.DTO.Theme;
@@ -12,13 +10,10 @@ import com.example.lilyasnotes.Database.ThemeManager;
 
 import java.util.Collections;
 
-public class MainSearchBarHelper extends SearchBarHelper {
+public class MainSearchBarHelper extends AbstractSearchBarHelper {
 
-    MainActivity activity;
-
-    public MainSearchBarHelper(EditText searchBar, MainActivity activity) {
-        super(searchBar);
-        this.activity = activity;
+    public MainSearchBarHelper(MainActivity activity) {
+        super(activity);
     }
 
     @Override
@@ -45,7 +40,7 @@ public class MainSearchBarHelper extends SearchBarHelper {
         String title = ThemeManager.getTitle(id);
 
         if (title == null) return false;
-        return title.contains(charSequence);
+        return title.toLowerCase().contains(charSequence.toString().toLowerCase());
     }
 
     private Theme[] getAllThemes() {
@@ -85,12 +80,19 @@ public class MainSearchBarHelper extends SearchBarHelper {
         return count;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void recordToRecordingList() {
-        activity.themes.clear();
-        for (int i = 0; i < visibleData.size(); i++) {
-            activity.themes.add((Theme) visibleData.get(i));
-        }
+        activity.data.clear();
+        activity.data.addAll(visibleData);
+    }
+
+    @Override
+    protected void recordToRecordingListAndNotifyAdapter() {
+        int size = activity.data.size();
+        activity.data.clear();
+        activity.getAdapter().notifyItemRangeRemoved(0, size);
+
+        activity.data.addAll(visibleData);
+        activity.getAdapter().notifyItemRangeInserted(0, activity.data.size());
     }
 }

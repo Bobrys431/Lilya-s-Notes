@@ -1,13 +1,10 @@
 package com.example.lilyasnotes.Buttons.ButtonManagers;
 
 import android.content.DialogInterface;
-import android.database.Cursor;
+import android.os.Handler;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.lilyasnotes.Activities.MainActivity;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.Buttons.DTO.AddButton;
@@ -18,14 +15,10 @@ import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
 import com.example.lilyasnotes.Widgets.Dialogs.MainAddingChoice;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
-import java.util.NoSuchElementException;
+public class MainButtonsManager extends AbstractButtonsManager {
 
-public class MainButtonsManager extends ButtonsManager {
-
-    MainActivity activity;
-
-    public MainButtonsManager(AppCompatActivity activity) {
-        this.activity = (MainActivity) activity;
+    public MainButtonsManager(MainActivity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -59,6 +52,8 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void addButtonRealization() {
+        System.out.println("MainButtonsManager addButtonRealization");
+
         MainAddingChoice choice = new MainAddingChoice(activity);
         choice.setOnChoiceSelectedListener(() -> {
             int choiceType = choice.getChoiceType();
@@ -77,8 +72,16 @@ public class MainButtonsManager extends ButtonsManager {
             ThemeManager.addNewTheme(themeEditor.getTitle());
             ThemesManager.addConnection(ThemeManager.getLastThemeId());
 
-            activity.getSearchBar().removeText();
-            activity.reloadThemes();
+            int oldSize = activity.data.size();
+            activity.reloadDataComparedToSearchBar();
+
+            if (oldSize != activity.data.size()) {
+                activity.getAdapter().notifyItemInserted(activity.data.size() - 1);
+                new Handler().postDelayed(() -> {
+                    activity.getAdapter().selectViewHolder(activity.data.size() - 1);
+                    updateButtonsDisplay();
+                }, 1);
+            }
         };
 
         themeEditor.setOnDismissListener(onDismiss);
@@ -95,7 +98,9 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void deleteButtonRealization() {
-        String title = getSelectedThemeTitle();
+        System.out.println("MainButtonsManager deleteButtonRealization");
+
+        String title = ThemeManager.getTitle(activity.selectedViewId);
         ConfirmDialog deletingConfirmationDialog = new ConfirmDialog();
 
         deletingConfirmationDialog.setTitle("Підтвердити видалення\n" + title);
@@ -104,31 +109,15 @@ public class MainButtonsManager extends ButtonsManager {
 
             ThemeManager.deleteTheme(activity.selectedViewId);
 
-            if (activity.getSearchBar().isSearching) {
-                activity.getSearchBar().updateVisibleData();
-                activity.getSearchBar().reloadData();
-            } else
-                activity.reloadThemes();
+            int index = activity.getSelectedViewIndex();
+            activity.getAdapter().deselectSelectedViewHolder();
+
+            activity.reloadDataComparedToSearchBar();
+            activity.getAdapter().notifyItemRemoved(index);
+            updateButtonsDisplay();
         });
 
         deletingConfirmationDialog.show(activity.getSupportFragmentManager(), "Deleting Confirmation Dialog");
-    }
-
-    private String getSelectedThemeTitle() {
-        Cursor themeIdToTitle = SQLiteDatabaseAdapter.getDatabase(activity).rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
-                " FROM " + SQLiteDatabaseAdapter.THEME +
-                " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + activity.selectedViewId, null);
-
-        String title;
-
-        if (themeIdToTitle != null && themeIdToTitle.moveToFirst()) {
-            title = themeIdToTitle.getString(themeIdToTitle.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEME_TITLE));
-            themeIdToTitle.close();
-        } else {
-            throw new NoSuchElementException("There is no Theme with id " + activity.selectedViewId + " in " + SQLiteDatabaseAdapter.THEME);
-        }
-
-        return title;
     }
 
     private void addAndSetupEditButton() {
@@ -141,15 +130,23 @@ public class MainButtonsManager extends ButtonsManager {
     }
 
     private void editButtonRealization() {
+        System.out.println("MainButtonsManager editButtonRealization");
+
         ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);
 
         DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
             ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());
 
-            if (activity.getSearchBar().isSearching)
-                activity.getSearchBar().reloadData();
-            else
-                activity.reloadThemes();
+            int index = activity.getSelectedViewIndex();
+            int oldSize = activity.data.size();
+
+            activity.reloadDataComparedToSearchBar();
+
+            if (oldSize > activity.data.size()) {
+                activity.getAdapter().notifyItemRemoved(index);
+                activity.getAdapter().deselectSelectedViewHolder();
+                activity.getButtonsManager().updateButtonsDisplay();
+            } else { activity.getAdapter().notifyItemChanged(index); }
         };
 
         themeEditor.setOnDismissListener(onDismiss);

@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Activities.ThemeActivity;
+import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.Data.ViewHolders.DataViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
 import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
@@ -19,17 +21,18 @@ import com.example.lilyasnotes.R;
 import java.util.Collections;
 import java.util.List;
 
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolder>
-        implements RecyclerViewMoveCallback.RecyclerViewTouchHelperContract {
+public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
 
-    MainActivity activity;
-    List<Theme> themes;
-    RecyclerView recyclerView;
-
-    public MainRecyclerViewAdapter(List<Theme> themes, MainActivity activity) {
+    public MainRecyclerViewAdapter(MainActivity activity) {
         this.activity = activity;
-        this.themes = themes;
-        this.recyclerView = activity.themesListView;
+    }
+
+    public void setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
+
+    public void setThemes(List<Data> data) {
+        this.data = data;
     }
 
     @NonNull
@@ -38,24 +41,21 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
         return new ThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.theme_view, parent, false));
     }
 
-    @SuppressLint({"DiscouragedApi", "NotifyDataSetChanged", "ClickableViewAccessibility"})
     @Override
-    public void onBindViewHolder(@NonNull ThemeViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.setup(
-                themes.get(holder.getAdapterPosition()).id,
+    public void onBindViewHolder(@NonNull AbstractViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        System.out.println("MainRecyclerViewAdapter onBindViewHolder");
 
-                new DataViewHolder.OnTouchEvents() {
+        holder.setup(
+                ((Theme) data.get(holder.getAdapterPosition())).id,
+                activity,
+                new AbstractViewHolder.OnTouchEvents() {
                     @Override
                     public void onSingleTapConfirmed() {
-                        if (holder.isSelected) {
-                            if (activity.getSearchBar().isSearching)
-                                activity.getSearchBar().reloadData();
-                            else
-                                activity.reloadThemes();
-                        } else {
-                            selectViewHolder(holder.getAdapterPosition());
-                            activity.buttonsManager.updateButtonsDisplay();
-                        }
+                        if (holder.isSelected)
+                            { deselectSelectedViewHolder(); }
+                        else
+                            { selectViewHolder(holder.getAdapterPosition()); }
+                        activity.getButtonsManager().updateButtonsDisplay();
                     }
 
                     @Override
@@ -67,19 +67,22 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
 
     private void openTheme(int position) {
         Intent intent = new Intent(activity, ThemeActivity.class);
-        intent.putExtra("themeId", themes.get(position).id);
+        intent.putExtra("themeId", ((Theme) data.get(position)).id);
         activity.startActivity(intent);
     }
 
     @Override
     public int getItemCount() {
-        return themes.size();
+        return data.size();
     }
 
-
+    @Override
     public void selectViewHolder(int position) {
+        System.out.println("MainRecyclerViewAdapter selectViewHolder");
+
         deselectSelectedViewHolder();
-        activity.selectedViewId = themes.get(position).id;
+        activity.selectedViewId = ((Theme) data.get(position)).id;
+        activity.selectedViewType = AbstractActivity.THEME_TYPE;
 
         ThemeViewHolder holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -87,9 +90,12 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
         }
     }
 
-
+    @Override
     public void deselectSelectedViewHolder() {
-        activity.selectedViewId = -1;
+        System.out.println("MainRecyclerViewAdapter deselectSelectedViewHolder");
+
+        activity.selectedViewId = AbstractActivity.NO_TYPE;
+        activity.selectedViewType = AbstractActivity.NO_TYPE;
 
         ThemeViewHolder holder;
         for (int i = 0; i < getItemCount(); i++) {
@@ -102,19 +108,21 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<ThemeViewHolde
 
     @Override
     public void onMoved(int type, int from, int to) {
-        if (type == ThemeActivity.NO_TYPE) return;
+        if (type == AbstractActivity.NO_TYPE) return;
 
         int id = ThemesManager.getThemeId(from);
 
         if (from < to) {
             for (int i = from; i < to; i++) {
-                Collections.swap(themes, i, i + 1);
-                ThemesManager.translateThemeDown(id);
+                Collections.swap(data, i, i + 1);
+                if (!activity.getSearchBar().isSearching)
+                    { ThemesManager.translateThemeDown(id); }
             }
         } else {
             for (int i = from; i > to; i--) {
-                Collections.swap(themes, i, i - 1);
-                ThemesManager.translateThemeUp(id);
+                Collections.swap(data, i, i - 1);
+                if (!activity.getSearchBar().isSearching)
+                    { ThemesManager.translateThemeUp(id); }
             }
         }
         notifyItemMoved(from, to);

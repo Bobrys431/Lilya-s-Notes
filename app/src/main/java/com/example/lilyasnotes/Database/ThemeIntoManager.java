@@ -15,6 +15,8 @@ public class ThemeIntoManager {
     }
 
     public static int getThemeIndex(int id) {
+        System.out.println("ThemeIntoManager getThemeIndex");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_INTO_INDEX +
                 " FROM " + SQLiteDatabaseAdapter.THEME_INTO +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_INTO_IN_ID + " = " + id, null);
@@ -28,6 +30,8 @@ public class ThemeIntoManager {
     }
 
     public static int getThemeId(int id, int index) {
+        System.out.println("ThemeIntoManager getThemeId");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_INTO_IN_ID +
                 " FROM " + SQLiteDatabaseAdapter.THEME_INTO +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_INTO_INDEX + " = " + index +
@@ -42,6 +46,8 @@ public class ThemeIntoManager {
     }
 
     public static int getParentId(int id) {
+        System.out.println("ThemeIntoManager getParentId");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_INTO_THEME_ID +
                 " FROM " + SQLiteDatabaseAdapter.THEME_INTO +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_INTO_IN_ID + " = " + id, null);

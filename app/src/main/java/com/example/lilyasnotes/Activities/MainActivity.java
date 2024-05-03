@@ -2,9 +2,7 @@ package com.example.lilyasnotes.Activities;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -12,13 +10,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.Buttons.ButtonManagers.ButtonsManager;
+import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
 import com.example.lilyasnotes.Buttons.ButtonManagers.MainButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
@@ -26,41 +23,33 @@ import com.example.lilyasnotes.Buttons.DTO.AddButton;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.RecyclerViews.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViews.MainRecyclerViewAdapter;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.RecyclerViews.RecyclerViewMoveCallback;
 import com.example.lilyasnotes.Widgets.SearchBars.MainSearchBarHelper;
-import com.example.lilyasnotes.Widgets.SearchBars.SearchBarHelper;
+import com.example.lilyasnotes.Widgets.SearchBars.AbstractSearchBarHelper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AbstractActivity {
 
-    public int selectedViewId;
-    public List<Theme> themes;
-    public RecyclerView themesListView;
-    public ButtonsManager buttonsManager;
+    private MainButtonsManager buttonsManager;
     private MainRecyclerViewAdapter adapter;
-    private SQLiteDatabase database;
-    private SearchBarHelper searchBar;
+    private MainSearchBarHelper searchBar;
 
+    private RecyclerView themesListView;
     private ImageView themesListBackground;
     private ImageButton themeButton;
     private ImageButton exitButton;
     private RelativeLayout actionBarLayout;
 
 
-    @SuppressLint({"NotifyDataSetChanged", "DiscouragedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        database = SQLiteDatabaseAdapter.getDatabase(this);
-        themes = new ArrayList<>();
-        selectedViewId = -1;
 
         SQLiteDatabaseAdapter.printTable(null, this);
         loadThemesFromDatabaseIntoThemesList();
@@ -69,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
         buildScrollingBackground();
         buildButtons();
         buildSearchBar();
-        setStatusAndActionBarAppTheme();
+        buildStatusAndActionBars();
 
+        changeByAppTheme();
         buttonsManager.updateButtonsDisplay();
     }
 
@@ -82,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (databaseCursor != null) {
             while (databaseCursor.moveToNext()) {
-                themes.add(new Theme(
+                data.add(new Theme(
                         databaseCursor.getInt(databaseCursor.getColumnIndexOrThrow(SQLiteDatabaseAdapter.THEMES_THEME_ID)),
                         this));
             }
@@ -90,13 +80,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void buildRecyclerView() {
+    @Override
+    protected void buildRecyclerView() {
         themesListView = findViewById(R.id.themes_list_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         themesListView.setLayoutManager(layoutManager);
 
-        adapter = new MainRecyclerViewAdapter(themes, this);
+        adapter = new MainRecyclerViewAdapter(this);
+        adapter.setRecyclerView(themesListView);
+        adapter.setThemes(data);
 
         ItemTouchHelper.Callback callback = new RecyclerViewMoveCallback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -106,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void buildScrollingBackground() {
+    @Override
+    protected void buildScrollingBackground() {
         themesListBackground = findViewById(R.id.themes_list_background);
         themesListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -123,9 +117,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    @SuppressLint("DiscouragedApi")
-    private void buildButtons() {
+    @Override
+    protected void buildButtons() {
         buildThemeButton();
         buildExitButton();
 
@@ -136,33 +129,27 @@ public class MainActivity extends AppCompatActivity {
                 EditButton.class);
     }
 
-
     @SuppressLint("DiscouragedApi")
     private void buildThemeButton() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
         themeButton = findViewById(R.id.theme_button);
-        themeButton.setBackgroundResource(getResources().getIdentifier("theme_" + appTheme, "drawable", getPackageName()));
         themeButton.setOnClickListener(view -> changeAppTheme());
     }
 
-    @SuppressLint("DiscouragedApi")
     private void changeAppTheme() {
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + " SET " + SQLiteDatabaseAdapter.APP_THEME + " = CASE WHEN " + SQLiteDatabaseAdapter.APP_THEME + " = 'LIGHT' THEN 'DARK' ELSE 'LIGHT' END");
-        changeToAppTheme();
+        changeByAppTheme();
     }
 
-    private void changeToAppTheme() {
-        changeWindowColorToAppTheme();
-        changeActionBarColorToAppTheme();
-        changeStatusBarColorToAppTheme();
-        changeAllButtonsColorToAppTheme();
-        changeAllViewHoldersColorToAppTheme();
-
-        new Handler().postDelayed(adapter::notifyDataSetChanged, 500);
+    private void changeByAppTheme() {
+        changeWindowColorByAppTheme();
+        changeActionBarColorByAppTheme();
+        changeStatusBarColorByAppTheme();
+        changeAllButtonsColorByAppTheme();
+        changeAllViewHoldersColorByAppTheme();
+        changeSearchBarColorByAppTheme();
     }
 
-    private void changeWindowColorToAppTheme() {
+    private void changeWindowColorByAppTheme() {
         Window window = getWindow();
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
 
@@ -172,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         R.color.darkThemeBackground);
     }
 
-    private void changeActionBarColorToAppTheme() {
+    private void changeActionBarColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
 
         actionBarLayout.setBackgroundResource(
@@ -181,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         R.color.darkThemeBackground);
     }
 
-    private void changeStatusBarColorToAppTheme() {
+    private void changeStatusBarColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
 
         Window window = getWindow();
@@ -191,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                         R.color.darkThemeBackground));
     }
 
-    private void changeAllButtonsColorToAppTheme() {
+    private void changeAllButtonsColorByAppTheme() {
         changeRightButtonsColorByAppTheme();
         changeExitButtonColorByAppTheme();
         changeThemeButtonColorByAppTheme();
@@ -224,91 +211,88 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void changeAllViewHoldersColorToAppTheme() {
+    private void changeAllViewHoldersColorByAppTheme() {
         for (int i = 0; i < adapter.getItemCount(); i++) {
             ThemeViewHolder holder = (ThemeViewHolder) themesListView.findViewHolderForAdapterPosition(i);
 
             if (holder != null) {
-                holder.changeViewHolderColorToAppTheme();
+                holder.changeColorByAppTheme();
             }
         }
+    }
+
+    private void changeSearchBarColorByAppTheme() {
+        searchBar.changeColorByAppTheme();
     }
 
 
     @SuppressLint("DiscouragedApi")
     private void buildExitButton() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
         exitButton = findViewById(R.id.exit_button);
-        exitButton.setBackgroundResource(getResources().getIdentifier("exit_" + appTheme, "drawable", getPackageName()));
         exitButton.setOnClickListener(view -> closeApp());
     }
 
-    @SuppressLint("DiscouragedApi")
     private void closeApp() {
         database.close();
         this.finish();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void buildSearchBar() {
-        searchBar = new MainSearchBarHelper(findViewById(R.id.search_bar), this);
-        searchBar.setRecyclerViewUpdater(() -> {
+    @Override
+    protected void buildSearchBar() {
+        searchBar = new MainSearchBarHelper(this);
+        searchBar.setOnDataRecordedListener(() -> {
             adapter.deselectSelectedViewHolder();
-            adapter.notifyDataSetChanged();
+            buttonsManager.updateButtonsDisplay();
         });
-        searchBar.setButtonsManagerUpdater(buttonsManager::updateButtonsDisplay);
         searchBar.build();
     }
 
-
-    private void setStatusAndActionBarAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        setStatusBarAppTheme(appTheme);
-        setActionBarAppTheme(appTheme);
+    @Override
+    protected void buildStatusAndActionBars() {
+        buildStatusBar();
+        buildActionBar();
     }
 
-    private void setStatusBarAppTheme(String appTheme) {
+    private void buildStatusBar() {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(
-                getResources().getColor(appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground, getTheme())
-        );
     }
 
-    private void setActionBarAppTheme(String appTheme) {
+    private void buildActionBar() {
         actionBarLayout = findViewById(R.id.action_bar_layout);
-        actionBarLayout.setBackgroundColor(getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground, getTheme()));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void reloadThemes() {
-        themes.clear();
-        loadThemesFromDatabaseIntoThemesList();
-
-        adapter.deselectSelectedViewHolder();
-        adapter.notifyDataSetChanged();
-        buttonsManager.updateButtonsDisplay();
+    @Override
+    public void reloadDataComparedToSearchBar() {
+        searchBar.updateVisibleData();
     }
 
-    public SearchBarHelper getSearchBar() {
-        return searchBar;
-    }
-
-    public MainRecyclerViewAdapter getAdapter() {
+    @Override
+    public AbstractRecyclerViewAdapter getAdapter() {
         return adapter;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        reloadThemes();
-        changeToAppTheme();
+    public AbstractButtonsManager getButtonsManager() {
+        return buttonsManager;
+    }
+
+    @Override
+    public AbstractSearchBarHelper getSearchBar() {
+        return searchBar;
+    }
+
+    @Override
+    public int getSelectedViewIndex() {
+        int index = -1;
+        for (int i = 0; i < data.size(); i++) {
+            if (((Theme) data.get(i)).id == selectedViewId) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1)
+            { throw new NoSuchElementException("There is no selected theme or selected theme is not visible in the data list."); }
+        return index;
     }
 }

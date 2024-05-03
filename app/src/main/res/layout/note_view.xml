@@ -42,9 +42,8 @@
             android:text="It's a title, lol"
             android:textColor="@color/black"
             android:fontFamily="@font/advent_pro_bold"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginHorizontal="20dp"
             android:textSize="13dp" />
-
     </RelativeLayout>
 </RelativeLayout>

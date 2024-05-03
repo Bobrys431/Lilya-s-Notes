@@ -1,15 +1,17 @@
 package com.example.lilyasnotes.Buttons.ButtonManagers;
 
+import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ButtonsManager {
+public abstract class AbstractButtonsManager {
 
+    protected AbstractActivity activity;
     protected List<Button> buttons;
 
-    protected ButtonsManager() {
+    protected AbstractButtonsManager() {
         buttons = new ArrayList<>();
     }
 

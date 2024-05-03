@@ -12,10 +12,11 @@ public class ThemeManager {
 
     public static void build(Context context) {
         database = SQLiteDatabaseAdapter.getDatabase(context);
-        System.out.println(database);
     }
 
     public static String getTitle(int id) {
+        System.out.println("ThemeManager getTitle");
+
         Cursor titleById = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEME_TITLE +
                 " FROM " + SQLiteDatabaseAdapter.THEME +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + id, null);
@@ -29,6 +30,8 @@ public class ThemeManager {
     }
 
     public static void setTitle(int id, String title) {
+        System.out.println("ThemeManager setTitle");
+
         database.execSQL("UPDATE " + SQLiteDatabaseAdapter.THEME +
                 " SET " + SQLiteDatabaseAdapter.THEME_TITLE + " = ?" +
                 " WHERE " + SQLiteDatabaseAdapter.THEME_ID + " = " + id, new Object[]{title});

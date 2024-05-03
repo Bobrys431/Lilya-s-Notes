@@ -1,10 +1,10 @@
 package com.example.lilyasnotes.Buttons.ButtonManagers;
 
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.NoteManager;
 import com.example.lilyasnotes.Database.ThemeIntoManager;
@@ -19,12 +19,10 @@ import com.example.lilyasnotes.Widgets.Dialogs.ThemeAddingChoice;
 import com.example.lilyasnotes.Widgets.WidgetEditors.NoteWidgetEditor;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
-public class ThemeButtonsManager extends ButtonsManager {
+public class ThemeButtonsManager extends AbstractButtonsManager {
 
-    ThemeActivity activity;
-
-    public ThemeButtonsManager(AppCompatActivity activity) {
-        this.activity = (ThemeActivity) activity;
+    public ThemeButtonsManager(ThemeActivity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -58,13 +56,15 @@ public class ThemeButtonsManager extends ButtonsManager {
     }
 
     private void addButtonRealization() {
+        System.out.println("ThemeButtonsManager addButtonRealization");
+
         ThemeAddingChoice choice = new ThemeAddingChoice(activity);
         choice.setOnChoiceSelectedListener(() -> {
             int choiceType = choice.getChoiceType();
 
-            if (choiceType == ThemeAddingChoice.THEME_CHOICE) {
+            if (choiceType == AbstractActivity.THEME_TYPE) {
                 getTitleAndAddNewTheme();
-            } else if (choiceType == ThemeAddingChoice.NOTE_CHOICE) {
+            } else if (choiceType == AbstractActivity.NOTE_TYPE) {
                 getTitleAndAddNewNote();
             }
         });
@@ -76,10 +76,18 @@ public class ThemeButtonsManager extends ButtonsManager {
 
         DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
             ThemeManager.addNewTheme(themeEditor.getTitle());
-            ThemeIntoManager.addConnection(activity.theme.id, ThemeManager.getLastThemeId());
+            ThemeIntoManager.addConnection(((ThemeActivity) activity).theme.id, ThemeManager.getLastThemeId());
 
-            activity.getSearchBar().removeText();
-            activity.reloadData();
+            int oldSize = activity.data.size();
+            activity.reloadDataComparedToSearchBar();
+
+            if (oldSize != activity.data.size()) {
+                activity.getAdapter().notifyItemInserted(activity.data.size() - 1);
+                new Handler().postDelayed(() -> {
+                    activity.getAdapter().selectViewHolder(activity.data.size() - 1);
+                    updateButtonsDisplay();
+                }, 1);
+            }
         };
 
         themeEditor.setOnDismissListener(onDismiss);
@@ -91,10 +99,18 @@ public class ThemeButtonsManager extends ButtonsManager {
 
         DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
             NoteManager.addNewNote(noteEditor.getTitle(), noteEditor.getText());
-            ThemeNoteManager.addConnection(activity.theme.id, NoteManager.getLastNoteId());
+            ThemeNoteManager.addConnection(((ThemeActivity) activity).theme.id, NoteManager.getLastNoteId());
 
-            activity.getSearchBar().removeText();
-            activity.reloadData();
+            int oldSize = activity.data.size();
+            activity.reloadDataComparedToSearchBar();
+
+            if (oldSize != activity.data.size()) {
+                activity.getAdapter().notifyItemInserted(activity.data.size() - 1);
+                new Handler().postDelayed(() -> {
+                    activity.getAdapter().selectViewHolder(activity.data.size() - 1);
+                    updateButtonsDisplay();
+                }, 1);
+            }
         };
 
         noteEditor.setOnDismissListener(onDismiss);
@@ -111,6 +127,8 @@ public class ThemeButtonsManager extends ButtonsManager {
     }
 
     private void deleteButtonRealization() {
+        System.out.println("ThemeButtonsManager deleteButtonRealization");
+
         String title = getSelectedDataTitle();
         ConfirmDialog deletingConfirmationDialog = new ConfirmDialog();
 
@@ -124,11 +142,12 @@ public class ThemeButtonsManager extends ButtonsManager {
                 NoteManager.deleteNote(activity.selectedViewId);
             }
 
-            if (activity.getSearchBar().isSearching) {
-                activity.getSearchBar().updateVisibleData();
-                activity.getSearchBar().reloadData();
-            } else
-                activity.reloadData();
+            int index = activity.getSelectedViewIndex();
+            activity.getAdapter().deselectSelectedViewHolder();
+
+            activity.reloadDataComparedToSearchBar();
+            activity.getAdapter().notifyItemRemoved(index);
+            updateButtonsDisplay();
         });
 
         deletingConfirmationDialog.show(activity.getSupportFragmentManager(), "Deleting Confirmation Dialog");
@@ -150,16 +169,25 @@ public class ThemeButtonsManager extends ButtonsManager {
     }
 
     private void editButtonRealization() {
+        System.out.println("ThemeButtonsManager editButtonRealization");
+
         if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
             ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);
 
             DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
                 ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());
 
-                if (activity.getSearchBar().isSearching)
-                    activity.getSearchBar().reloadData();
-                else
-                    activity.reloadData();
+                int index = activity.getSelectedViewIndex();
+                int oldSize = activity.data.size();
+
+                activity.reloadDataComparedToSearchBar();
+
+                if (oldSize > activity.data.size()) {
+                    activity.getAdapter().notifyItemRemoved(index);
+                    activity.getAdapter().deselectSelectedViewHolder();
+                    activity.getButtonsManager().updateButtonsDisplay();
+                } else
+                    { activity.getAdapter().notifyItemChanged(index); }
             };
 
             themeEditor.setOnDismissListener(onDismiss);
@@ -172,10 +200,17 @@ public class ThemeButtonsManager extends ButtonsManager {
                 NoteManager.setTitle(activity.selectedViewId, noteEditor.getTitle());
                 NoteManager.setText(activity.selectedViewId, noteEditor.getText());
 
-                if (activity.getSearchBar().isSearching)
-                    activity.getSearchBar().reloadData();
-                else
-                    activity.reloadData();
+                int index = activity.getSelectedViewIndex();
+                int oldSize = activity.data.size();
+
+                activity.reloadDataComparedToSearchBar();
+
+                if (oldSize > activity.data.size()) {
+                    activity.getAdapter().notifyItemRemoved(index);
+                    activity.getAdapter().deselectSelectedViewHolder();
+                    activity.getButtonsManager().updateButtonsDisplay();
+                } else
+                    { activity.getAdapter().notifyItemChanged(index); }
             };
 
             noteEditor.setOnDismissListener(onDismiss);

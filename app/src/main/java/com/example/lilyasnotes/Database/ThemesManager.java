@@ -15,6 +15,8 @@ public class ThemesManager {
     }
 
     public static int getThemeIndex(int id) {
+        System.out.println("ThemesManager getThemeIndex");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX +
                 " FROM " + SQLiteDatabaseAdapter.THEMES +
                 " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_ID + " = " + id, null);
@@ -28,6 +30,8 @@ public class ThemesManager {
     }
 
     public static int getThemeId(int index) {
+        System.out.println("ThemesManager getThemeId");
+
         Cursor cursor = database.rawQuery("SELECT " + SQLiteDatabaseAdapter.THEMES_THEME_ID +
                 " FROM " + SQLiteDatabaseAdapter.THEMES +
                 " WHERE " + SQLiteDatabaseAdapter.THEMES_THEME_INDEX + " = " + index, null);

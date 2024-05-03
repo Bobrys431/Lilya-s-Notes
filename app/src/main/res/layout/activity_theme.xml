@@ -22,10 +22,11 @@
             android:translationZ="1dp">
 
             <RelativeLayout
+                android:id="@+id/search_field"
                 android:layout_width="match_parent"
                 android:layout_height="29dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/serch_field_light" />
+                android:background="@drawable/search_field_light" />
 
             <EditText
                 android:id="@+id/search_bar"
@@ -37,6 +38,7 @@
                 android:fontFamily="@font/advent_pro_bold"
                 android:inputType="text"
                 android:text=""
+                android:hint="Пошук ..."
                 android:textColor="@color/black"
                 android:textSize="13dp" />
 
@@ -160,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/lilya_background"
+            android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
             android:adjustViewBounds="true"/>
 
@@ -175,5 +177,39 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:inputType="textMultiLine"
         android:singleLine="false"/>
+    
+    <RelativeLayout
+        android:id="@+id/title_frame_wrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationX="2000dp">
+
+        <TextView
+            android:id="@+id/title_wrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/advent_pro_bold"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/note_frame_wrap"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:translationX="2000dp">
+
+        <TextView
+            android:id="@+id/note_wrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/advent_pro_bold"
+            android:layout_marginBottom="4dp"
+            android:layout_marginHorizontal="20dp"
+            android:textSize="13dp" />
+    </RelativeLayout>
+
 
 </RelativeLayout>
