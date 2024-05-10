@@ -39,22 +39,4 @@ public class Tools {
         }
         return count;
     }
-
-    public static int[] getNoteWrapParams(ThemeActivity activity, String title, String note) {
-        int[] params = new int[2];
-
-        RelativeLayout titleFrame = activity.findViewById(R.id.title_frame_wrap);
-        TextView titleView = activity.findViewById(R.id.title_wrap);
-
-        titleView.setText(title);
-        params[0] = titleFrame.getWidth();
-
-        RelativeLayout noteFrame = activity.findViewById(R.id.note_frame_wrap);
-        TextView noteView = activity.findViewById(R.id.note_wrap);
-
-        noteView.setText(note);
-        params[1] = noteFrame.getHeight();
-
-        return params;
-    }
 }

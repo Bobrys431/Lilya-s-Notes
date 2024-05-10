@@ -3,9 +3,12 @@ package com.example.lilyasnotes.Widgets.WidgetEditors;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,6 +74,27 @@ public class NoteWidgetEditor extends Dialog {
                 appTheme.equals("light") ?
                         R.color.black :
                         R.color.white));
+
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 45) {
+                    Toast.makeText(getContext(), "Максимум символів: 45", Toast.LENGTH_LONG).show();
+                    title.setText(charSequence.subSequence(0, 45));
+                    title.setEnabled(false);
+                    title.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
         if (id != -1)
             title.setText(NoteManager.getTitle(id));
 

@@ -107,7 +107,6 @@ public class SQLiteDatabaseAdapter extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-
     public static SQLiteDatabase getDatabase(Context context) {
         return new SQLiteDatabaseAdapter(context).getWritableDatabase();
     }

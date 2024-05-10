@@ -177,39 +177,62 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:inputType="textMultiLine"
         android:singleLine="false"/>
-    
+
     <RelativeLayout
-        android:id="@+id/title_frame_wrap"
+        android:id="@+id/theme_title_frame_wrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationX="2000dp"
+        android:maxWidth="270dp">
+
+        <TextView
+            android:id="@+id/theme_title_wrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/advent_pro_bold"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:textSize="20sp"
+            android:maxWidth="220dp"
+            android:maxLines="3"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/note_title_frame_wrap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:translationX="2000dp">
 
         <TextView
-            android:id="@+id/title_wrap"
+            android:id="@+id/note_title_wrap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/advent_pro_bold"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="20dp"
             android:layout_centerHorizontal="true"
-            android:textSize="20dp" />
+            android:textSize="20sp"
+            android:maxWidth="270dp"
+            android:maxLines="3"
+            android:gravity="center"/>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/note_frame_wrap"
-        android:layout_width="300dp"
+        android:id="@+id/note_text_frame_wrap"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:translationX="2000dp">
+        android:translationX="2000dp"
+        android:paddingBottom="10dp">
 
         <TextView
-            android:id="@+id/note_wrap"
+            android:id="@+id/note_text_wrap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/advent_pro_bold"
-            android:layout_marginBottom="4dp"
             android:layout_marginHorizontal="20dp"
-            android:textSize="13dp" />
+            android:textSize="16sp" />
     </RelativeLayout>
-
 
 </RelativeLayout>

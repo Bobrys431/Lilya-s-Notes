@@ -1,5 +1,6 @@
 package com.example.lilyasnotes.Data.ViewHolders;
 
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -7,6 +8,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,9 +58,9 @@ public class ThemeViewHolder extends AbstractViewHolder {
         setupTitleFrame(appTheme);
 
         if (isSelected) {
-            new Handler().postDelayed(this::visualizeLikeSelected, 350);
+            new Handler().postDelayed(this::visualizeLikeSelected, 300);
         } else {
-            new Handler().postDelayed(this::visualizeLikeDeselected, 350);
+            new Handler().postDelayed(this::visualizeLikeDeselected, 300);
         }
     }
 
@@ -90,13 +92,20 @@ public class ThemeViewHolder extends AbstractViewHolder {
                 "mark_" + appTheme,
                 "drawable",
                 activity.getPackageName()));
-        ViewGroup.LayoutParams titleFrameLayoutParams = titleFrame.getLayoutParams();
-        ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
 
-        markLayoutParams.height = titleFrameLayoutParams.height;
-        markLayoutParams.width = titleFrameLayoutParams.height / 2;
+        ViewTreeObserver vto = titleFrame.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                titleFrame.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int height = titleFrame.getHeight();
 
-        mark.setLayoutParams(markLayoutParams);
+                ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
+                markLayoutParams.height = height;
+                markLayoutParams.width = height / 2;
+                mark.setLayoutParams(markLayoutParams);
+            }
+        });
     }
 
     private void setupTitle(String appTheme) {
@@ -118,164 +127,160 @@ public class ThemeViewHolder extends AbstractViewHolder {
     @Override
     public void visualizeLikeSelected() {
         basement.setAlpha(0.9f);
-        basement.setPivotX(0f);
-        basement.setPivotY(50f);
-        basement.setScaleX(1.35f);
-        basement.setScaleY(1.35f);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
         params.setMargins(0, (int) (20 * Tools.getDensity(activity)), 0, (int) (20 * Tools.getDensity(activity)));
         basement.setLayoutParams(params);
+        RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
+                (int) (Tools.getDensity(activity) * 290),
+                (int) (titleFrame.getHeight() * 1.1f));
+        titleFrame.setLayoutParams(frameParams);
     }
 
     @Override
     public void visualizeLikeDeselected() {
         basement.setAlpha(0.75f);
-        basement.setPivotX(0f);
-        basement.setPivotY(50f);
-        basement.setScaleX(1.0f);
-        basement.setScaleY(1.0f);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
         params.setMargins(0, (int) (6 * Tools.getDensity(activity)), 0, (int) (6 * Tools.getDensity(activity)));
         basement.setLayoutParams(params);
+        RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        titleFrame.setLayoutParams(frameParams);
     }
 
     public void select() {
         if (!isSelected) {
             isSelected = true;
 
-            animateMarginsUp();
-            animateScaleUp();
-            animateAlphaUp();
+            setupWrapParams();
+            animateSelected();
         }
     }
 
-    private void animateMarginsUp() {
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        ValueAnimator marginAnimator = ValueAnimator.ofInt(6, 20);
+    private void animateSelected() {
+        ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
+                PropertyValuesHolder.ofInt("margins", (int) (6 * Tools.getDensity(activity)), (int) (20 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofFloat("alpha", 0.75f, 0.9f),
+                PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), (int) (290 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofInt("height", titleFrame.getHeight(), (int) (titleFrame.getHeight() * 1.2f))
+        );
+        animator.setDuration(300);
 
-        marginAnimator.setDuration(400);
-        marginAnimator.addUpdateListener(valueAnimator -> {
+        RecyclerView.LayoutParams basementParams = (RecyclerView.LayoutParams) basement.getLayoutParams();
+        RelativeLayout.LayoutParams titleFrameParams = (RelativeLayout.LayoutParams) titleFrame.getLayoutParams();
+        ViewGroup.LayoutParams markParams = mark.getLayoutParams();
 
-            params.setMargins(
+        animator.addUpdateListener(valueAnimator -> {
+            basementParams.setMargins(
                     0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(activity)),
+                    (Integer) valueAnimator.getAnimatedValue("margins"),
                     0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(activity)));
-            basement.setLayoutParams(params);
+                    (Integer) valueAnimator.getAnimatedValue("margins")
+            );
+
+            basement.setAlpha((Float) valueAnimator.getAnimatedValue("alpha"));
+
+            titleFrameParams.width = (int) valueAnimator.getAnimatedValue("width");
+            titleFrameParams.height = (int) valueAnimator.getAnimatedValue("height");
+
+            markParams.width = (int) valueAnimator.getAnimatedValue("height") / 2;
+            markParams.height = (int) valueAnimator.getAnimatedValue("height");
+
+            basement.setLayoutParams(basementParams);
+            titleFrame.setLayoutParams(titleFrameParams);
+            mark.setLayoutParams(markParams);
         });
 
-        marginAnimator.start();
-    }
+        animator.start();
 
-    private void animateScaleUp() {
-        basement.setPivotX(0f);
-        basement.setPivotY(50f);
-
-        ValueAnimator scaleAnimator = ValueAnimator.ofFloat(1.0f, 1.35f);
-
-        scaleAnimator.setDuration(400);
-        scaleAnimator.addUpdateListener(valueAnimator -> {
-
-            basement.setScaleX((float) valueAnimator.getAnimatedValue());
-            basement.setScaleY((float) valueAnimator.getAnimatedValue());
-        });
-
-        scaleAnimator.start();
-    }
-
-    private void animateAlphaUp() {
-        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0.75f, 0.9f);
-
-        alphaAnimator.setDuration(400);
-        alphaAnimator.addUpdateListener(valueAnimator ->
-                basement.setAlpha((float) valueAnimator.getAnimatedValue()));
-
-        alphaAnimator.start();
+        new Handler().postDelayed(() -> {
+            markParams.width = titleFrame.getHeight() / 2;
+            markParams.height = titleFrame.getHeight();
+            mark.setLayoutParams(markParams);
+        }, 300);
     }
 
     public void deselect() {
         if (isSelected) {
             isSelected = false;
 
-            animateMarginsDown();
-            animateScaleDown();
-            animateAlphaDown();
+            setupWrapParams();
+            animateDeselected();
         }
     }
 
-    private void animateMarginsDown() {
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        ValueAnimator marginAnimator = ValueAnimator.ofInt(20, 6);
+    private void animateDeselected() {
+        ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
+                PropertyValuesHolder.ofInt("margins", (int) (20 * Tools.getDensity(activity)), (int) (6 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofFloat("alpha", 0.9f, 0.75f),
+                PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), getTitleWidthWrap()),
+                PropertyValuesHolder.ofInt("height", titleFrame.getHeight(), (int) (titleFrame.getHeight() / 1.2f))
+        );
+        animator.setDuration(300);
 
-        marginAnimator.setDuration(400);
-        marginAnimator.addUpdateListener(valueAnimator -> {
+        RecyclerView.LayoutParams basementParams = (RecyclerView.LayoutParams) basement.getLayoutParams();
+        RelativeLayout.LayoutParams titleFrameParams = (RelativeLayout.LayoutParams) titleFrame.getLayoutParams();
+        ViewGroup.LayoutParams markParams = mark.getLayoutParams();
 
-            params.setMargins(
+        animator.addUpdateListener(valueAnimator -> {
+            basementParams.setMargins(
                     0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(activity)),
+                    (Integer) valueAnimator.getAnimatedValue("margins"),
                     0,
-                    (int) ((int) valueAnimator.getAnimatedValue() * Tools.getDensity(activity)));
-            basement.setLayoutParams(params);
+                    (Integer) valueAnimator.getAnimatedValue("margins"));
+
+            basement.setAlpha((Float) valueAnimator.getAnimatedValue("alpha"));
+
+            titleFrameParams.width = (int) valueAnimator.getAnimatedValue("width");
+            titleFrameParams.height = (int) valueAnimator.getAnimatedValue("height");
+
+            markParams.width = (int) valueAnimator.getAnimatedValue("height") / 2;
+            markParams.height = (int) valueAnimator.getAnimatedValue("height");
+
+            basement.setLayoutParams(basementParams);
+            titleFrame.setLayoutParams(titleFrameParams);
+            mark.setLayoutParams(markParams);
         });
 
-        marginAnimator.start();
+        animator.start();
+
+        new Handler().postDelayed(() -> {
+            titleFrameParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            titleFrameParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            titleFrame.setLayoutParams(titleFrameParams);
+
+            new Handler().postDelayed(() -> {
+                markParams.width = titleFrame.getHeight() / 2;
+                markParams.height = titleFrame.getHeight();
+                mark.setLayoutParams(markParams);
+            }, 0);
+        }, 300);
     }
 
-    private void animateScaleDown() {
-        basement.setPivotX(0f);
-        basement.setPivotY(50f);
-
-        ValueAnimator scaleAnimator = ValueAnimator.ofFloat(1.35f, 1.0f);
-
-        scaleAnimator.setDuration(400);
-        scaleAnimator.addUpdateListener(valueAnimator -> {
-
-            basement.setScaleX((float) valueAnimator.getAnimatedValue());
-            basement.setScaleY((float) valueAnimator.getAnimatedValue());
-        });
-
-        scaleAnimator.start();
+    private int getTitleWidthWrap() {
+        RelativeLayout titleFrame = activity.findViewById(R.id.theme_title_frame_wrap);
+        return titleFrame.getWidth();
     }
 
-    private void animateAlphaDown() {
-        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0.9f, 0.75f);
-
-        alphaAnimator.setDuration(400);
-        alphaAnimator.addUpdateListener(valueAnimator ->
-                basement.setAlpha((float) valueAnimator.getAnimatedValue()));
-
-        alphaAnimator.start();
+    private void setupWrapParams() {
+        TextView titleView = activity.findViewById(R.id.theme_title_wrap);
+        titleView.setText(title.getText());
     }
 
+    @SuppressLint("DiscouragedApi")
     @Override
     public void changeColorByAppTheme() {
-        changeTitleColor();
-        changeTitleFrameColor();
-        changeMarkColor();
-    }
-
-    private void changeTitleColor() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
         title.setTextColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
                         R.color.darkThemeActiveColor, activity.getTheme()));
-    }
-
-    private void changeTitleFrameColor() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
         titleFrame.setBackgroundColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeBackground :
                         R.color.darkThemeBackground, activity.getTheme()));
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private void changeMarkColor() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
-        System.out.println(appTheme);
 
         mark.setBackgroundResource(activity.getResources().getIdentifier(
                 "mark_" + appTheme,

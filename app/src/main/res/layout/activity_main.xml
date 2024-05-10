@@ -156,4 +156,25 @@
         android:inputType="textMultiLine"
         android:singleLine="false"/>
 
+    <RelativeLayout
+        android:id="@+id/theme_title_frame_wrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationX="2000dp"
+        android:maxWidth="270dp">
+
+        <TextView
+            android:id="@+id/theme_title_wrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/advent_pro_bold"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:textSize="20sp"
+            android:maxWidth="220dp"
+            android:maxLines="3"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
 </RelativeLayout>

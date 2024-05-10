@@ -10,9 +10,10 @@
     <RelativeLayout
         android:id="@+id/title_frame"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:background="@color/lightThemeBackground"
-        android:translationZ="5dp">
+        android:translationZ="5dp"
+        android:maxWidth="270dp">
 
         <TextView
             android:id="@+id/title"
@@ -23,14 +24,18 @@
             android:fontFamily="@font/advent_pro_bold"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="20dp"
-            android:textSize="20dp" />
+            android:textSize="20sp"
+            android:maxWidth="220dp"
+            android:maxLines="3"
+            android:gravity="center"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/mark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/title_frame"
+        android:layout_toEndOf="@id/title_frame"
         android:background="@drawable/mark_light"
         android:translationZ="5dp" />
 </RelativeLayout>

@@ -295,4 +295,10 @@ public class MainActivity extends AbstractActivity {
             { throw new NoSuchElementException("There is no selected theme or selected theme is not visible in the data list."); }
         return index;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        changeByAppTheme();
+    }
 }
