@@ -52,15 +52,26 @@ public class ThemeViewHolder extends AbstractViewHolder {
                 activity.selectedViewId == id &&
                 activity.selectedViewType == AbstractActivity.THEME_TYPE;
 
+        if (isSelected) {
+            System.out.println("Selected");
+            alphaState = ALPHA_SELECTED;
+        } else if (activity.selectedViewType == AbstractActivity.NO_TYPE) {
+            System.out.println("To select");
+            alphaState = ALPHA_TO_SELECT;
+        } else {
+            System.out.println("Not selected");
+            alphaState = ALPHA_NOT_SELECTED;
+        }
+
         setupBasement(onTouchEvents);
         setupMark(appTheme);
         setupTitle(appTheme);
         setupTitleFrame(appTheme);
 
         if (isSelected) {
-            new Handler().postDelayed(this::visualizeLikeSelected, 300);
+            new Handler().postDelayed(this::visualizeLikeSelected, 200);
         } else {
-            new Handler().postDelayed(this::visualizeLikeDeselected, 300);
+            new Handler().postDelayed(this::visualizeLikeDeselected, 200);
         }
     }
 
@@ -126,7 +137,7 @@ public class ThemeViewHolder extends AbstractViewHolder {
 
     @Override
     public void visualizeLikeSelected() {
-        basement.setAlpha(0.9f);
+        basement.setAlpha(alphaState);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
         params.setMargins(0, (int) (20 * Tools.getDensity(activity)), 0, (int) (20 * Tools.getDensity(activity)));
         basement.setLayoutParams(params);
@@ -138,7 +149,7 @@ public class ThemeViewHolder extends AbstractViewHolder {
 
     @Override
     public void visualizeLikeDeselected() {
-        basement.setAlpha(0.75f);
+        basement.setAlpha(alphaState);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
         params.setMargins(0, (int) (6 * Tools.getDensity(activity)), 0, (int) (6 * Tools.getDensity(activity)));
         basement.setLayoutParams(params);
@@ -160,7 +171,6 @@ public class ThemeViewHolder extends AbstractViewHolder {
     private void animateSelected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
                 PropertyValuesHolder.ofInt("margins", (int) (6 * Tools.getDensity(activity)), (int) (20 * Tools.getDensity(activity))),
-                PropertyValuesHolder.ofFloat("alpha", 0.75f, 0.9f),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), (int) (290 * Tools.getDensity(activity))),
                 PropertyValuesHolder.ofInt("height", titleFrame.getHeight(), (int) (titleFrame.getHeight() * 1.2f))
         );
@@ -177,8 +187,6 @@ public class ThemeViewHolder extends AbstractViewHolder {
                     0,
                     (Integer) valueAnimator.getAnimatedValue("margins")
             );
-
-            basement.setAlpha((Float) valueAnimator.getAnimatedValue("alpha"));
 
             titleFrameParams.width = (int) valueAnimator.getAnimatedValue("width");
             titleFrameParams.height = (int) valueAnimator.getAnimatedValue("height");
@@ -212,7 +220,6 @@ public class ThemeViewHolder extends AbstractViewHolder {
     private void animateDeselected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
                 PropertyValuesHolder.ofInt("margins", (int) (20 * Tools.getDensity(activity)), (int) (6 * Tools.getDensity(activity))),
-                PropertyValuesHolder.ofFloat("alpha", 0.9f, 0.75f),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), getTitleWidthWrap()),
                 PropertyValuesHolder.ofInt("height", titleFrame.getHeight(), (int) (titleFrame.getHeight() / 1.2f))
         );
@@ -228,8 +235,6 @@ public class ThemeViewHolder extends AbstractViewHolder {
                     (Integer) valueAnimator.getAnimatedValue("margins"),
                     0,
                     (Integer) valueAnimator.getAnimatedValue("margins"));
-
-            basement.setAlpha((Float) valueAnimator.getAnimatedValue("alpha"));
 
             titleFrameParams.width = (int) valueAnimator.getAnimatedValue("width");
             titleFrameParams.height = (int) valueAnimator.getAnimatedValue("height");
@@ -265,6 +270,38 @@ public class ThemeViewHolder extends AbstractViewHolder {
     private void setupWrapParams() {
         TextView titleView = activity.findViewById(R.id.theme_title_wrap);
         titleView.setText(title.getText());
+    }
+
+    @Override
+    public void animateAlphaState() {
+        if (isSelected && alphaState != ALPHA_SELECTED) {
+            alphaState = ALPHA_SELECTED;
+
+            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+            alphaAnimator.setDuration(300);
+
+            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+            alphaAnimator.start();
+        } else if (activity.selectedViewType == AbstractActivity.NO_TYPE && alphaState != ALPHA_TO_SELECT) {
+            alphaState = ALPHA_TO_SELECT;
+
+            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+            alphaAnimator.setDuration(300);
+
+            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+            alphaAnimator.start();
+        } else if (alphaState != ALPHA_NOT_SELECTED) {
+            alphaState = ALPHA_NOT_SELECTED;
+
+            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+            alphaAnimator.setDuration(300);
+
+            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+            alphaAnimator.start();
+        }
     }
 
     @SuppressLint("DiscouragedApi")

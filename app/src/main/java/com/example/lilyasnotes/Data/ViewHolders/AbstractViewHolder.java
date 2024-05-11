@@ -9,6 +9,11 @@ import com.example.lilyasnotes.Activities.AbstractActivity;
 
 public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
 
+    final public static float ALPHA_NOT_SELECTED = 0.5f;
+    final public static float ALPHA_TO_SELECT = 0.75f;
+    final public static float ALPHA_SELECTED = 0.9f;
+
+    public float alphaState;
     public boolean isSelected;
     protected AbstractActivity activity;
 
@@ -19,11 +24,11 @@ public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
     public abstract void setup(int id, AbstractActivity activity, OnTouchEvents onTouchEvents);
 
     public abstract void select();
-
     public abstract void deselect();
 
-    public abstract void visualizeLikeSelected();
+    public abstract void animateAlphaState();
 
+    public abstract void visualizeLikeSelected();
     public abstract void visualizeLikeDeselected();
 
 

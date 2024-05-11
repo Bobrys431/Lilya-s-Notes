@@ -54,6 +54,13 @@ public class NoteViewHolder extends AbstractViewHolder {
         isSelected =
                 activity.selectedViewId == id &&
                 activity.selectedViewType == ThemeActivity.NOTE_TYPE;
+        if (isSelected) {
+            alphaState = ALPHA_SELECTED;
+        } else if (activity.selectedViewType == AbstractActivity.NO_TYPE) {
+            alphaState = ALPHA_TO_SELECT;
+        } else {
+            alphaState = ALPHA_NOT_SELECTED;
+        }
 
         setupBasement(onTouchEvents);
         setupTitle(appTheme);
@@ -62,9 +69,9 @@ public class NoteViewHolder extends AbstractViewHolder {
         setupNoteFrame(appTheme);
 
         if (isSelected) {
-            new Handler().postDelayed(this::visualizeLikeSelected, 300);
+            new Handler().postDelayed(this::visualizeLikeSelected, 200);
         } else {
-            new Handler().postDelayed(this::visualizeLikeDeselected, 300);
+            new Handler().postDelayed(this::visualizeLikeDeselected, 200);
         }
     }
 
@@ -138,7 +145,7 @@ public class NoteViewHolder extends AbstractViewHolder {
 
     @Override
     public void visualizeLikeSelected() {
-        basement.setAlpha(0.9f);
+        basement.setAlpha(alphaState);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
         params.setMargins(0, (int) (20 * Tools.getDensity(activity)), 0, (int) (20 * Tools.getDensity(activity)));
         basement.setLayoutParams(params);
@@ -158,7 +165,7 @@ public class NoteViewHolder extends AbstractViewHolder {
 
     @Override
     public void visualizeLikeDeselected() {
-        basement.setAlpha(0.75f);
+        basement.setAlpha(alphaState);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
         params.setMargins(0, (int) (6 * Tools.getDensity(activity)), 0, (int) (6 * Tools.getDensity(activity)));
         basement.setLayoutParams(params);
@@ -190,7 +197,6 @@ public class NoteViewHolder extends AbstractViewHolder {
     public void animateSelected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
                 PropertyValuesHolder.ofInt("margins", (int) (6 * Tools.getDensity(activity)), (int) (20 * Tools.getDensity(activity))),
-                PropertyValuesHolder.ofFloat("alpha", 0.75f, 0.9f),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), (int) (Tools.getDensity(activity) * 340)),
                 PropertyValuesHolder.ofInt("height", 0, getNoteHeightWrap())
         );
@@ -207,8 +213,6 @@ public class NoteViewHolder extends AbstractViewHolder {
                     0,
                     (Integer) valueAnimator.getAnimatedValue("margins")
             );
-
-            basement.setAlpha((Float) valueAnimator.getAnimatedValue("alpha"));
 
             titleFrameParams.width = (int) valueAnimator.getAnimatedValue("width");
 
@@ -245,7 +249,6 @@ public class NoteViewHolder extends AbstractViewHolder {
     public void animateDeselected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
                 PropertyValuesHolder.ofInt("margins", (int) (20 * Tools.getDensity(activity)), (int) (6 * Tools.getDensity(activity))),
-                PropertyValuesHolder.ofFloat("alpha", 0.9f, 0.75f),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), getTitleWidthWrap()),
                 PropertyValuesHolder.ofInt("height", noteFrame.getHeight(), 0)
         );
@@ -262,8 +265,6 @@ public class NoteViewHolder extends AbstractViewHolder {
                     0,
                     (Integer) valueAnimator.getAnimatedValue("margins")
             );
-
-            basement.setAlpha((Float) valueAnimator.getAnimatedValue("alpha"));
 
             titleFrameParams.width = (int) valueAnimator.getAnimatedValue("width");
 
@@ -296,6 +297,37 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     @Override
+    public void animateAlphaState() {
+        if (isSelected && alphaState != ALPHA_SELECTED) {
+            alphaState = ALPHA_SELECTED;
+
+            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+            alphaAnimator.setDuration(300);
+
+            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+            alphaAnimator.start();
+        } else if (activity.selectedViewType == AbstractActivity.NO_TYPE && alphaState != ALPHA_TO_SELECT) {
+            alphaState = ALPHA_TO_SELECT;
+
+            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+            alphaAnimator.setDuration(300);
+
+            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+            alphaAnimator.start();
+        } else if (alphaState != ALPHA_NOT_SELECTED) {
+            alphaState = ALPHA_NOT_SELECTED;
+
+            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+            alphaAnimator.setDuration(300);
+
+            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+            alphaAnimator.start();
+        }
+    }
+
     public void changeColorByAppTheme() {
         changeTitleColor();
         changeTitleFrameColor();

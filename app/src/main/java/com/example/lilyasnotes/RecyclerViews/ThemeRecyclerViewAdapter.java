@@ -134,8 +134,6 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     public void selectViewHolder(int position) {
         System.out.println("ThemeRecyclerViewAdapter selectViewHolder");
 
-        deselectSelectedViewHolder();
-
         if (data.get(position) instanceof Theme) {
             activity.selectedViewId = ((Theme) data.get(position)).id;
             activity.selectedViewType = ThemeActivity.THEME_TYPE;
@@ -145,9 +143,17 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
             activity.selectedViewType = ThemeActivity.NOTE_TYPE;
         }
 
-        AbstractViewHolder holder = (AbstractViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            holder.select();
+        AbstractViewHolder holder;
+        for (int i = 0; i < getItemCount(); i++) {
+            holder = (AbstractViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
+            if (holder != null) {
+                if (position == i) {
+                    holder.select();
+                } else {
+                    holder.deselect();
+                }
+                holder.animateAlphaState();
+            }
         }
     }
 
@@ -163,6 +169,7 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
             holder = (AbstractViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
             if (holder != null) {
                 holder.deselect();
+                holder.animateAlphaState();
             }
         }
     }

@@ -84,9 +84,17 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
         activity.selectedViewId = ((Theme) data.get(position)).id;
         activity.selectedViewType = AbstractActivity.THEME_TYPE;
 
-        ThemeViewHolder holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            holder.select();
+        ThemeViewHolder holder;
+        for (int i = 0; i < getItemCount(); i++) {
+            holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
+            if (holder != null) {
+                if (position == i) {
+                    holder.select();
+                } else {
+                    holder.deselect();
+                }
+                holder.animateAlphaState();
+            }
         }
     }
 
@@ -102,6 +110,7 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
             holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
             if (holder != null) {
                 holder.deselect();
+                holder.animateAlphaState();
             }
         }
     }

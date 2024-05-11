@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Data;
@@ -18,12 +17,12 @@ import java.util.List;
 
 public abstract class AbstractActivity extends AppCompatActivity {
 
-    final public static int NO_TYPE = -1;
-    final public static int THEME_TYPE = 0;
-    final public static int NOTE_TYPE = 1;
+    final public static byte NO_TYPE = -1;
+    final public static byte THEME_TYPE = 0;
+    final public static byte NOTE_TYPE = 1;
 
     public int selectedViewId;
-    public int selectedViewType;
+    public byte selectedViewType;
     public List<Data> data;
 
 
