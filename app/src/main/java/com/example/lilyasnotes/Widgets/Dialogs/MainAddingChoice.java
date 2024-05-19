@@ -14,8 +14,6 @@ import com.example.lilyasnotes.R;
 
 public class MainAddingChoice extends Dialog {
 
-    public static final int THEME_CHOICE = 1;
-
     private int choiceType;
     private OnChoiceSelectedListener onChoiceSelectedListener;
 
@@ -38,7 +36,7 @@ public class MainAddingChoice extends Dialog {
                 getContext().getPackageName()
         ));
         addThemeButton.setOnClickListener((view) -> {
-            choiceType = THEME_CHOICE;
+            choiceType = AbstractActivity.THEME_TYPE;
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });

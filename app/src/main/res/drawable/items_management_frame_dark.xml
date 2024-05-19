@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/darkThemeBackground"/>
-    <corners
-        android:topRightRadius="25dp"
-        android:bottomRightRadius="25dp"/>
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="773dp"
+    android:height="200dp"
+    android:viewportWidth="773"
+    android:viewportHeight="200">
+  <path
+      android:pathData="M0,0H727.19C760.64,0 782.4,35.2 767.44,65.12L712.44,175.13C704.82,190.37 689.23,200 672.19,200H590V105C590,96.72 583.28,90 575,90H375C366.72,90 360,96.72 360,105V200H295V105C295,96.72 288.28,90 280,90H80C71.72,90 65,96.72 65,105V200H0V0Z"
+      android:fillColor="#191927"/>
+</vector>

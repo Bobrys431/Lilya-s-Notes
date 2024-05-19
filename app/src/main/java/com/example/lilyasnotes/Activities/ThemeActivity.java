@@ -28,9 +28,7 @@ import com.example.lilyasnotes.RecyclerViews.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViews.RecyclerViewMoveCallback;
 import com.example.lilyasnotes.RecyclerViews.ThemeRecyclerViewAdapter;
 import com.example.lilyasnotes.Utilities.Tools;
-import com.example.lilyasnotes.Buttons.DTO.AddButton;
 import com.example.lilyasnotes.Buttons.DTO.Button;
-import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
 import com.example.lilyasnotes.Widgets.SearchBars.AbstractSearchBarHelper;
 import com.example.lilyasnotes.Widgets.SearchBars.ThemeSearchBarHelper;
@@ -150,10 +148,7 @@ public class ThemeActivity extends AbstractActivity {
         buildExitButton();
 
         buttonsManager = new ThemeButtonsManager(this);
-        buttonsManager.addAndSetupButtonsByType(
-                AddButton.class,
-                DeleteButton.class,
-                EditButton.class);
+        buttonsManager.addAndSetupButtonsByType(EditButton.class);
     }
 
     @SuppressLint("DiscouragedApi")
@@ -326,6 +321,16 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     public AbstractSearchBarHelper getSearchBar() {
         return searchBar;
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return dataListView;
+    }
+
+    @Override
+    public ImageView getBackground() {
+        return dataListBackground;
     }
 
     @Override

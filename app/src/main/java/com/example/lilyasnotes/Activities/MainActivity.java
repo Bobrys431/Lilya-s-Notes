@@ -18,10 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
 import com.example.lilyasnotes.Buttons.ButtonManagers.MainButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
-import com.example.lilyasnotes.Buttons.DTO.AddButton;
+import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Buttons.DTO.Button;
-import com.example.lilyasnotes.Buttons.DTO.DeleteButton;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
 import com.example.lilyasnotes.RecyclerViews.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViews.MainRecyclerViewAdapter;
@@ -123,10 +121,7 @@ public class MainActivity extends AbstractActivity {
         buildExitButton();
 
         buttonsManager = new MainButtonsManager(this);
-        buttonsManager.addAndSetupButtonsByType(
-                AddButton.class,
-                DeleteButton.class,
-                EditButton.class);
+        buttonsManager.addAndSetupButtonsByType(EditButton.class);
     }
 
     @SuppressLint("DiscouragedApi")
@@ -213,7 +208,7 @@ public class MainActivity extends AbstractActivity {
 
     private void changeAllViewHoldersColorByAppTheme() {
         for (int i = 0; i < adapter.getItemCount(); i++) {
-            ThemeViewHolder holder = (ThemeViewHolder) themesListView.findViewHolderForAdapterPosition(i);
+            AbstractViewHolder holder = (AbstractViewHolder) themesListView.findViewHolderForAdapterPosition(i);
 
             if (holder != null) {
                 holder.changeColorByAppTheme();
@@ -280,6 +275,16 @@ public class MainActivity extends AbstractActivity {
     @Override
     public AbstractSearchBarHelper getSearchBar() {
         return searchBar;
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return themesListView;
+    }
+
+    @Override
+    public ImageView getBackground() {
+        return themesListBackground;
     }
 
     @Override

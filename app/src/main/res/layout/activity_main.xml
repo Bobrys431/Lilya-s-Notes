@@ -72,52 +72,13 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/add_button_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:background="@color/lightThemeBackground"
-        android:translationZ="1dp">
-
-        <ImageButton
-            android:id="@+id/add_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/add_light"
-            android:translationZ="1dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/delete_button_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/lightThemeBackground"
-        android:translationZ="1dp"
-        android:layout_below="@id/add_button_frame"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp">
-
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_margin="10dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/delete_light"
-            android:translationZ="1dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/edit_button_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/lightThemeBackground"
         android:translationZ="1dp"
-        android:layout_below="@id/delete_button_frame"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp">
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true">
 
         <ImageButton
             android:id="@+id/edit_button"
@@ -142,7 +103,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
-            android:adjustViewBounds="true"/>
+            android:adjustViewBounds="true"
+            android:translationY="-1000dp"/>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -3,6 +3,7 @@ package com.example.lilyasnotes.Data.ViewHolders;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -18,12 +19,14 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
+import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Utilities.Tools;
 
 public class ThemeViewHolder extends AbstractViewHolder {
+
     private int id;
 
     public RelativeLayout basement;
@@ -42,10 +45,7 @@ public class ThemeViewHolder extends AbstractViewHolder {
     }
 
     @Override
-    public void setup(int id, AbstractActivity activity, OnTouchEvents onTouchEvents) {
-        final String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
-        assert appTheme != null : "ThemeViewHolder: appTheme = null";
-
+    public void setup(int id, AbstractActivity activity) {
         this.id = id;
         this.activity = activity;
         isSelected =
@@ -53,40 +53,44 @@ public class ThemeViewHolder extends AbstractViewHolder {
                 activity.selectedViewType == AbstractActivity.THEME_TYPE;
 
         if (isSelected) {
-            System.out.println("Selected");
             alphaState = ALPHA_SELECTED;
+            marginState = (int) (Tools.getDensity(activity) * MARGIN_SELECTED);
+
         } else if (activity.selectedViewType == AbstractActivity.NO_TYPE) {
-            System.out.println("To select");
             alphaState = ALPHA_TO_SELECT;
+            marginState = (int) (Tools.getDensity(activity) * MARGIN_NOT_SELECTED);
+
         } else {
-            System.out.println("Not selected");
             alphaState = ALPHA_NOT_SELECTED;
+            marginState = (int) (Tools.getDensity(activity) * MARGIN_NOT_SELECTED);
         }
 
-        setupBasement(onTouchEvents);
-        setupMark(appTheme);
-        setupTitle(appTheme);
-        setupTitleFrame(appTheme);
+        setupBasement();
+        setupTitle();
+        setupMark();
 
-        if (isSelected) {
-            new Handler().postDelayed(this::visualizeLikeSelected, 200);
-        } else {
-            new Handler().postDelayed(this::visualizeLikeDeselected, 200);
-        }
+        changeColorByAppTheme();
+        visualizeDelayed();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupBasement(OnTouchEvents onTouchEvents) {
+    private void setupBasement() {
         GestureDetector gestureDetector = new GestureDetector(activity, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(@NonNull MotionEvent e) {
-                onTouchEvents.onDoubleTap();
+                Intent intent = new Intent(activity, ThemeActivity.class);
+                intent.putExtra("themeId", id);
+                activity.startActivity(intent);
                 return true;
             }
 
             @Override
             public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
-                onTouchEvents.onSingleTapConfirmed();
+                if (isSelected)
+                    { activity.getAdapter().deselectSelectedViewHolder(); }
+                else
+                    { activity.getAdapter().selectViewHolder(getAdapterPosition()); }
+                activity.getButtonsManager().updateButtonsDisplay();
                 return true;
             }
         });
@@ -97,80 +101,67 @@ public class ThemeViewHolder extends AbstractViewHolder {
         });
     }
 
+    private void setupTitle() {
+        title.setText(ThemeManager.getTitle(id));
+        title.setTypeface(ResourcesCompat.getFont(activity, R.font.advent_pro_bold));
+    }
+
     @SuppressLint("DiscouragedApi")
-    private void setupMark(String appTheme) {
-        mark.setBackgroundResource(activity.getResources().getIdentifier(
-                "mark_" + appTheme,
-                "drawable",
-                activity.getPackageName()));
-
+    private void setupMark() {
         ViewTreeObserver vto = titleFrame.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                titleFrame.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int height = titleFrame.getHeight();
-
-                ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
-                markLayoutParams.height = height;
-                markLayoutParams.width = height / 2;
-                mark.setLayoutParams(markLayoutParams);
-            }
+        vto.addOnGlobalLayoutListener(() -> {
+            ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
+            markLayoutParams.height = titleFrame.getHeight();
+            markLayoutParams.width = titleFrame.getHeight() / 2;
+            mark.setLayoutParams(markLayoutParams);
         });
     }
 
-    private void setupTitle(String appTheme) {
-        title.setText(ThemeManager.getTitle(id));
-        title.setTypeface(ResourcesCompat.getFont(activity, R.font.advent_pro_bold));
-        title.setTextColor(activity.getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.black :
-                        R.color.white, activity.getTheme()));
-    }
+    private void visualizeDelayed() {
+        new Handler().postDelayed(() -> {
 
-    private void setupTitleFrame(String appTheme) {
-        titleFrame.setBackgroundColor(activity.getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground, activity.getTheme()));
+            basement.setAlpha(alphaState);
+
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
+            params.setMargins(0, marginState, 0, marginState);
+            basement.setLayoutParams(params);
+
+            int width;
+            int height;
+            if (isSelected) {
+                width = (int) (Tools.getDensity(activity) * 290);
+                height = (int) (titleFrame.getHeight() * 1.1f);
+            } else {
+                width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            }
+
+            RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
+                    width,
+                    height);
+            titleFrame.setLayoutParams(frameParams);
+        }, 300);
     }
 
     @Override
-    public void visualizeLikeSelected() {
-        basement.setAlpha(alphaState);
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        params.setMargins(0, (int) (20 * Tools.getDensity(activity)), 0, (int) (20 * Tools.getDensity(activity)));
-        basement.setLayoutParams(params);
-        RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
-                (int) (Tools.getDensity(activity) * 290),
-                (int) (titleFrame.getHeight() * 1.1f));
-        titleFrame.setLayoutParams(frameParams);
-    }
-
-    @Override
-    public void visualizeLikeDeselected() {
-        basement.setAlpha(alphaState);
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        params.setMargins(0, (int) (6 * Tools.getDensity(activity)), 0, (int) (6 * Tools.getDensity(activity)));
-        basement.setLayoutParams(params);
-        RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        titleFrame.setLayoutParams(frameParams);
-    }
-
-    public void select() {
-        if (!isSelected) {
+    public void updateSelection() {
+        if (activity.selectedViewType == AbstractActivity.THEME_TYPE && activity.selectedViewId == id && !isSelected) {
             isSelected = true;
 
             setupWrapParams();
             animateSelected();
+
+        } else if (isSelected) {
+            isSelected = false;
+
+            setupWrapParams();
+            animateDeselected();
         }
     }
 
     private void animateSelected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
-                PropertyValuesHolder.ofInt("margins", (int) (6 * Tools.getDensity(activity)), (int) (20 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofInt("margins", (int) (MARGIN_NOT_SELECTED * Tools.getDensity(activity)), (int) (MARGIN_SELECTED * Tools.getDensity(activity))),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), (int) (290 * Tools.getDensity(activity))),
                 PropertyValuesHolder.ofInt("height", titleFrame.getHeight(), (int) (titleFrame.getHeight() * 1.2f))
         );
@@ -208,18 +199,9 @@ public class ThemeViewHolder extends AbstractViewHolder {
         }, 300);
     }
 
-    public void deselect() {
-        if (isSelected) {
-            isSelected = false;
-
-            setupWrapParams();
-            animateDeselected();
-        }
-    }
-
     private void animateDeselected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
-                PropertyValuesHolder.ofInt("margins", (int) (20 * Tools.getDensity(activity)), (int) (6 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofInt("margins", (int) (MARGIN_SELECTED * Tools.getDensity(activity)), (int) (MARGIN_NOT_SELECTED * Tools.getDensity(activity))),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), getTitleWidthWrap()),
                 PropertyValuesHolder.ofInt("height", titleFrame.getHeight(), (int) (titleFrame.getHeight() / 1.2f))
         );
@@ -273,52 +255,56 @@ public class ThemeViewHolder extends AbstractViewHolder {
     }
 
     @Override
-    public void animateAlphaState() {
+    public void updateAlphaState() {
         if (isSelected && alphaState != ALPHA_SELECTED) {
             alphaState = ALPHA_SELECTED;
 
-            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
-            alphaAnimator.setDuration(300);
-
-            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
-
-            alphaAnimator.start();
         } else if (activity.selectedViewType == AbstractActivity.NO_TYPE && alphaState != ALPHA_TO_SELECT) {
             alphaState = ALPHA_TO_SELECT;
 
-            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
-            alphaAnimator.setDuration(300);
-
-            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
-
-            alphaAnimator.start();
         } else if (alphaState != ALPHA_NOT_SELECTED) {
             alphaState = ALPHA_NOT_SELECTED;
 
-            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
-            alphaAnimator.setDuration(300);
-
-            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
-
-            alphaAnimator.start();
+        } else {
+            return;
         }
+        animateAlphaState();
     }
 
-    @SuppressLint("DiscouragedApi")
+    private void animateAlphaState() {
+        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+        alphaAnimator.setDuration(300);
+
+        alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+        alphaAnimator.start();
+    }
+
     @Override
     public void changeColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
+        changeTitleColor(appTheme);
+        changeTitleFrameColor(appTheme);
+        changeMarkColor(appTheme);
+    }
+
+    private void changeTitleColor(String appTheme) {
         title.setTextColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
                         R.color.darkThemeActiveColor, activity.getTheme()));
+    }
 
+    private void changeTitleFrameColor(String appTheme) {
         titleFrame.setBackgroundColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeBackground :
                         R.color.darkThemeBackground, activity.getTheme()));
+    }
 
+    @SuppressLint("DiscouragedApi")
+    private void changeMarkColor(String appTheme) {
         mark.setBackgroundResource(activity.getResources().getIdentifier(
                 "mark_" + appTheme,
                 "drawable",

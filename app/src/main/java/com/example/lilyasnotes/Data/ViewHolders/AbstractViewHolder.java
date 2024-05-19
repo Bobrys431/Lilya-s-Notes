@@ -9,11 +9,16 @@ import com.example.lilyasnotes.Activities.AbstractActivity;
 
 public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
 
-    final public static float ALPHA_NOT_SELECTED = 0.5f;
-    final public static float ALPHA_TO_SELECT = 0.75f;
-    final public static float ALPHA_SELECTED = 0.9f;
+    final protected static float ALPHA_NOT_SELECTED = 0.5f;
+    final protected static float ALPHA_TO_SELECT = 0.75f;
+    final protected static float ALPHA_SELECTED = 0.9f;
 
-    public float alphaState;
+    final protected static int MARGIN_NOT_SELECTED = 6;
+    final protected static int MARGIN_SELECTED = 12;
+
+    protected float alphaState;
+    protected int marginState;
+
     public boolean isSelected;
     protected AbstractActivity activity;
 
@@ -21,21 +26,11 @@ public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public abstract void setup(int id, AbstractActivity activity, OnTouchEvents onTouchEvents);
+    public abstract void setup(int id, AbstractActivity activity);
 
-    public abstract void select();
-    public abstract void deselect();
+    public abstract void updateSelection();
 
-    public abstract void animateAlphaState();
-
-    public abstract void visualizeLikeSelected();
-    public abstract void visualizeLikeDeselected();
-
+    public abstract void updateAlphaState();
 
     public abstract void changeColorByAppTheme();
-
-    public interface OnTouchEvents {
-        void onSingleTapConfirmed();
-        void onDoubleTap();
-    }
 }

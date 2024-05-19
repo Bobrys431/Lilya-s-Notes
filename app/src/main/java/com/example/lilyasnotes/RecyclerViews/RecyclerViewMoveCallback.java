@@ -4,16 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.Activities.ThemeActivity;
-import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.FooterViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
 
 public class RecyclerViewMoveCallback extends ItemTouchHelper.Callback {
 
-    private final RecyclerViewTouchHelperContract touchHelperContract;
+    TouchHelperContract touchHelperContract;
 
-    public RecyclerViewMoveCallback(RecyclerViewTouchHelperContract touchHelperContract) {
+    public RecyclerViewMoveCallback(TouchHelperContract touchHelperContract) {
         this.touchHelperContract = touchHelperContract;
     }
 
@@ -29,23 +28,24 @@ public class RecyclerViewMoveCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int dragFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        return makeMovementFlags(dragFlag, 0);
+        System.out.println("getMovementFlags");
+        int movementFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        return makeMovementFlags(movementFlags, 0);
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        if (viewHolder instanceof AbstractViewHolder) {
-            int type = ThemeActivity.NO_TYPE;
-            if (viewHolder instanceof ThemeViewHolder) {
-                type = ThemeActivity.THEME_TYPE;
-            } else if (viewHolder instanceof NoteViewHolder) {
-                type = ThemeActivity.NOTE_TYPE;
-            }
+        System.out.println("onMove");
+        byte type = 0;
 
-            touchHelperContract.onMoved(type, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-        }
+        if (viewHolder instanceof ThemeViewHolder)
+            { type = AbstractRecyclerViewAdapter.VIEW_TYPE_THEME; }
+        else if (viewHolder instanceof NoteViewHolder)
+            { type = AbstractRecyclerViewAdapter.VIEW_TYPE_NOTE; }
+        else if (viewHolder instanceof FooterViewHolder)
+            { type = AbstractRecyclerViewAdapter.VIEW_TYPE_FOOTER; }
 
+        touchHelperContract.onMoved(type, viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
@@ -54,7 +54,12 @@ public class RecyclerViewMoveCallback extends ItemTouchHelper.Callback {
 
     }
 
-    public interface RecyclerViewTouchHelperContract {
-        void onMoved(int type, int from, int to);
+    @Override
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+    }
+
+    public interface TouchHelperContract {
+        void onMoved(byte type, int from, int to);
     }
 }

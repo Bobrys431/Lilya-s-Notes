@@ -1,7 +1,6 @@
 package com.example.lilyasnotes.RecyclerViews;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.MainActivity;
-import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.FooterViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
 import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.R;
@@ -37,7 +36,10 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
 
     @NonNull
     @Override
-    public ThemeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AbstractViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_FOOTER) {
+            return new FooterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_management_view, parent, false));
+        }
         return new ThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.theme_view, parent, false));
     }
 
@@ -45,35 +47,25 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     public void onBindViewHolder(@NonNull AbstractViewHolder holder, @SuppressLint("RecyclerView") int position) {
         System.out.println("MainRecyclerViewAdapter onBindViewHolder");
 
-        holder.setup(
-                ((Theme) data.get(holder.getAdapterPosition())).id,
-                activity,
-                new AbstractViewHolder.OnTouchEvents() {
-                    @Override
-                    public void onSingleTapConfirmed() {
-                        if (holder.isSelected)
-                            { deselectSelectedViewHolder(); }
-                        else
-                            { selectViewHolder(holder.getAdapterPosition()); }
-                        activity.getButtonsManager().updateButtonsDisplay();
-                    }
+        if (holder instanceof FooterViewHolder) {
+            holder.setup(-1, activity);
+            return;
+        }
 
-                    @Override
-                    public void onDoubleTap() {
-                        openTheme(holder.getAdapterPosition());
-                    }
-                });
-    }
-
-    private void openTheme(int position) {
-        Intent intent = new Intent(activity, ThemeActivity.class);
-        intent.putExtra("themeId", ((Theme) data.get(position)).id);
-        activity.startActivity(intent);
+        holder.setup(((Theme) data.get(holder.getAdapterPosition())).id, activity);
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == getItemCount() - 1) {
+            return VIEW_TYPE_FOOTER;
+        }
+        return super.getItemViewType(position);
     }
 
     @Override
@@ -85,15 +77,11 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
         activity.selectedViewType = AbstractActivity.THEME_TYPE;
 
         ThemeViewHolder holder;
-        for (int i = 0; i < getItemCount(); i++) {
+        for (int i = 0; i < getItemCount() - 1; i++) {
             holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
             if (holder != null) {
-                if (position == i) {
-                    holder.select();
-                } else {
-                    holder.deselect();
-                }
-                holder.animateAlphaState();
+                holder.updateSelection();
+                holder.updateAlphaState();
             }
         }
     }
@@ -106,18 +94,20 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
         activity.selectedViewType = AbstractActivity.NO_TYPE;
 
         ThemeViewHolder holder;
-        for (int i = 0; i < getItemCount(); i++) {
+        for (int i = 0; i < getItemCount() - 1; i++) {
             holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
             if (holder != null) {
-                holder.deselect();
-                holder.animateAlphaState();
+                holder.updateSelection();
+                holder.updateAlphaState();
             }
         }
     }
 
     @Override
-    public void onMoved(int type, int from, int to) {
-        if (type == AbstractActivity.NO_TYPE) return;
+    public void onMoved(byte type, int from, int to) {
+        System.out.println("onMoved");
+
+        if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_FOOTER) return;
 
         int id = ThemesManager.getThemeId(from);
 

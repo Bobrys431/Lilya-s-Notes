@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,7 +44,7 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     @Override
-    public void setup(int id, AbstractActivity activity, OnTouchEvents onTouchEvents) {
+    public void setup(int id, AbstractActivity activity) {
         final String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
         assert appTheme != null : "NoteViewHolder: appTheme = null";
 
@@ -54,39 +53,38 @@ public class NoteViewHolder extends AbstractViewHolder {
         isSelected =
                 activity.selectedViewId == id &&
                 activity.selectedViewType == ThemeActivity.NOTE_TYPE;
+
         if (isSelected) {
             alphaState = ALPHA_SELECTED;
+            marginState = (int) (Tools.getDensity(activity) * MARGIN_SELECTED);
+
         } else if (activity.selectedViewType == AbstractActivity.NO_TYPE) {
             alphaState = ALPHA_TO_SELECT;
+            marginState = (int) (Tools.getDensity(activity) * MARGIN_NOT_SELECTED);
+
         } else {
             alphaState = ALPHA_NOT_SELECTED;
+            marginState = (int) (Tools.getDensity(activity) * MARGIN_NOT_SELECTED);
         }
 
-        setupBasement(onTouchEvents);
-        setupTitle(appTheme);
-        setupTitleFrame(appTheme);
-        setupNote(appTheme);
-        setupNoteFrame(appTheme);
+        setupBasement();
+        setupTitle();
+        setupNote();
 
-        if (isSelected) {
-            new Handler().postDelayed(this::visualizeLikeSelected, 200);
-        } else {
-            new Handler().postDelayed(this::visualizeLikeDeselected, 200);
-        }
+        changeColorByAppTheme();
+        visualizeDelayed();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupBasement(OnTouchEvents onTouchEvents) {
+    private void setupBasement() {
         GestureDetector gestureDetector = new GestureDetector(activity, new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public boolean onDoubleTap(@NonNull MotionEvent e) {
-                onTouchEvents.onDoubleTap();
-                return true;
-            }
-
-            @Override
             public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
-                onTouchEvents.onSingleTapConfirmed();
+                if (isSelected)
+                    { activity.getAdapter().deselectSelectedViewHolder(); }
+                else
+                    { activity.getAdapter().selectViewHolder(getAdapterPosition()); }
+                activity.getButtonsManager().updateButtonsDisplay();
                 return true;
             }
         });
@@ -97,30 +95,14 @@ public class NoteViewHolder extends AbstractViewHolder {
         });
     }
 
-    private void setupTitle(String appTheme) {
+    private void setupTitle() {
         title.setText(NoteManager.getTitle(id));
         title.setTypeface(ResourcesCompat.getFont(activity, R.font.advent_pro_bold));
-        title.setTextColor(activity.getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.black :
-                        R.color.white, activity.getTheme()));
     }
 
-    @SuppressLint("DiscouragedApi")
-    private void setupTitleFrame(String appTheme) {
-        titleFrame.setBackgroundResource(activity.getResources().getIdentifier(
-                "note_frame_" + appTheme,
-                "drawable",
-                activity.getPackageName()));
-    }
-
-    private void setupNote(String appTheme) {
+    private void setupNote() {
         note.setText(NoteManager.getText(id));
         note.setTypeface(ResourcesCompat.getFont(activity, R.font.advent_pro_bold));
-        note.setTextColor(activity.getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.black :
-                        R.color.white, activity.getTheme()));
 
         note.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,67 +118,66 @@ public class NoteViewHolder extends AbstractViewHolder {
         });
     }
 
-    private void setupNoteFrame(String appTheme) {
-        noteFrame.setBackgroundColor(activity.getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground, activity.getTheme()));
-    }
-
-    @Override
-    public void visualizeLikeSelected() {
-        basement.setAlpha(alphaState);
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        params.setMargins(0, (int) (20 * Tools.getDensity(activity)), 0, (int) (20 * Tools.getDensity(activity)));
-        basement.setLayoutParams(params);
-        RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
-                (int) (Tools.getDensity(activity) * 340),
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        titleFrame.setLayoutParams(frameParams);
+    private void visualizeDelayed() {
         new Handler().postDelayed(() -> {
-            RelativeLayout.LayoutParams areaParams = new RelativeLayout.LayoutParams(
-                    titleFrame.getWidth(),
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            areaParams.addRule(RelativeLayout.BELOW, R.id.title_frame);
-            noteFrame.setLayoutParams(areaParams);
-        }, 0);
+
+            basement.setAlpha(alphaState);
+
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
+            params.setMargins(0, marginState, 0, marginState);
+            basement.setLayoutParams(params);
+
+            int titleWidth;
+            int titleHeight;
+            int noteWidth;
+            int noteHeight;
+            if (isSelected) {
+                titleWidth = (int) (Tools.getDensity(activity) * 340);
+                titleHeight = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                noteWidth = titleFrame.getWidth();
+                noteHeight = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            } else {
+                titleWidth = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                titleHeight = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                noteWidth = titleFrame.getWidth();
+                noteHeight = 0;
+            }
+
+            RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
+                    titleWidth,
+                    titleHeight);
+            titleFrame.setLayoutParams(frameParams);
+
+            new Handler().postDelayed(() -> {
+                RelativeLayout.LayoutParams areaParams = new RelativeLayout.LayoutParams(
+                        noteWidth,
+                        noteHeight
+                );
+                areaParams.addRule(RelativeLayout.BELOW, R.id.title_frame);
+                noteFrame.setLayoutParams(areaParams);
+            }, 0);
+        }, 300);
     }
 
     @Override
-    public void visualizeLikeDeselected() {
-        basement.setAlpha(alphaState);
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) basement.getLayoutParams();
-        params.setMargins(0, (int) (6 * Tools.getDensity(activity)), 0, (int) (6 * Tools.getDensity(activity)));
-        basement.setLayoutParams(params);
-        RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        titleFrame.setLayoutParams(frameParams);
-        new Handler().postDelayed(() -> {
-            RelativeLayout.LayoutParams areaParams = new RelativeLayout.LayoutParams(
-                    titleFrame.getWidth(),
-                    0
-            );
-            areaParams.addRule(RelativeLayout.BELOW, R.id.title_frame);
-            noteFrame.setLayoutParams(areaParams);
-        }, 0);
-    }
-
-    @Override
-    public void select() {
-        if (!isSelected) {
+    public void updateSelection() {
+        if (activity.selectedViewType == AbstractActivity.NOTE_TYPE && activity.selectedViewId == id && !isSelected) {
             isSelected = true;
 
             setupWrapParams();
-            new Handler().postDelayed(this::animateSelected, 0);
+            animateSelected();
+
+        } else if (isSelected) {
+            isSelected = false;
+
+            setupWrapParams();
+            animateDeselected();
         }
     }
 
     public void animateSelected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
-                PropertyValuesHolder.ofInt("margins", (int) (6 * Tools.getDensity(activity)), (int) (20 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofInt("margins", (int) (MARGIN_NOT_SELECTED * Tools.getDensity(activity)), (int) (MARGIN_SELECTED * Tools.getDensity(activity))),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), (int) (Tools.getDensity(activity) * 340)),
                 PropertyValuesHolder.ofInt("height", 0, getNoteHeightWrap())
         );
@@ -236,19 +217,9 @@ public class NoteViewHolder extends AbstractViewHolder {
         return noteFrame.getHeight();
     }
 
-    @Override
-    public void deselect() {
-        if (isSelected) {
-            isSelected = false;
-
-            setupWrapParams();
-            new Handler().postDelayed(this::animateDeselected, 0);
-        }
-    }
-
     public void animateDeselected() {
         ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
-                PropertyValuesHolder.ofInt("margins", (int) (20 * Tools.getDensity(activity)), (int) (6 * Tools.getDensity(activity))),
+                PropertyValuesHolder.ofInt("margins", (int) (MARGIN_SELECTED * Tools.getDensity(activity)), (int) (MARGIN_NOT_SELECTED * Tools.getDensity(activity))),
                 PropertyValuesHolder.ofInt("width", titleFrame.getWidth(), getTitleWidthWrap()),
                 PropertyValuesHolder.ofInt("height", noteFrame.getHeight(), 0)
         );
@@ -296,48 +267,41 @@ public class NoteViewHolder extends AbstractViewHolder {
         noteView.setText(note.getText());
     }
 
-    @Override
-    public void animateAlphaState() {
+    public void updateAlphaState() {
         if (isSelected && alphaState != ALPHA_SELECTED) {
             alphaState = ALPHA_SELECTED;
 
-            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
-            alphaAnimator.setDuration(300);
-
-            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
-
-            alphaAnimator.start();
         } else if (activity.selectedViewType == AbstractActivity.NO_TYPE && alphaState != ALPHA_TO_SELECT) {
             alphaState = ALPHA_TO_SELECT;
 
-            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
-            alphaAnimator.setDuration(300);
-
-            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
-
-            alphaAnimator.start();
         } else if (alphaState != ALPHA_NOT_SELECTED) {
             alphaState = ALPHA_NOT_SELECTED;
 
-            ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
-            alphaAnimator.setDuration(300);
-
-            alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
-
-            alphaAnimator.start();
+        } else {
+            return;
         }
+        animateAlphaState();
+    }
+
+    private void animateAlphaState() {
+        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(basement.getAlpha(), alphaState);
+        alphaAnimator.setDuration(300);
+
+        alphaAnimator.addUpdateListener(valueAnimator -> basement.setAlpha((Float) valueAnimator.getAnimatedValue()));
+
+        alphaAnimator.start();
     }
 
     public void changeColorByAppTheme() {
-        changeTitleColor();
-        changeTitleFrameColor();
-        changeNoteColor();
-        changeNoteFrameColor();
-    }
-
-    private void changeTitleColor() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
+        changeTitleColor(appTheme);
+        changeTitleFrameColor(appTheme);
+        changeNoteColor(appTheme);
+        changeNoteFrameColor(appTheme);
+    }
+
+    private void changeTitleColor(String appTheme) {
         title.setTextColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
@@ -345,18 +309,14 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     @SuppressLint("DiscouragedApi")
-    private void changeTitleFrameColor() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
-
+    private void changeTitleFrameColor(String appTheme) {
         titleFrame.setBackgroundResource(activity.getResources().getIdentifier(
                 "note_frame_" + appTheme,
                 "drawable",
                 activity.getPackageName()));
     }
 
-    private void changeNoteColor() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
-
+    private void changeNoteColor(String appTheme) {
         note.setTextColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
@@ -364,9 +324,7 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     @SuppressLint("DiscouragedApi")
-    private void changeNoteFrameColor() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
-
+    private void changeNoteFrameColor(String appTheme) {
         noteFrame.setBackgroundColor(activity.getResources().getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeBackground :

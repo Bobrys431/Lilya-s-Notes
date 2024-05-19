@@ -2,9 +2,11 @@ package com.example.lilyasnotes.Activities;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Data;
@@ -21,6 +23,8 @@ public abstract class AbstractActivity extends AppCompatActivity {
     final public static byte THEME_TYPE = 0;
     final public static byte NOTE_TYPE = 1;
 
+    public boolean eraseMode;
+
     public int selectedViewId;
     public byte selectedViewType;
     public List<Data> data;
@@ -35,6 +39,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
         selectedViewId = NO_TYPE;
         selectedViewType = NO_TYPE;
         data = new ArrayList<>();
+        eraseMode = false;
 
         database = SQLiteDatabaseAdapter.getDatabase(this);
     }
@@ -50,5 +55,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
     public abstract AbstractRecyclerViewAdapter getAdapter();
     public abstract AbstractButtonsManager getButtonsManager();
     public abstract AbstractSearchBarHelper getSearchBar();
+    public abstract RecyclerView getRecyclerView();
+    public abstract ImageView getBackground();
     public abstract int getSelectedViewIndex();
 }
