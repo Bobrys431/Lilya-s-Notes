@@ -1,7 +1,5 @@
 package com.example.lilyasnotes.RecyclerViews;
 
-import android.view.View;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;

@@ -140,10 +140,10 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     public void onMoved(byte type, int from, int to) {
         System.out.println("onMoved");
 
-        if (type == ThemeActivity.NO_TYPE) return;
+        if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_FOOTER) return;
 
         int id;
-        if (type == ThemeActivity.THEME_TYPE)
+        if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_THEME)
             id = ThemeIntoManager.getThemeId(((ThemeActivity) activity).theme.id, from);
         else
             id = ThemeNoteManager.getNoteId(((ThemeActivity) activity).theme.id, from);
@@ -157,7 +157,7 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
             for (int i = from; i < to; i++) {
                 Collections.swap(data, i, i + 1);
 
-                if (type == ThemeActivity.THEME_TYPE)
+                if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_THEME)
                     { if (!activity.getSearchBar().isSearching)
                         { ThemeIntoManager.translateThemeDown(((ThemeActivity) activity).theme.id, id); } }
                 else
@@ -168,7 +168,7 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
             for (int i = from; i > to; i--) {
                 Collections.swap(data, i, i - 1);
 
-                if (type == ThemeActivity.THEME_TYPE)
+                if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_THEME)
                     { if (!activity.getSearchBar().isSearching)
                         { ThemeIntoManager.translateThemeUp(((ThemeActivity) activity).theme.id, id); } }
                 else

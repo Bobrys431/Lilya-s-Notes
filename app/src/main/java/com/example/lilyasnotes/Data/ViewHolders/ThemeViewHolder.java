@@ -106,17 +106,6 @@ public class ThemeViewHolder extends AbstractViewHolder {
         title.setTypeface(ResourcesCompat.getFont(activity, R.font.advent_pro_bold));
     }
 
-    @SuppressLint("DiscouragedApi")
-    private void setupMark() {
-        ViewTreeObserver vto = titleFrame.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(() -> {
-            ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
-            markLayoutParams.height = titleFrame.getHeight();
-            markLayoutParams.width = titleFrame.getHeight() / 2;
-            mark.setLayoutParams(markLayoutParams);
-        });
-    }
-
     private void visualizeDelayed() {
         new Handler().postDelayed(() -> {
 
@@ -141,6 +130,20 @@ public class ThemeViewHolder extends AbstractViewHolder {
                     height);
             titleFrame.setLayoutParams(frameParams);
         }, 300);
+    }
+
+    private void setupMark() {
+        ViewTreeObserver vto = titleFrame.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                titleFrame.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
+                markLayoutParams.height = titleFrame.getHeight();
+                markLayoutParams.width = titleFrame.getHeight() / 2;
+                mark.setLayoutParams(markLayoutParams);
+            }
+        });
     }
 
     @Override

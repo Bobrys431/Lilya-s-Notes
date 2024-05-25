@@ -111,6 +111,11 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
 
         int id = ThemesManager.getThemeId(from);
 
+        int itemCount = getItemCount();
+        if (from == itemCount - 1 || to == itemCount - 1) {
+            return;
+        }
+
         if (from < to) {
             for (int i = from; i < to; i++) {
                 Collections.swap(data, i, i + 1);
