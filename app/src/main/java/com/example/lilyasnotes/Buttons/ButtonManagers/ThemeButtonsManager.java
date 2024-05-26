@@ -5,11 +5,15 @@ import android.view.View;
 
 import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.NoteManager;
+import com.example.lilyasnotes.Database.ThemeIntoManager;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.Database.ThemeNoteManager;
 import com.example.lilyasnotes.Widgets.WidgetEditors.NoteWidgetEditor;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
+
+import java.util.Random;
 
 public class ThemeButtonsManager extends AbstractButtonsManager {
 
@@ -42,20 +46,21 @@ public class ThemeButtonsManager extends AbstractButtonsManager {
     private void editButtonRealization() {
         System.out.println("ThemeButtonsManager editButtonRealization");
 
-        if (activity.selectedViewType == ThemeActivity.THEME_TYPE) { // TODO
-            ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId); // TODO
+        int random = new Random().nextInt() % 2;
+
+        if (random == 0) {
+            ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, ThemeManager.getLastThemeId());
 
             DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
-                ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle()); // TODO
+                ThemeManager.setTitle(ThemeManager.getLastThemeId(), themeEditor.getTitle());
 
-                int index = activity.getSelectedViewIndex(); // TODO
+                int index = ThemeIntoManager.getThemeIndex(ThemeManager.getLastThemeId());
                 int oldSize = activity.data.size();
 
                 activity.reloadDataComparedToSearchBar();
 
                 if (oldSize > activity.data.size()) {
                     activity.getAdapter().notifyItemRemoved(index);
-                    activity.getAdapter().deselectSelectedViewHolder(); // TODO
                     activity.getButtonsManager().updateButtonsDisplay();
                 } else
                     { activity.getAdapter().notifyItemChanged(index); }
@@ -64,21 +69,20 @@ public class ThemeButtonsManager extends AbstractButtonsManager {
             themeEditor.setOnDismissListener(onDismiss);
             themeEditor.show();
 
-        } else if (activity.selectedViewType == ThemeActivity.NOTE_TYPE) { // TODO
-            NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity, activity.selectedViewId); // TODO
+        } else if (random == 1) {
+            NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity, NoteManager.getLastNoteId());
 
             DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
-                NoteManager.setTitle(activity.selectedViewId, noteEditor.getTitle()); // TODO
-                NoteManager.setText(activity.selectedViewId, noteEditor.getText()); // TODO
+                NoteManager.setTitle(NoteManager.getLastNoteId(), noteEditor.getTitle());
+                NoteManager.setText(NoteManager.getLastNoteId(), noteEditor.getText());
 
-                int index = activity.getSelectedViewIndex(); // TODO
+                int index = ThemeNoteManager.getNoteIndex(NoteManager.getLastNoteId());
                 int oldSize = activity.data.size();
 
                 activity.reloadDataComparedToSearchBar();
 
                 if (oldSize > activity.data.size()) {
                     activity.getAdapter().notifyItemRemoved(index);
-                    activity.getAdapter().deselectSelectedViewHolder(); // TODO
                     activity.getButtonsManager().updateButtonsDisplay();
                 } else
                     { activity.getAdapter().notifyItemChanged(index); }
@@ -103,10 +107,6 @@ public class ThemeButtonsManager extends AbstractButtonsManager {
     }
 
     private void updateRenameButton() {
-        if (activity.selectedViewType == ThemeActivity.NO_TYPE) { // TODO
-            hide(EditButton.class);
-        } else {
-            show(EditButton.class);
-        }
+        show(EditButton.class);
     }
 }

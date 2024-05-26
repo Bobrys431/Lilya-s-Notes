@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Theme;
@@ -66,41 +65,6 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
             return VIEW_TYPE_FOOTER;
         }
         return super.getItemViewType(position);
-    }
-
-    @Override
-    public void selectViewHolder(int position) { // TODO
-        System.out.println("MainRecyclerViewAdapter selectViewHolder");
-
-        deselectSelectedViewHolder();
-        activity.selectedViewId = ((Theme) data.get(position)).id;
-        activity.selectedViewType = AbstractActivity.THEME_TYPE;
-
-        ThemeViewHolder holder;
-        for (int i = 0; i < getItemCount() - 1; i++) {
-            holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
-            if (holder != null) {
-                holder.updateSelection();
-                holder.updateAlphaState();
-            }
-        }
-    }
-
-    @Override
-    public void deselectSelectedViewHolder() { // TODO
-        System.out.println("MainRecyclerViewAdapter deselectSelectedViewHolder");
-
-        activity.selectedViewId = AbstractActivity.NO_TYPE;
-        activity.selectedViewType = AbstractActivity.NO_TYPE;
-
-        ThemeViewHolder holder;
-        for (int i = 0; i < getItemCount() - 1; i++) {
-            holder = (ThemeViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
-            if (holder != null) {
-                holder.updateSelection();
-                holder.updateAlphaState();
-            }
-        }
     }
 
     @Override

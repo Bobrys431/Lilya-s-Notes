@@ -11,12 +11,12 @@ import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Widgets.Dialogs.ConfirmDialog;
 
+import java.util.Random;
+
 public class DeleteButton {
 
     AbstractActivity activity;
     ImageButton button;
-
-    public boolean isBlocked;
 
     public DeleteButton(ImageButton button) {
         this.button = button;
@@ -26,30 +26,28 @@ public class DeleteButton {
         this.activity = activity;
 
         button.setOnClickListener((view) -> {
-            if (!isBlocked) { // TODO
-                onClickListener.onClick(button);
-
-                new Handler().postDelayed(this::requestToDelete, 200);
-            }
+            onClickListener.onClick(button);
+            new Handler().postDelayed(this::requestToDelete, 200);
         });
     }
 
     private void requestToDelete() {
         String title = "???";
-        if (activity.selectedViewType == AbstractActivity.THEME_TYPE) // TODO
-            { title = ThemeManager.getTitle(activity.selectedViewId); } // TODO
-        else if (activity.selectedViewType == AbstractActivity.NOTE_TYPE) // TODO
-            { title = NoteManager.getTitle(activity.selectedViewId); } // TODO
+        int random = new Random().nextInt() % 2;
+        if (random == 0)
+            { title = ThemeManager.getTitle(ThemeManager.getLastThemeId()); }
+        else if (random == 1)
+            { title = NoteManager.getTitle(NoteManager.getLastNoteId()); }
         ConfirmDialog deletingConfirmationDialog = new ConfirmDialog();
 
         deletingConfirmationDialog.setTitle("Підтвердити видалення\n" + title);
         deletingConfirmationDialog.setOnConfirmListener(view -> {
             deletingConfirmationDialog.dismiss();
 
-            if (activity.selectedViewType == AbstractActivity.THEME_TYPE) // TODO
-                { ThemeManager.deleteTheme(activity.selectedViewId); } // TODO
-            else if (activity.selectedViewType == AbstractActivity.NOTE_TYPE) // TODO
-                { NoteManager.deleteNote(activity.selectedViewId); } // TODO
+            if (random == 0)
+                { ThemeManager.deleteTheme(ThemeManager.getLastThemeId()); }
+            else if (random == 1)
+                { NoteManager.deleteNote(NoteManager.getLastNoteId()); }
 
             updateAdapterSequence();
         });
@@ -58,8 +56,7 @@ public class DeleteButton {
     }
 
     private void updateAdapterSequence() {
-        int index = activity.getSelectedViewIndex(); // TODO
-        activity.getAdapter().deselectSelectedViewHolder(); // TODO
+        int index = activity.getAdapter().getItemCount() - 1;
 
         activity.reloadDataComparedToSearchBar();
         activity.getAdapter().notifyItemRemoved(index);

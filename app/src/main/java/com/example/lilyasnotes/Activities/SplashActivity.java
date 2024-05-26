@@ -33,6 +33,8 @@ public class SplashActivity extends AppCompatActivity {
         ThemeNoteManager.build(this);
 
         ActionsSimulator.build(this);
+        ActionsSimulator.clearDB();
+        ActionsSimulator.firstAction();
 
         if (SQLiteDatabaseAdapter.getCurrentAppTheme(this) == null) {
             SQLiteDatabaseAdapter.getDatabase(this).execSQL("INSERT INTO " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + "(" + SQLiteDatabaseAdapter.APP_THEME + ") VALUES ('LIGHT')");

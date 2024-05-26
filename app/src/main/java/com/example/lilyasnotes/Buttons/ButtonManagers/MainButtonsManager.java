@@ -7,6 +7,7 @@ import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.Database.ThemesManager;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
 public class MainButtonsManager extends AbstractButtonsManager {
@@ -40,21 +41,21 @@ public class MainButtonsManager extends AbstractButtonsManager {
     private void editButtonRealization() {
         System.out.println("MainButtonsManager editButtonRealization");
 
-        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);  // TODO
+        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, ThemeManager.getLastThemeId());
 
         DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
-            ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());  // TODO
+            ThemeManager.setTitle(ThemeManager.getLastThemeId(), themeEditor.getTitle());
 
-            int index = activity.getSelectedViewIndex();  // TODO
+            int index = ThemesManager.getThemeIndex(ThemeManager.getLastThemeId());
             int oldSize = activity.data.size();
 
             activity.reloadDataComparedToSearchBar();
 
             if (oldSize > activity.data.size()) {
                 activity.getAdapter().notifyItemRemoved(index);
-                activity.getAdapter().deselectSelectedViewHolder();  // TODO
                 activity.getButtonsManager().updateButtonsDisplay();
-            } else { activity.getAdapter().notifyItemChanged(index); }
+            } else
+                { activity.getAdapter().notifyItemChanged(index); }
         };
 
         themeEditor.setOnDismissListener(onDismiss);
@@ -74,10 +75,6 @@ public class MainButtonsManager extends AbstractButtonsManager {
     }
 
     private void updateRenameButton() {
-        if (activity.selectedViewId == -1) { // TODO
-            hide(EditButton.class);
-        } else {
-            show(EditButton.class);
-        }
+        show(EditButton.class);
     }
 }

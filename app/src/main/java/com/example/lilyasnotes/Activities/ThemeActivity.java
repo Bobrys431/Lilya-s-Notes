@@ -34,7 +34,6 @@ import com.example.lilyasnotes.Widgets.SearchBars.AbstractSearchBarHelper;
 import com.example.lilyasnotes.Widgets.SearchBars.ThemeSearchBarHelper;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public class ThemeActivity extends AbstractActivity {
 
@@ -273,10 +272,7 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     protected void buildSearchBar() {
         searchBar = new ThemeSearchBarHelper(this);
-        searchBar.setOnDataRecordedListener(() -> {
-            adapter.deselectSelectedViewHolder();
-            buttonsManager.updateButtonsDisplay();
-        });
+        searchBar.setOnDataRecordedListener(() -> buttonsManager.updateButtonsDisplay());
         searchBar.build();
     }
 
@@ -326,28 +322,6 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     public ImageView getBackground() {
         return dataListBackground;
-    }
-
-    @Override
-    public int getSelectedViewIndex() { // TODO
-        int index = -1;
-        for (int i = 0; i < data.size(); i++) {
-            if (selectedViewType == THEME_TYPE) {
-                if (data.get(i) instanceof Theme && ((Theme) data.get(i)).id == selectedViewId) {
-                    index = i;
-                    break;
-                }
-            }
-            if (selectedViewType == NOTE_TYPE) {
-                if (data.get(i) instanceof Note && ((Note) data.get(i)).id == selectedViewId) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-        if (index == -1)
-        { throw new NoSuchElementException("There is no selected item or selected item is not visible in the data list."); }
-        return index;
     }
 
     @Override

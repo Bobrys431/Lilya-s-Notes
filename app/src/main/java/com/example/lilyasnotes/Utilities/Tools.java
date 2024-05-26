@@ -3,12 +3,8 @@ package com.example.lilyasnotes.Utilities;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.R;
 
 public class Tools {
     public static float getDensity(Context context) {

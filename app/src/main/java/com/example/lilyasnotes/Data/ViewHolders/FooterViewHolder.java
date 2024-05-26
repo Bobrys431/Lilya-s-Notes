@@ -3,7 +3,6 @@ package com.example.lilyasnotes.Data.ViewHolders;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -44,9 +43,6 @@ public class FooterViewHolder extends AbstractViewHolder {
         this.activity = activity;
 
         addButton.setup(activity, (view) -> {
-            deleteButton.isBlocked = true; // TODO
-            addButton.isBlocked = true; // TODO
-
             ValueAnimator markDown = ValueAnimator.ofInt(addButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
             markDown.setDuration(100);
             markDown.addUpdateListener(valueAnimator -> {
@@ -54,6 +50,7 @@ public class FooterViewHolder extends AbstractViewHolder {
                 params.height = (int) valueAnimator.getAnimatedValue();
                 addButtonFrame.setLayoutParams(params);
             });
+
             ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
             markUp.setDuration(100);
             markUp.addUpdateListener(valueAnimator -> {
@@ -61,6 +58,7 @@ public class FooterViewHolder extends AbstractViewHolder {
                     params.height = (int) valueAnimator.getAnimatedValue();
                     addButtonFrame.setLayoutParams(params);
             });
+
             markDown.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(@NonNull Animator animator) {
@@ -83,17 +81,9 @@ public class FooterViewHolder extends AbstractViewHolder {
                 }
             });
             markDown.start();
-
-            new Handler().postDelayed(() -> {
-                deleteButton.isBlocked = false; // TODO
-                addButton.isBlocked = false; // TODO
-            }, 300);
         });
 
         deleteButton.setup(activity, (view) -> {
-            deleteButton.isBlocked = true; // TODO
-            addButton.isBlocked = true; // TODO
-
             ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
             markDown.setDuration(100);
             markDown.addUpdateListener(valueAnimator -> {
@@ -130,24 +120,9 @@ public class FooterViewHolder extends AbstractViewHolder {
                 }
             });
             markDown.start();
-
-            new Handler().postDelayed(() -> {
-                deleteButton.isBlocked = false; // TODO
-                addButton.isBlocked = false; // TODO
-            }, 300);
         });
 
         changeColorByAppTheme();
-    }
-
-    @Override
-    public void updateSelection() { // TODO
-
-    }
-
-    @Override
-    public void updateAlphaState() { // TODO
-
     }
 
     @Override

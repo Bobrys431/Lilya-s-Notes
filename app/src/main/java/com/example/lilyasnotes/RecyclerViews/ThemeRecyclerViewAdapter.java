@@ -97,46 +97,6 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public void selectViewHolder(int position) { // TODO
-        System.out.println("ThemeRecyclerViewAdapter selectViewHolder");
-
-        if (data.get(position) instanceof Theme) {
-            activity.selectedViewId = ((Theme) data.get(position)).id;
-            activity.selectedViewType = ThemeActivity.THEME_TYPE;
-
-        } else if (data.get(position) instanceof Note) {
-            activity.selectedViewId = ((Note) data.get(position)).id;
-            activity.selectedViewType = ThemeActivity.NOTE_TYPE;
-        }
-
-        AbstractViewHolder holder;
-        for (int i = 0; i < getItemCount(); i++) {
-            holder = (AbstractViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
-            if (holder != null) {
-                holder.updateSelection();
-                holder.updateAlphaState();
-            }
-        }
-    }
-
-    @Override
-    public void deselectSelectedViewHolder() { // TODO
-        System.out.println("ThemeRecyclerViewAdapter deselectSelectedViewHolder");
-
-        activity.selectedViewId = ThemeActivity.NO_TYPE;
-        activity.selectedViewType = ThemeActivity.NO_TYPE;
-
-        AbstractViewHolder holder;
-        for (int i = 0; i < getItemCount(); i++) {
-            holder = (AbstractViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
-            if (holder != null) {
-                holder.updateSelection();
-                holder.updateAlphaState();
-            }
-        }
-    }
-
-    @Override
     public void onMoved(byte type, int from, int to) {
         System.out.println("onMoved");
 

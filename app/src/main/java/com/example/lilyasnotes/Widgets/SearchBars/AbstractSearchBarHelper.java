@@ -1,14 +1,11 @@
 package com.example.lilyasnotes.Widgets.SearchBars;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Data.DTO.Data;

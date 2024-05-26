@@ -81,20 +81,20 @@ public class ActionsSimulator {
 
 
     public static void firstAction() {
-        int[] ids = createThemes(4);
+        int[] ids = createThemes(3);
 
         for (int id : ids) {
-            createProfileIn(2, id, 2);
+            createProfileIn(3, id, 3);
         }
 
         SQLiteDatabaseAdapter.printTable(null, context);
     }
 
     public static void secondAction() {
-        int[] ids = createThemes(3);
+        int[] ids = createThemes(5);
 
         for (int id : ids) {
-            createProfileIn(6, id, 2);
+            createProfileIn(5, id, 3);
         }
 
         SQLiteDatabaseAdapter.printTable(null, context);
