@@ -26,7 +26,7 @@ public class DeleteButton {
         this.activity = activity;
 
         button.setOnClickListener((view) -> {
-            if (!isBlocked) {
+            if (!isBlocked) { // TODO
                 onClickListener.onClick(button);
 
                 new Handler().postDelayed(this::requestToDelete, 200);
@@ -36,20 +36,20 @@ public class DeleteButton {
 
     private void requestToDelete() {
         String title = "???";
-        if (activity.selectedViewType == AbstractActivity.THEME_TYPE)
-            { title = ThemeManager.getTitle(activity.selectedViewId); }
-        else if (activity.selectedViewType == AbstractActivity.NOTE_TYPE)
-            { title = NoteManager.getTitle(activity.selectedViewId); }
+        if (activity.selectedViewType == AbstractActivity.THEME_TYPE) // TODO
+            { title = ThemeManager.getTitle(activity.selectedViewId); } // TODO
+        else if (activity.selectedViewType == AbstractActivity.NOTE_TYPE) // TODO
+            { title = NoteManager.getTitle(activity.selectedViewId); } // TODO
         ConfirmDialog deletingConfirmationDialog = new ConfirmDialog();
 
         deletingConfirmationDialog.setTitle("Підтвердити видалення\n" + title);
         deletingConfirmationDialog.setOnConfirmListener(view -> {
             deletingConfirmationDialog.dismiss();
 
-            if (activity.selectedViewType == AbstractActivity.THEME_TYPE)
-                { ThemeManager.deleteTheme(activity.selectedViewId); }
-            else if (activity.selectedViewType == AbstractActivity.NOTE_TYPE)
-                { NoteManager.deleteNote(activity.selectedViewId); }
+            if (activity.selectedViewType == AbstractActivity.THEME_TYPE) // TODO
+                { ThemeManager.deleteTheme(activity.selectedViewId); } // TODO
+            else if (activity.selectedViewType == AbstractActivity.NOTE_TYPE) // TODO
+                { NoteManager.deleteNote(activity.selectedViewId); } // TODO
 
             updateAdapterSequence();
         });
@@ -58,8 +58,8 @@ public class DeleteButton {
     }
 
     private void updateAdapterSequence() {
-        int index = activity.getSelectedViewIndex();
-        activity.getAdapter().deselectSelectedViewHolder();
+        int index = activity.getSelectedViewIndex(); // TODO
+        activity.getAdapter().deselectSelectedViewHolder(); // TODO
 
         activity.reloadDataComparedToSearchBar();
         activity.getAdapter().notifyItemRemoved(index);

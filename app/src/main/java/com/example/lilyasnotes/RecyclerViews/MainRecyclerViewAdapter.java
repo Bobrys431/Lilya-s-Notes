@@ -69,7 +69,7 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public void selectViewHolder(int position) {
+    public void selectViewHolder(int position) { // TODO
         System.out.println("MainRecyclerViewAdapter selectViewHolder");
 
         deselectSelectedViewHolder();
@@ -87,7 +87,7 @@ public class MainRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public void deselectSelectedViewHolder() {
+    public void deselectSelectedViewHolder() { // TODO
         System.out.println("MainRecyclerViewAdapter deselectSelectedViewHolder");
 
         activity.selectedViewId = AbstractActivity.NO_TYPE;

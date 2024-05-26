@@ -97,7 +97,7 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public void selectViewHolder(int position) {
+    public void selectViewHolder(int position) { // TODO
         System.out.println("ThemeRecyclerViewAdapter selectViewHolder");
 
         if (data.get(position) instanceof Theme) {
@@ -120,7 +120,7 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public void deselectSelectedViewHolder() {
+    public void deselectSelectedViewHolder() { // TODO
         System.out.println("ThemeRecyclerViewAdapter deselectSelectedViewHolder");
 
         activity.selectedViewId = ThemeActivity.NO_TYPE;

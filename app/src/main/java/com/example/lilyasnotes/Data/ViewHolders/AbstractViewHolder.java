@@ -9,17 +9,17 @@ import com.example.lilyasnotes.Activities.AbstractActivity;
 
 public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
 
-    final protected static float ALPHA_NOT_SELECTED = 0.5f;
-    final protected static float ALPHA_TO_SELECT = 0.75f;
-    final protected static float ALPHA_SELECTED = 0.9f;
+    final protected static float ALPHA_NOT_SELECTED = 0.5f; // TODO
+    final protected static float ALPHA_TO_SELECT = 0.75f; // TODO
+    final protected static float ALPHA_SELECTED = 0.9f; // TODO
 
-    final protected static int MARGIN_NOT_SELECTED = 6;
-    final protected static int MARGIN_SELECTED = 12;
+    final protected static int MARGIN_NOT_SELECTED = 6; // TODO
+    final protected static int MARGIN_SELECTED = 12; // TODO
 
-    protected float alphaState;
-    protected int marginState;
+    protected float alphaState; // TODO
+    protected int marginState; // TODO
 
-    public boolean isSelected;
+    public boolean isSelected; // TODO
     protected AbstractActivity activity;
 
     public AbstractViewHolder(@NonNull View itemView) {
@@ -28,9 +28,9 @@ public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
 
     public abstract void setup(int id, AbstractActivity activity);
 
-    public abstract void updateSelection();
+    public abstract void updateSelection(); // TODO
 
-    public abstract void updateAlphaState();
+    public abstract void updateAlphaState(); // TODO
 
     public abstract void changeColorByAppTheme();
 }

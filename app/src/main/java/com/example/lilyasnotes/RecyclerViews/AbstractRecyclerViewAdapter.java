@@ -19,6 +19,6 @@ public abstract class AbstractRecyclerViewAdapter extends RecyclerView.Adapter<A
     protected List<Data> data;
     protected RecyclerView recyclerView;
 
-    public abstract void selectViewHolder(int position);
-    public abstract void deselectSelectedViewHolder();
+    public abstract void selectViewHolder(int position); // TODO
+    public abstract void deselectSelectedViewHolder(); // TODO
 }

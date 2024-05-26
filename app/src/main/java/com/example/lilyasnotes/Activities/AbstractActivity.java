@@ -19,14 +19,14 @@ import java.util.List;
 
 public abstract class AbstractActivity extends AppCompatActivity {
 
-    final public static byte NO_TYPE = -1;
-    final public static byte THEME_TYPE = 0;
-    final public static byte NOTE_TYPE = 1;
+    final public static byte NO_TYPE = -1; // TODO
+    final public static byte THEME_TYPE = 0; // TODO
+    final public static byte NOTE_TYPE = 1; // TODO
 
     public boolean eraseMode;
 
-    public int selectedViewId;
-    public byte selectedViewType;
+    public int selectedViewId; // TODO
+    public byte selectedViewType; // TODO
     public List<Data> data;
 
 
@@ -36,8 +36,8 @@ public abstract class AbstractActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        selectedViewId = NO_TYPE;
-        selectedViewType = NO_TYPE;
+        selectedViewId = NO_TYPE; // TODO
+        selectedViewType = NO_TYPE; // TODO
         data = new ArrayList<>();
         eraseMode = false;
 
@@ -55,7 +55,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
     public abstract AbstractRecyclerViewAdapter getAdapter();
     public abstract AbstractButtonsManager getButtonsManager();
     public abstract AbstractSearchBarHelper getSearchBar();
-    public abstract RecyclerView getRecyclerView();
     public abstract ImageView getBackground();
-    public abstract int getSelectedViewIndex();
+    public abstract int getSelectedViewIndex(); // TODO
 }

@@ -324,17 +324,12 @@ public class ThemeActivity extends AbstractActivity {
     }
 
     @Override
-    public RecyclerView getRecyclerView() {
-        return dataListView;
-    }
-
-    @Override
     public ImageView getBackground() {
         return dataListBackground;
     }
 
     @Override
-    public int getSelectedViewIndex() {
+    public int getSelectedViewIndex() { // TODO
         int index = -1;
         for (int i = 0; i < data.size(); i++) {
             if (selectedViewType == THEME_TYPE) {

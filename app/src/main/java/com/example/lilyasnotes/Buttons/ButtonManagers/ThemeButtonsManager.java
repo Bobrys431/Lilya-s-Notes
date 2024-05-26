@@ -42,20 +42,20 @@ public class ThemeButtonsManager extends AbstractButtonsManager {
     private void editButtonRealization() {
         System.out.println("ThemeButtonsManager editButtonRealization");
 
-        if (activity.selectedViewType == ThemeActivity.THEME_TYPE) {
-            ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);
+        if (activity.selectedViewType == ThemeActivity.THEME_TYPE) { // TODO
+            ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId); // TODO
 
             DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
-                ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());
+                ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle()); // TODO
 
-                int index = activity.getSelectedViewIndex();
+                int index = activity.getSelectedViewIndex(); // TODO
                 int oldSize = activity.data.size();
 
                 activity.reloadDataComparedToSearchBar();
 
                 if (oldSize > activity.data.size()) {
                     activity.getAdapter().notifyItemRemoved(index);
-                    activity.getAdapter().deselectSelectedViewHolder();
+                    activity.getAdapter().deselectSelectedViewHolder(); // TODO
                     activity.getButtonsManager().updateButtonsDisplay();
                 } else
                     { activity.getAdapter().notifyItemChanged(index); }
@@ -64,21 +64,21 @@ public class ThemeButtonsManager extends AbstractButtonsManager {
             themeEditor.setOnDismissListener(onDismiss);
             themeEditor.show();
 
-        } else if (activity.selectedViewType == ThemeActivity.NOTE_TYPE) {
-            NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity, activity.selectedViewId);
+        } else if (activity.selectedViewType == ThemeActivity.NOTE_TYPE) { // TODO
+            NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity, activity.selectedViewId); // TODO
 
             DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
-                NoteManager.setTitle(activity.selectedViewId, noteEditor.getTitle());
-                NoteManager.setText(activity.selectedViewId, noteEditor.getText());
+                NoteManager.setTitle(activity.selectedViewId, noteEditor.getTitle()); // TODO
+                NoteManager.setText(activity.selectedViewId, noteEditor.getText()); // TODO
 
-                int index = activity.getSelectedViewIndex();
+                int index = activity.getSelectedViewIndex(); // TODO
                 int oldSize = activity.data.size();
 
                 activity.reloadDataComparedToSearchBar();
 
                 if (oldSize > activity.data.size()) {
                     activity.getAdapter().notifyItemRemoved(index);
-                    activity.getAdapter().deselectSelectedViewHolder();
+                    activity.getAdapter().deselectSelectedViewHolder(); // TODO
                     activity.getButtonsManager().updateButtonsDisplay();
                 } else
                     { activity.getAdapter().notifyItemChanged(index); }
@@ -103,7 +103,7 @@ public class ThemeButtonsManager extends AbstractButtonsManager {
     }
 
     private void updateRenameButton() {
-        if (activity.selectedViewType == ThemeActivity.NO_TYPE) {
+        if (activity.selectedViewType == ThemeActivity.NO_TYPE) { // TODO
             hide(EditButton.class);
         } else {
             show(EditButton.class);

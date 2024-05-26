@@ -40,19 +40,19 @@ public class MainButtonsManager extends AbstractButtonsManager {
     private void editButtonRealization() {
         System.out.println("MainButtonsManager editButtonRealization");
 
-        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);
+        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity, activity.selectedViewId);  // TODO
 
         DialogInterface.OnDismissListener onDismiss = dialogInterface -> {
-            ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());
+            ThemeManager.setTitle(activity.selectedViewId, themeEditor.getTitle());  // TODO
 
-            int index = activity.getSelectedViewIndex();
+            int index = activity.getSelectedViewIndex();  // TODO
             int oldSize = activity.data.size();
 
             activity.reloadDataComparedToSearchBar();
 
             if (oldSize > activity.data.size()) {
                 activity.getAdapter().notifyItemRemoved(index);
-                activity.getAdapter().deselectSelectedViewHolder();
+                activity.getAdapter().deselectSelectedViewHolder();  // TODO
                 activity.getButtonsManager().updateButtonsDisplay();
             } else { activity.getAdapter().notifyItemChanged(index); }
         };
@@ -74,7 +74,7 @@ public class MainButtonsManager extends AbstractButtonsManager {
     }
 
     private void updateRenameButton() {
-        if (activity.selectedViewId == -1) {
+        if (activity.selectedViewId == -1) { // TODO
             hide(EditButton.class);
         } else {
             show(EditButton.class);

@@ -24,7 +24,7 @@ public class AddButton {
     AbstractActivity activity;
     ImageButton button;
 
-    public boolean isBlocked;
+    public boolean isBlocked; // TODO
 
     public AddButton(ImageButton button) {
         this.button = button;
@@ -34,7 +34,7 @@ public class AddButton {
         this.activity = activity;
 
         button.setOnClickListener((view) -> {
-            if (!isBlocked) {
+            if (!isBlocked) { // TODO
                 onClickListener.onClick(button);
 
                 new Handler().postDelayed(() -> {
@@ -54,9 +54,9 @@ public class AddButton {
             tac.dismiss();
 
             int choiceType = tac.getChoiceType();
-            if (choiceType == AbstractActivity.THEME_TYPE)
+            if (choiceType == AbstractActivity.THEME_TYPE) // TODO
                 { addNewTheme(); }
-            else if (choiceType == AbstractActivity.NOTE_TYPE)
+            else if (choiceType == AbstractActivity.NOTE_TYPE) // TODO
                 { addNewNote(); }
         });
         tac.show();
@@ -68,7 +68,7 @@ public class AddButton {
             mac.dismiss();
 
             int choiceType = mac.getChoiceType();
-            if (choiceType == AbstractActivity.THEME_TYPE)
+            if (choiceType == AbstractActivity.THEME_TYPE) // TODO
                 { addNewTheme(); }
         });
         mac.show();

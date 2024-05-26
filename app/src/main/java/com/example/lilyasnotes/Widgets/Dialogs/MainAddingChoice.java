@@ -36,7 +36,7 @@ public class MainAddingChoice extends Dialog {
                 getContext().getPackageName()
         ));
         addThemeButton.setOnClickListener((view) -> {
-            choiceType = AbstractActivity.THEME_TYPE;
+            choiceType = AbstractActivity.THEME_TYPE; // TODO
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });

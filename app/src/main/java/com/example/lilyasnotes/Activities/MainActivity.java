@@ -124,7 +124,6 @@ public class MainActivity extends AbstractActivity {
         buttonsManager.addAndSetupButtonsByType(EditButton.class);
     }
 
-    @SuppressLint("DiscouragedApi")
     private void buildThemeButton() {
         themeButton = findViewById(R.id.theme_button);
         themeButton.setOnClickListener(view -> changeAppTheme());
@@ -278,17 +277,12 @@ public class MainActivity extends AbstractActivity {
     }
 
     @Override
-    public RecyclerView getRecyclerView() {
-        return themesListView;
-    }
-
-    @Override
     public ImageView getBackground() {
         return themesListBackground;
     }
 
     @Override
-    public int getSelectedViewIndex() {
+    public int getSelectedViewIndex() { // TODO
         int index = -1;
         for (int i = 0; i < data.size(); i++) {
             if (((Theme) data.get(i)).id == selectedViewId) {

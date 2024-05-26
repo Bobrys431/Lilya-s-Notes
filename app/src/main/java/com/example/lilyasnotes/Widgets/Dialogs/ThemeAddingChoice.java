@@ -36,7 +36,7 @@ public class ThemeAddingChoice extends Dialog {
                 getContext().getPackageName()
         ));
         addThemeButton.setOnClickListener((view) -> {
-            choiceType = AbstractActivity.THEME_TYPE;
+            choiceType = AbstractActivity.THEME_TYPE; // TODO
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });
@@ -48,7 +48,7 @@ public class ThemeAddingChoice extends Dialog {
                 getContext().getPackageName()
         ));
         addNoteButton.setOnClickListener((view) -> {
-            choiceType = AbstractActivity.NOTE_TYPE;
+            choiceType = AbstractActivity.NOTE_TYPE; // TODO
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });

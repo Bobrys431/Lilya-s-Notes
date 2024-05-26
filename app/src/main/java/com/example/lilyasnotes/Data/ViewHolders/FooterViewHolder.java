@@ -44,8 +44,8 @@ public class FooterViewHolder extends AbstractViewHolder {
         this.activity = activity;
 
         addButton.setup(activity, (view) -> {
-            deleteButton.isBlocked = true;
-            addButton.isBlocked = true;
+            deleteButton.isBlocked = true; // TODO
+            addButton.isBlocked = true; // TODO
 
             ValueAnimator markDown = ValueAnimator.ofInt(addButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
             markDown.setDuration(100);
@@ -85,14 +85,14 @@ public class FooterViewHolder extends AbstractViewHolder {
             markDown.start();
 
             new Handler().postDelayed(() -> {
-                deleteButton.isBlocked = false;
-                addButton.isBlocked = false;
+                deleteButton.isBlocked = false; // TODO
+                addButton.isBlocked = false; // TODO
             }, 300);
         });
 
         deleteButton.setup(activity, (view) -> {
-            deleteButton.isBlocked = true;
-            addButton.isBlocked = true;
+            deleteButton.isBlocked = true; // TODO
+            addButton.isBlocked = true; // TODO
 
             ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
             markDown.setDuration(100);
@@ -132,8 +132,8 @@ public class FooterViewHolder extends AbstractViewHolder {
             markDown.start();
 
             new Handler().postDelayed(() -> {
-                deleteButton.isBlocked = false;
-                addButton.isBlocked = false;
+                deleteButton.isBlocked = false; // TODO
+                addButton.isBlocked = false; // TODO
             }, 300);
         });
 
@@ -141,12 +141,12 @@ public class FooterViewHolder extends AbstractViewHolder {
     }
 
     @Override
-    public void updateSelection() {
+    public void updateSelection() { // TODO
 
     }
 
     @Override
-    public void updateAlphaState() {
+    public void updateAlphaState() { // TODO
 
     }
 

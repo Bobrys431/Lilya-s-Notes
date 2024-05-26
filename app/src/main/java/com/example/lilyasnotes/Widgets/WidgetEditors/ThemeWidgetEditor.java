@@ -1,6 +1,7 @@
 package com.example.lilyasnotes.Widgets.WidgetEditors;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.Database.ThemeManager;
 import com.example.lilyasnotes.R;
@@ -21,19 +21,16 @@ import com.example.lilyasnotes.R;
 public class ThemeWidgetEditor extends Dialog {
 
     private final int id;
-    private final AbstractActivity activity;
 
     private EditText title;
 
-    public ThemeWidgetEditor(@NonNull AbstractActivity activity, int id) {
-        super(activity);
-        this.activity = activity;
+    public ThemeWidgetEditor(@NonNull Context Context, int id) {
+        super(Context);
         this.id = id;
     }
 
-    public ThemeWidgetEditor(@NonNull AbstractActivity activity) {
-        super(activity);
-        this.activity = activity;
+    public ThemeWidgetEditor(@NonNull Context Context) {
+        super(Context);
         this.id = -1;
     }
 
