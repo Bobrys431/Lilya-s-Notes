@@ -3,7 +3,7 @@ package com.example.lilyasnotes.Data.DTO;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 
 public class Note implements Data {
 

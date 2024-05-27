@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Data;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.RecyclerViews.AbstractRecyclerViewAdapter;
-import com.example.lilyasnotes.Widgets.SearchBars.AbstractSearchBarHelper;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
+import com.example.lilyasnotes.SearchBars.AbstractSearchBarHelper;
 
 import java.util.ArrayList;
 import java.util.List;

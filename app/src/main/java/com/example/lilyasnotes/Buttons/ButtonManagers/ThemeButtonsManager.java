@@ -4,12 +4,12 @@ import android.content.DialogInterface;
 import android.view.View;
 
 import com.example.lilyasnotes.Activities.ThemeActivity;
-import com.example.lilyasnotes.Database.NoteManager;
-import com.example.lilyasnotes.Database.ThemeIntoManager;
-import com.example.lilyasnotes.Database.ThemeManager;
+import com.example.lilyasnotes.DatabaseManagement.NoteManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeIntoManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.Database.ThemeNoteManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
 import com.example.lilyasnotes.Widgets.WidgetEditors.NoteWidgetEditor;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 

@@ -4,10 +4,10 @@ import android.content.DialogInterface;
 import android.view.View;
 
 import com.example.lilyasnotes.Activities.MainActivity;
-import com.example.lilyasnotes.Database.ThemeManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.Database.ThemesManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemesManager;
 import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
 public class MainButtonsManager extends AbstractButtonsManager {

@@ -103,8 +103,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
-            android:adjustViewBounds="true"
-            android:translationY="-1000dp"/>
+            android:adjustViewBounds="true" />
 
     </androidx.core.widget.NestedScrollView>
 
@@ -114,29 +113,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/action_bar_layout"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:inputType="textMultiLine"
-        android:singleLine="false"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <RelativeLayout
-        android:id="@+id/theme_title_frame_wrap"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/undo_erase_container"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:translationX="2000dp"
-        android:maxWidth="270dp">
-
-        <TextView
-            android:id="@+id/theme_title_wrap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/advent_pro_bold"
-            android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="20dp"
-            android:textSize="20sp"
-            android:maxWidth="220dp"
-            android:maxLines="3"
-            android:gravity="center"
-            android:layout_centerInParent="true" />
-    </RelativeLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </RelativeLayout>

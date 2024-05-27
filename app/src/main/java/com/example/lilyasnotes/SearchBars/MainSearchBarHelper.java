@@ -1,12 +1,12 @@
-package com.example.lilyasnotes.Widgets.SearchBars;
+package com.example.lilyasnotes.SearchBars;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.Database.ThemeManager;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 
 import java.util.Collections;
 

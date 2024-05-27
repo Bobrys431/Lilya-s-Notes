@@ -5,7 +5,7 @@ import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
 public abstract class EditButton extends Button {

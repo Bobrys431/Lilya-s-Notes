@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.RecyclerViews;
+package com.example.lilyasnotes.RecyclerViewAdapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;

@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.lilyasnotes.Database.NoteManager;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.NoteManager;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
 public class NoteWidgetEditor extends Dialog {

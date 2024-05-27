@@ -21,13 +21,13 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
-import com.example.lilyasnotes.RecyclerViews.AbstractRecyclerViewAdapter;
-import com.example.lilyasnotes.RecyclerViews.MainRecyclerViewAdapter;
+import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
+import com.example.lilyasnotes.RecyclerViewAdapters.MainRecyclerViewAdapter;
 import com.example.lilyasnotes.R;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.RecyclerViews.RecyclerViewMoveCallback;
-import com.example.lilyasnotes.Widgets.SearchBars.MainSearchBarHelper;
-import com.example.lilyasnotes.Widgets.SearchBars.AbstractSearchBarHelper;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.RecyclerViewAdapters.RecyclerViewMoveCallback;
+import com.example.lilyasnotes.SearchBars.MainSearchBarHelper;
+import com.example.lilyasnotes.SearchBars.AbstractSearchBarHelper;
 
 public class MainActivity extends AbstractActivity {
 

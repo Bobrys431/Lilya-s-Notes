@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.RecyclerViews;
+package com.example.lilyasnotes.RecyclerViewAdapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -14,8 +14,8 @@ import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.FooterViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
-import com.example.lilyasnotes.Database.ThemeIntoManager;
-import com.example.lilyasnotes.Database.ThemeNoteManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeIntoManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
 import com.example.lilyasnotes.R;
 
 import java.util.Collections;

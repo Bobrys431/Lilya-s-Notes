@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.Dialogs;
+package com.example.lilyasnotes.AuxiliaryDialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -9,18 +9,17 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
-public class ThemeAddingChoice extends Dialog {
+public class MainAddingChoice extends Dialog {
 
     final public static byte THEME_CHOICE = 0;
-    final public static byte NOTE_CHOICE = 1;
 
     private int choiceType;
     private OnChoiceSelectedListener onChoiceSelectedListener;
 
-    public ThemeAddingChoice(@NonNull AbstractActivity activity) {
+    public MainAddingChoice(@NonNull AbstractActivity activity) {
         super(activity);
     }
 
@@ -28,7 +27,7 @@ public class ThemeAddingChoice extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.theme_adding_choice);
+        setContentView(R.layout.main_adding_choice);
 
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(getContext());
 
@@ -40,18 +39,6 @@ public class ThemeAddingChoice extends Dialog {
         ));
         addThemeButton.setOnClickListener((view) -> {
             choiceType = THEME_CHOICE;
-            onChoiceSelectedListener.onChoiseSelected();
-            dismiss();
-        });
-
-        ImageButton addNoteButton = findViewById(R.id.add_note);
-        addNoteButton.setBackgroundResource(getContext().getResources().getIdentifier(
-                "note_choice_" + appTheme,
-                "drawable",
-                getContext().getPackageName()
-        ));
-        addNoteButton.setOnClickListener((view) -> {
-            choiceType = NOTE_CHOICE;
             onChoiceSelectedListener.onChoiseSelected();
             dismiss();
         });

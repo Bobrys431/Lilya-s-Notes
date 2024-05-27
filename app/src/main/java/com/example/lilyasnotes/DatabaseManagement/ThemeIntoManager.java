@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Database;
+package com.example.lilyasnotes.DatabaseManagement;
 
 import android.content.Context;
 import android.database.Cursor;

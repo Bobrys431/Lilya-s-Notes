@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Buttons.AddButton;
-import com.example.lilyasnotes.Buttons.DeleteButton;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.Buttons.EraseButton;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.Utilities.Tools;
 
@@ -23,7 +23,7 @@ public class FooterViewHolder extends AbstractViewHolder {
     AddButton addButton;
     ImageView addMark;
     RelativeLayout deleteButtonFrame;
-    DeleteButton deleteButton;
+    EraseButton eraseButton;
     ImageView deleteMark;
 
     public FooterViewHolder(@NonNull View itemView) {
@@ -34,7 +34,7 @@ public class FooterViewHolder extends AbstractViewHolder {
         addButton = new AddButton(itemView.findViewById(R.id.add_button));
         addMark = itemView.findViewById(R.id.add_mark);
         deleteButtonFrame = itemView.findViewById(R.id.delete_button_frame);
-        deleteButton = new DeleteButton(itemView.findViewById(R.id.delete_button));
+        eraseButton = new EraseButton(itemView.findViewById(R.id.delete_button));
         deleteMark = itemView.findViewById(R.id.delete_mark);
     }
 
@@ -61,9 +61,7 @@ public class FooterViewHolder extends AbstractViewHolder {
 
             markDown.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationStart(@NonNull Animator animator) {
-
-                }
+                public void onAnimationStart(@NonNull Animator animator) {}
 
                 @Override
                 public void onAnimationEnd(@NonNull Animator animator) {
@@ -71,55 +69,35 @@ public class FooterViewHolder extends AbstractViewHolder {
                 }
 
                 @Override
-                public void onAnimationCancel(@NonNull Animator animator) {
-
-                }
+                public void onAnimationCancel(@NonNull Animator animator) {}
 
                 @Override
-                public void onAnimationRepeat(@NonNull Animator animator) {
-
-                }
+                public void onAnimationRepeat(@NonNull Animator animator) {}
             });
             markDown.start();
         });
 
-        deleteButton.setup(activity, (view) -> {
-            ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
-            markDown.setDuration(100);
-            markDown.addUpdateListener(valueAnimator -> {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
-                params.height = (int) valueAnimator.getAnimatedValue();
-                deleteButtonFrame.setLayoutParams(params);
-            });
-            ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
-            markUp.setDuration(100);
-            markUp.addUpdateListener(valueAnimator -> {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
-                params.height = (int) valueAnimator.getAnimatedValue();
-                deleteButtonFrame.setLayoutParams(params);
-            });
-            markDown.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(@NonNull Animator animator) {
+        eraseButton.setup(activity, (view) -> {
+            if (!activity.eraseMode) {
+                ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
+                markDown.setDuration(100);
+                markDown.addUpdateListener(valueAnimator -> {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
+                    params.height = (int) valueAnimator.getAnimatedValue();
+                    deleteButtonFrame.setLayoutParams(params);
+                });
+                markDown.start();
 
-                }
-
-                @Override
-                public void onAnimationEnd(@NonNull Animator animator) {
-                    markUp.start();
-                }
-
-                @Override
-                public void onAnimationCancel(@NonNull Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(@NonNull Animator animator) {
-
-                }
-            });
-            markDown.start();
+            } else {
+                ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
+                markUp.setDuration(100);
+                markUp.addUpdateListener(valueAnimator -> {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
+                    params.height = (int) valueAnimator.getAnimatedValue();
+                    deleteButtonFrame.setLayoutParams(params);
+                });
+                markUp.start();
+            }
         });
 
         changeColorByAppTheme();
@@ -134,7 +112,7 @@ public class FooterViewHolder extends AbstractViewHolder {
         addButton.changeColorByAppTheme();
         changeAddMarkColor(appTheme);
         changeDeleteButtonFrameColor(appTheme);
-        deleteButton.changeColorByAppTheme();
+        eraseButton.changeColorByAppTheme();
         changeDeleteMarkColor(appTheme);
     }
 

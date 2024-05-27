@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
-import com.example.lilyasnotes.Database.NoteManager;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.NoteManager;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
 public class NoteViewHolder extends AbstractViewHolder {
@@ -50,11 +50,26 @@ public class NoteViewHolder extends AbstractViewHolder {
         changeColorByAppTheme();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setupBasement() {
         basement.setOnClickListener(view -> {
 
+            if (activity.eraseMode) {
+                deleteNote();
+                return;
+            }
+
+            openNote();
         });
+    }
+
+    private void deleteNote() {
+        NoteManager.deleteNote(id);
+        activity.data.remove(getAdapterPosition());
+        activity.getAdapter().notifyItemRemoved(getAdapterPosition());
+    }
+
+    private void openNote() {
+        // TODO  *******OPEN**NOTE**FUNCTIONAL******   D:<<    <----
     }
 
     private void setupTitle() {

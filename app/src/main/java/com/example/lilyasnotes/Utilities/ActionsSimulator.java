@@ -4,12 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.lilyasnotes.Database.NoteManager;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.Database.ThemeIntoManager;
-import com.example.lilyasnotes.Database.ThemeManager;
-import com.example.lilyasnotes.Database.ThemeNoteManager;
-import com.example.lilyasnotes.Database.ThemesManager;
+import com.example.lilyasnotes.DatabaseManagement.NoteManager;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.ThemeIntoManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemesManager;
 
 public class ActionsSimulator {
     private static SQLiteDatabase database;

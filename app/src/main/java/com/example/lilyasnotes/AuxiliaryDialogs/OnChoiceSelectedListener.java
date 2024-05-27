@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.Dialogs;
+package com.example.lilyasnotes.AuxiliaryDialogs;
 
 public interface OnChoiceSelectedListener {
     void onChoiseSelected();

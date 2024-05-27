@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.SearchBars;
+package com.example.lilyasnotes.SearchBars;
 
 public interface OnDataRecordedListener {
     void onDataRecorded();

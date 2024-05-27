@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.RecyclerViews;
+package com.example.lilyasnotes.RecyclerViewAdapters;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.FooterViewHolder;
 import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
-import com.example.lilyasnotes.Database.ThemesManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemesManager;
 import com.example.lilyasnotes.R;
 
 import java.util.Collections;

@@ -14,9 +14,9 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.ThemeActivity;
-import com.example.lilyasnotes.Database.ThemeManager;
+import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.R;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 
 public class ThemeViewHolder extends AbstractViewHolder {
 
@@ -48,13 +48,28 @@ public class ThemeViewHolder extends AbstractViewHolder {
         changeColorByAppTheme();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setupBasement() {
         basement.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, ThemeActivity.class);
-            intent.putExtra("themeId", id);
-            activity.startActivity(intent);
+
+            if (activity.eraseMode) {
+                deleteTheme();
+                return;
+            }
+
+            openTheme();
         });
+    }
+
+    private void deleteTheme() {
+        ThemeManager.deleteTheme(id);
+        activity.data.remove(getAdapterPosition());
+        activity.getAdapter().notifyItemRemoved(getAdapterPosition());
+    }
+
+    private void openTheme() {
+        Intent intent = new Intent(activity, ThemeActivity.class);
+        intent.putExtra("themeId", id);
+        activity.startActivity(intent);
     }
 
     private void setupTitle() {

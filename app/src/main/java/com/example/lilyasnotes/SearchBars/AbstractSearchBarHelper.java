@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.SearchBars;
+package com.example.lilyasnotes.SearchBars;
 
 import android.annotation.SuppressLint;
 import android.text.Editable;
@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
-import com.example.lilyasnotes.Database.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
 import java.util.ArrayList;
