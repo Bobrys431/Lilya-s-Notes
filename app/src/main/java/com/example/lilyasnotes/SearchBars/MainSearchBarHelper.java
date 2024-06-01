@@ -8,8 +8,6 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 
-import java.util.Collections;
-
 public class MainSearchBarHelper extends AbstractSearchBarHelper {
 
     public MainSearchBarHelper(MainActivity activity) {
@@ -19,7 +17,12 @@ public class MainSearchBarHelper extends AbstractSearchBarHelper {
     @Override
     protected void insertAllDataFromDatabaseToVisibleData() {
         Theme[] themes = getAllThemes();
-        Collections.addAll(visibleData, themes);
+
+        for (Theme theme : themes) {
+            if (isThemeNotGoingToBeDeleted(theme)) {
+                visibleData.add(theme);
+            }
+        }
     }
 
     @Override
@@ -27,13 +30,20 @@ public class MainSearchBarHelper extends AbstractSearchBarHelper {
         Theme[] themes = getAllThemes();
 
         for (Theme theme : themes) {
-            if (isThemeTitleFoundBySequence(
-                    theme.id,
-                    charSequence
-            )) {
+            if (
+                    isThemeNotGoingToBeDeleted(theme) &&
+                    isThemeTitleFoundBySequence(theme.id, charSequence)
+            ) {
                 visibleData.add(theme);
             }
         }
+    }
+
+    private boolean isThemeNotGoingToBeDeleted(Theme theme) {
+        return
+                !activity.getUndoEraseWidget().isActive() ||
+                !(activity.getUndoEraseWidget().getItem() instanceof Theme) ||
+                ((Theme) activity.getUndoEraseWidget().getItem()).id != theme.id;
     }
 
     private boolean isThemeTitleFoundBySequence(int id, CharSequence charSequence) {

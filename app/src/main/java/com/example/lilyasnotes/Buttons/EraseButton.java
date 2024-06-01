@@ -1,9 +1,7 @@
 package com.example.lilyasnotes.Buttons;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
@@ -11,9 +9,9 @@ import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 public class EraseButton {
 
     AbstractActivity activity;
-    ImageButton button;
+    View button;
 
-    public EraseButton(ImageButton button) {
+    public EraseButton(View button) {
         this.button = button;
     }
 
@@ -21,22 +19,12 @@ public class EraseButton {
         this.activity = activity;
 
         button.setOnClickListener((view) -> {
+            switchEraseMode();
             onClickListener.onClick(button);
-            new Handler().postDelayed(this::switchEraseMode, 200);
         });
     }
 
     private void switchEraseMode() {
         activity.eraseMode = !activity.eraseMode;
-    }
-
-    @SuppressLint("DiscouragedApi")
-    public void changeColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
-        button.setBackgroundResource(activity.getResources().getIdentifier(
-                "delete_" + appTheme,
-                "drawable",
-                activity.getPackageName()
-        ));
     }
 }

@@ -17,5 +17,9 @@ public abstract class AbstractRecyclerViewAdapter extends RecyclerView.Adapter<A
 
     protected AbstractActivity activity;
     protected List<Data> data;
-    protected RecyclerView recyclerView;
+
+    @Override
+    public int getItemCount() {
+        return data.size() + 1;
+    }
 }

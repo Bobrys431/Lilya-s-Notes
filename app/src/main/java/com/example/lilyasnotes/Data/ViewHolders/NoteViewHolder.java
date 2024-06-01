@@ -19,11 +19,11 @@ public class NoteViewHolder extends AbstractViewHolder {
 
     private int id;
 
-    public RelativeLayout basement;
-    public TextView title;
-    public RelativeLayout titleFrame;
-    public TextView note;
-    public RelativeLayout noteFrame;
+    private final RelativeLayout basement;
+    private final TextView title;
+    private final RelativeLayout titleFrame;
+    private final TextView note;
+    private final RelativeLayout noteFrame;
 
     public NoteViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -63,7 +63,8 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     private void deleteNote() {
-        NoteManager.deleteNote(id);
+        activity.getUndoEraseWidget().activate(activity.data.get(getAdapterPosition()));
+
         activity.data.remove(getAdapterPosition());
         activity.getAdapter().notifyItemRemoved(getAdapterPosition());
     }
@@ -105,10 +106,10 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     private void changeTitleColor(String appTheme) {
-        title.setTextColor(activity.getResources().getColor(
+        title.setTextColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
-                        R.color.darkThemeActiveColor, activity.getTheme()));
+                        R.color.darkThemeActiveColor));
     }
 
     @SuppressLint("DiscouragedApi")
@@ -120,16 +121,16 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     private void changeNoteColor(String appTheme) {
-        note.setTextColor(activity.getResources().getColor(
+        note.setTextColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
-                        R.color.darkThemeActiveColor, activity.getTheme()));
+                        R.color.darkThemeActiveColor));
     }
 
     private void changeNoteFrameColor(String appTheme) {
-        noteFrame.setBackgroundColor(activity.getResources().getColor(
+        noteFrame.setBackgroundColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeBackground :
-                        R.color.darkThemeBackground, activity.getTheme()));
+                        R.color.darkThemeBackground));
     }
 }

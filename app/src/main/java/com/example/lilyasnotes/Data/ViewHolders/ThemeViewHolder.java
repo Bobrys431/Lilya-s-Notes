@@ -22,10 +22,10 @@ public class ThemeViewHolder extends AbstractViewHolder {
 
     private int id;
 
-    public RelativeLayout basement;
-    public ImageView mark;
-    public TextView title;
-    public RelativeLayout titleFrame;
+    private final RelativeLayout basement;
+    private final ImageView mark;
+    private final TextView title;
+    private final RelativeLayout titleFrame;
 
     public ThemeViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -52,7 +52,7 @@ public class ThemeViewHolder extends AbstractViewHolder {
         basement.setOnClickListener(view -> {
 
             if (activity.eraseMode) {
-                deleteTheme();
+                removeTheme();
                 return;
             }
 
@@ -60,8 +60,9 @@ public class ThemeViewHolder extends AbstractViewHolder {
         });
     }
 
-    private void deleteTheme() {
-        ThemeManager.deleteTheme(id);
+    private void removeTheme() {
+        activity.getUndoEraseWidget().activate(activity.data.get(getAdapterPosition()));
+
         activity.data.remove(getAdapterPosition());
         activity.getAdapter().notifyItemRemoved(getAdapterPosition());
     }
@@ -101,17 +102,17 @@ public class ThemeViewHolder extends AbstractViewHolder {
     }
 
     private void changeTitleColor(String appTheme) {
-        title.setTextColor(activity.getResources().getColor(
+        title.setTextColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
-                        R.color.darkThemeActiveColor, activity.getTheme()));
+                        R.color.darkThemeActiveColor));
     }
 
     private void changeTitleFrameColor(String appTheme) {
-        titleFrame.setBackgroundColor(activity.getResources().getColor(
+        titleFrame.setBackgroundColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeBackground :
-                        R.color.darkThemeBackground, activity.getTheme()));
+                        R.color.darkThemeBackground));
     }
 
     @SuppressLint("DiscouragedApi")

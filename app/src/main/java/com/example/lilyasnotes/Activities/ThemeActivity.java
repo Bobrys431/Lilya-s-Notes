@@ -23,6 +23,7 @@ import com.example.lilyasnotes.Data.DTO.Note;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.EraseUndoUtils.UndoEraseWidget;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViewAdapters.RecyclerViewMoveCallback;
@@ -42,6 +43,7 @@ public class ThemeActivity extends AbstractActivity {
     private ThemeButtonsManager buttonsManager;
     private ThemeRecyclerViewAdapter adapter;
     private ThemeSearchBarHelper searchBar;
+    private UndoEraseWidget undoEraseWidget;
 
     private RecyclerView dataListView;
     private RelativeLayout themeTitleFrame;
@@ -65,6 +67,7 @@ public class ThemeActivity extends AbstractActivity {
         buildScrollingBackground();
         buildButtons();
         buildSearchBar();
+        buildEraseUndoSystem();
         buildStatusAndActionBars();
         setupThemeTitle();
 
@@ -112,7 +115,6 @@ public class ThemeActivity extends AbstractActivity {
         dataListView.setLayoutManager(layoutManager);
 
         adapter = new ThemeRecyclerViewAdapter(this);
-        adapter.setRecyclerView(dataListView);
         adapter.setData(data);
 
         ItemTouchHelper.Callback callback = new RecyclerViewMoveCallback(adapter);
@@ -167,6 +169,8 @@ public class ThemeActivity extends AbstractActivity {
         changeStatusBarColorByAppTheme();
         changeAllButtonsColorByAppTheme();
         changeAllViewHoldersColorByAppTheme();
+        changeSearchBarColorByAppTheme();
+        changeUndoEraseWidgetColorByAppTheme();
         changeThemeTitleColorByAppTheme();
     }
 
@@ -242,6 +246,14 @@ public class ThemeActivity extends AbstractActivity {
         }
     }
 
+    private void changeSearchBarColorByAppTheme() {
+        searchBar.changeColorByAppTheme();
+    }
+
+    private void changeUndoEraseWidgetColorByAppTheme() {
+        undoEraseWidget.changeColorByAppTheme();
+    }
+
     @SuppressLint("DiscouragedApi")
     private void changeThemeTitleColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
@@ -257,6 +269,7 @@ public class ThemeActivity extends AbstractActivity {
                         R.color.black :
                         R.color.white, getTheme()));
     }
+
 
     @SuppressLint("DiscouragedApi")
     private void buildExitButton() {
@@ -274,6 +287,11 @@ public class ThemeActivity extends AbstractActivity {
         searchBar = new ThemeSearchBarHelper(this);
         searchBar.setOnDataRecordedListener(() -> buttonsManager.updateButtonsDisplay());
         searchBar.build();
+    }
+
+    @Override
+    protected void buildEraseUndoSystem() {
+        undoEraseWidget = new UndoEraseWidget(this);
     }
 
     @Override
@@ -317,6 +335,11 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     public AbstractSearchBarHelper getSearchBar() {
         return searchBar;
+    }
+
+    @Override
+    public UndoEraseWidget getUndoEraseWidget() {
+        return undoEraseWidget;
     }
 
     @Override

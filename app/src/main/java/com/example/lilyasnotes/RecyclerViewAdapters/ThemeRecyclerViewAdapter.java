@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
@@ -27,10 +26,6 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
 
     public ThemeRecyclerViewAdapter(ThemeActivity activity) {
         this.activity = activity;
-    }
-
-    public void setRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
     }
 
     public void setData(List<Data> data) {
@@ -92,15 +87,11 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemCount() {
-        return data.size() + 1;
-    }
-
-    @Override
     public void onMoved(byte type, int from, int to) {
         System.out.println("onMoved");
 
         if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_FOOTER) return;
+        if (activity.getUndoEraseWidget().isActive()) return;
 
         int id;
         if (type == AbstractRecyclerViewAdapter.VIEW_TYPE_THEME)

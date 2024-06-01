@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.EraseUndoUtils.UndoEraseWidget;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.SearchBars.AbstractSearchBarHelper;
 
@@ -37,6 +38,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
     protected abstract void buildScrollingBackground();
     protected abstract void buildButtons();
     protected abstract void buildSearchBar();
+    protected abstract void buildEraseUndoSystem();
     protected abstract void buildStatusAndActionBars();
 
     public abstract void reloadDataComparedToSearchBar();
@@ -44,5 +46,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
     public abstract AbstractRecyclerViewAdapter getAdapter();
     public abstract AbstractButtonsManager getButtonsManager();
     public abstract AbstractSearchBarHelper getSearchBar();
+    public abstract UndoEraseWidget getUndoEraseWidget();
     public abstract ImageView getBackground();
 }

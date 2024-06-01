@@ -103,7 +103,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:translationY="-1000dp"/>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -115,12 +116,12 @@
         android:layout_below="@id/action_bar_layout"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <RelativeLayout
         android:id="@+id/undo_erase_container"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:layout_marginBottom="15dp" />
 
 </RelativeLayout>

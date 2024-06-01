@@ -25,8 +25,8 @@
         android:layout_alignStart="@id/items_management_frame"
         android:layout_marginStart="16.875dp">
 
-        <ImageButton
-            android:id="@+id/add_button"
+        <ImageView
+            android:id="@+id/add_icon"
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:background="@drawable/add_light"
@@ -51,8 +51,8 @@
         android:layout_alignEnd="@id/items_management_frame"
         android:layout_marginEnd="43.425dp">
 
-        <ImageButton
-            android:id="@+id/delete_button"
+        <ImageView
+            android:id="@+id/delete_icon"
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:background="@drawable/delete_light"

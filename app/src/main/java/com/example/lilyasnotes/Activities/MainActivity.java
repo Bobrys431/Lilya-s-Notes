@@ -21,6 +21,7 @@ import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.Buttons.DTO.Button;
 import com.example.lilyasnotes.Buttons.DTO.EditButton;
+import com.example.lilyasnotes.EraseUndoUtils.UndoEraseWidget;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViewAdapters.MainRecyclerViewAdapter;
 import com.example.lilyasnotes.R;
@@ -34,6 +35,7 @@ public class MainActivity extends AbstractActivity {
     private MainButtonsManager buttonsManager;
     private MainRecyclerViewAdapter adapter;
     private MainSearchBarHelper searchBar;
+    private UndoEraseWidget undoEraseWidget;
 
     private RecyclerView themesListView;
     private ImageView themesListBackground;
@@ -54,6 +56,7 @@ public class MainActivity extends AbstractActivity {
         buildScrollingBackground();
         buildButtons();
         buildSearchBar();
+        buildEraseUndoSystem();
         buildStatusAndActionBars();
 
         changeByAppTheme();
@@ -84,7 +87,6 @@ public class MainActivity extends AbstractActivity {
         themesListView.setLayoutManager(layoutManager);
 
         adapter = new MainRecyclerViewAdapter(this);
-        adapter.setRecyclerView(themesListView);
         adapter.setThemes(data);
 
         ItemTouchHelper.Callback callback = new RecyclerViewMoveCallback(adapter);
@@ -139,6 +141,7 @@ public class MainActivity extends AbstractActivity {
         changeAllButtonsColorByAppTheme();
         changeAllViewHoldersColorByAppTheme();
         changeSearchBarColorByAppTheme();
+        changeUndoEraseWidgetColorByAppTheme();
     }
 
     private void changeWindowColorByAppTheme() {
@@ -217,6 +220,10 @@ public class MainActivity extends AbstractActivity {
         searchBar.changeColorByAppTheme();
     }
 
+    private void changeUndoEraseWidgetColorByAppTheme() {
+        undoEraseWidget.changeColorByAppTheme();
+    }
+
 
     @SuppressLint("DiscouragedApi")
     private void buildExitButton() {
@@ -234,6 +241,11 @@ public class MainActivity extends AbstractActivity {
         searchBar = new MainSearchBarHelper(this);
         searchBar.setOnDataRecordedListener(() -> buttonsManager.updateButtonsDisplay());
         searchBar.build();
+    }
+
+    @Override
+    protected void buildEraseUndoSystem() {
+        undoEraseWidget = new UndoEraseWidget(this);
     }
 
     @Override
@@ -269,6 +281,11 @@ public class MainActivity extends AbstractActivity {
     @Override
     public AbstractSearchBarHelper getSearchBar() {
         return searchBar;
+    }
+
+    @Override
+    public UndoEraseWidget getUndoEraseWidget() {
+        return undoEraseWidget;
     }
 
     @Override

@@ -12,8 +12,6 @@ import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.Utilities.Tools;
 
-import java.util.Collections;
-
 public class ThemeSearchBarHelper extends AbstractSearchBarHelper {
 
     public ThemeSearchBarHelper(ThemeActivity activity) {
@@ -23,7 +21,13 @@ public class ThemeSearchBarHelper extends AbstractSearchBarHelper {
     @Override
     protected void insertAllDataFromDatabaseToVisibleData() {
         Data[] jointData = getAllData();
-        Collections.addAll(visibleData, jointData);
+        for (Data data : jointData) {
+            if (data instanceof Theme && isThemeNotGoingToBeDeleted((Theme) data)) {
+                visibleData.add(data);
+            } else if (data instanceof Note && isNoteNotGoingToBeDeleted((Note) data)) {
+                visibleData.add(data);
+            }
+        }
     }
 
     @Override
@@ -32,23 +36,37 @@ public class ThemeSearchBarHelper extends AbstractSearchBarHelper {
 
         for (Data data : jointData) {
             if (data instanceof Theme) {
-                if (isThemeTitleFoundBySequence(
-                        ((Theme) data).id,
-                        charSequence
-                )) {
+                if (
+                        isThemeNotGoingToBeDeleted((Theme) data) &&
+                        isThemeTitleFoundBySequence(((Theme) data).id, charSequence)
+                ) {
                     visibleData.add(data);
                     continue;
                 }
             }
             if (data instanceof Note) {
-                if (isNoteTitleFoundBySequence(
-                        ((Note) data).id,
-                        charSequence
-                )) {
+                if (
+                        isNoteNotGoingToBeDeleted((Note) data) &&
+                        isNoteTitleFoundBySequence(((Note) data).id, charSequence)
+                ) {
                     visibleData.add(data);
                 }
             }
         }
+    }
+
+    private boolean isThemeNotGoingToBeDeleted(Theme theme) {
+        return
+                !activity.getUndoEraseWidget().isActive() ||
+                !(activity.getUndoEraseWidget().getItem() instanceof Theme) ||
+                ((Theme) activity.getUndoEraseWidget().getItem()).id != theme.id;
+    }
+
+    private boolean isNoteNotGoingToBeDeleted(Note note) {
+        return
+                !activity.getUndoEraseWidget().isActive() ||
+                !(activity.getUndoEraseWidget().getItem() instanceof Note) ||
+                ((Note) activity.getUndoEraseWidget().getItem()).id != note.id;
     }
 
     private boolean isThemeTitleFoundBySequence(int id, CharSequence charSequence) {

@@ -18,24 +18,30 @@ import com.example.lilyasnotes.Utilities.Tools;
 
 public class FooterViewHolder extends AbstractViewHolder {
 
-    RelativeLayout itemsManagementFrame;
-    RelativeLayout addButtonFrame;
-    AddButton addButton;
-    ImageView addMark;
-    RelativeLayout deleteButtonFrame;
-    EraseButton eraseButton;
-    ImageView deleteMark;
+    private final AddButton addButton;
+    private final EraseButton eraseButton;
+
+    private final RelativeLayout itemsManagementFrame;
+    private final RelativeLayout addButtonFrame;
+    private final ImageView addIcon;
+    private final ImageView addMark;
+    private final RelativeLayout deleteButtonFrame;
+    private final ImageView deleteIcon;
+    private final ImageView deleteMark;
 
     public FooterViewHolder(@NonNull View itemView) {
         super(itemView);
 
         itemsManagementFrame = itemView.findViewById(R.id.items_management_frame);
         addButtonFrame = itemView.findViewById(R.id.add_button_frame);
-        addButton = new AddButton(itemView.findViewById(R.id.add_button));
+        addIcon = itemView.findViewById(R.id.add_icon);
         addMark = itemView.findViewById(R.id.add_mark);
         deleteButtonFrame = itemView.findViewById(R.id.delete_button_frame);
-        eraseButton = new EraseButton(itemView.findViewById(R.id.delete_button));
+        deleteIcon = itemView.findViewById(R.id.delete_icon);
         deleteMark = itemView.findViewById(R.id.delete_mark);
+
+        addButton = new AddButton(addButtonFrame);
+        eraseButton = new EraseButton(deleteButtonFrame);
     }
 
     @Override
@@ -78,7 +84,7 @@ public class FooterViewHolder extends AbstractViewHolder {
         });
 
         eraseButton.setup(activity, (view) -> {
-            if (!activity.eraseMode) {
+            if (activity.eraseMode) {
                 ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
                 markDown.setDuration(100);
                 markDown.addUpdateListener(valueAnimator -> {
@@ -109,10 +115,10 @@ public class FooterViewHolder extends AbstractViewHolder {
 
         changeItemsManagementFrameColor(appTheme);
         changeAddButtonFrameColor(appTheme);
-        addButton.changeColorByAppTheme();
+        changeAddIconColor(appTheme);
         changeAddMarkColor(appTheme);
         changeDeleteButtonFrameColor(appTheme);
-        eraseButton.changeColorByAppTheme();
+        changeDeleteIconColor(appTheme);
         changeDeleteMarkColor(appTheme);
     }
 
@@ -135,6 +141,15 @@ public class FooterViewHolder extends AbstractViewHolder {
     }
 
     @SuppressLint("DiscouragedApi")
+    private void changeAddIconColor(String appTheme) {
+        addIcon.setBackgroundResource(activity.getResources().getIdentifier(
+                "add_" + appTheme,
+                "drawable",
+                activity.getPackageName()
+        ));
+    }
+
+    @SuppressLint("DiscouragedApi")
     private void changeAddMarkColor(String appTheme ) {
         addMark.setBackgroundResource(activity.getResources().getIdentifier(
                 "mark_down_" + appTheme,
@@ -147,6 +162,15 @@ public class FooterViewHolder extends AbstractViewHolder {
     private void changeDeleteButtonFrameColor(String appTheme) {
         deleteButtonFrame.setBackgroundResource(activity.getResources().getIdentifier(
                 "items_management_button_" + appTheme,
+                "drawable",
+                activity.getPackageName()
+        ));
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void changeDeleteIconColor(String appTheme) {
+        deleteIcon.setBackgroundResource(activity.getResources().getIdentifier(
+                "delete_" + appTheme,
                 "drawable",
                 activity.getPackageName()
         ));
