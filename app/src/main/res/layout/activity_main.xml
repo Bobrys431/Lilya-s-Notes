@@ -103,8 +103,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
-            android:adjustViewBounds="true"
-            android:translationY="-1000dp"/>
+            android:adjustViewBounds="true" />
 
     </androidx.core.widget.NestedScrollView>
 

@@ -1,6 +1,5 @@
 package com.example.lilyasnotes.Buttons;
 
-import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.view.View;
 
@@ -8,7 +7,6 @@ import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.DatabaseManagement.NoteManager;
-import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.DatabaseManagement.ThemeIntoManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;

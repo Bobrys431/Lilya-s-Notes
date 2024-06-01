@@ -1,10 +1,8 @@
 package com.example.lilyasnotes.Buttons;
 
-import android.annotation.SuppressLint;
 import android.view.View;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
-import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 
 public class EraseButton {
 
