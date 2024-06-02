@@ -58,6 +58,8 @@ public class ThemeViewHolder extends AbstractViewHolder {
 
             openTheme();
         });
+
+        basement.setAlpha(0.85f);
     }
 
     private void removeTheme() {

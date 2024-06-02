@@ -48,6 +48,13 @@ public class FooterViewHolder extends AbstractViewHolder {
     public void setup(int id, AbstractActivity activity) {
         this.activity = activity;
 
+        setupAddButton();
+        setupEraseButton();
+
+        changeColorByAppTheme();
+    }
+
+    private void setupAddButton() {
         addButton.setup(activity, (view) -> {
             ValueAnimator markDown = ValueAnimator.ofInt(addButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
             markDown.setDuration(100);
@@ -60,9 +67,9 @@ public class FooterViewHolder extends AbstractViewHolder {
             ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
             markUp.setDuration(100);
             markUp.addUpdateListener(valueAnimator -> {
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) addButtonFrame.getLayoutParams();
-                    params.height = (int) valueAnimator.getAnimatedValue();
-                    addButtonFrame.setLayoutParams(params);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) addButtonFrame.getLayoutParams();
+                params.height = (int) valueAnimator.getAnimatedValue();
+                addButtonFrame.setLayoutParams(params);
             });
 
             markDown.addListener(new Animator.AnimatorListener() {
@@ -82,7 +89,9 @@ public class FooterViewHolder extends AbstractViewHolder {
             });
             markDown.start();
         });
+    }
 
+    private void setupEraseButton() {
         eraseButton.setup(activity, (view) -> {
             if (activity.eraseMode) {
                 ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
@@ -105,8 +114,6 @@ public class FooterViewHolder extends AbstractViewHolder {
                 markUp.start();
             }
         });
-
-        changeColorByAppTheme();
     }
 
     @Override

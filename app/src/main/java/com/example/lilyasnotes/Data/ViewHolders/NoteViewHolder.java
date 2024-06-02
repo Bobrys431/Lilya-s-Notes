@@ -60,6 +60,8 @@ public class NoteViewHolder extends AbstractViewHolder {
 
             openNote();
         });
+
+        basement.setAlpha(0.85f);
     }
 
     private void deleteNote() {
