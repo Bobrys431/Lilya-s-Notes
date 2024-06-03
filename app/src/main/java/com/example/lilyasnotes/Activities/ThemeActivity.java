@@ -8,7 +8,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -46,11 +45,8 @@ public class ThemeActivity extends AbstractActivity {
     private UndoEraseWidget undoEraseWidget;
 
     private RecyclerView dataListView;
-    private RelativeLayout themeTitleFrame;
-    private TextView themeTitle;
     private ImageView dataListBackground;
     private ImageButton themeButton;
-    private ImageButton exitButton;
     private RelativeLayout actionBarLayout;
 
     @Override
@@ -69,7 +65,6 @@ public class ThemeActivity extends AbstractActivity {
         buildSearchBar();
         buildEraseUndoSystem();
         buildStatusAndActionBars();
-        setupThemeTitle();
 
         changeByAppTheme();
         buttonsManager.updateButtonsDisplay();
@@ -146,7 +141,6 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     protected void buildButtons() {
         buildThemeButton();
-        buildExitButton();
 
         buttonsManager = new ThemeButtonsManager(this);
         buttonsManager.addAndSetupButtonsByType(EditButton.class);
@@ -171,7 +165,6 @@ public class ThemeActivity extends AbstractActivity {
         changeAllViewHoldersColorByAppTheme();
         changeSearchBarColorByAppTheme();
         changeUndoEraseWidgetColorByAppTheme();
-        changeThemeTitleColorByAppTheme();
     }
 
     private void changeWindowColorByAppTheme() {
@@ -205,7 +198,6 @@ public class ThemeActivity extends AbstractActivity {
 
     private void changeAllButtonsColorByAppTheme() {
         changeRightButtonsColorByAppTheme();
-        changeExitButtonColorByAppTheme();
         changeThemeButtonColorByAppTheme();
     }
 
@@ -213,16 +205,6 @@ public class ThemeActivity extends AbstractActivity {
         for (Button button : buttonsManager.getButtons()) {
             button.changeByAppTheme();
         }
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private void changeExitButtonColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        exitButton.setBackgroundResource(getResources().getIdentifier(
-                "return_" + appTheme,
-                "drawable",
-                getPackageName()));
     }
 
     @SuppressLint("DiscouragedApi")
@@ -254,34 +236,6 @@ public class ThemeActivity extends AbstractActivity {
         undoEraseWidget.changeColorByAppTheme();
     }
 
-    @SuppressLint("DiscouragedApi")
-    private void changeThemeTitleColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        themeTitleFrame.setBackgroundResource(getResources().getIdentifier(
-                "theme_title_" + appTheme,
-                "drawable",
-                getPackageName()
-        ));
-
-        themeTitle.setTextColor(getResources().getColor(
-                appTheme.equals("light") ?
-                        R.color.black :
-                        R.color.white, getTheme()));
-    }
-
-
-    @SuppressLint("DiscouragedApi")
-    private void buildExitButton() {
-        exitButton = findViewById(R.id.return_button);
-        exitButton.setOnClickListener(view -> returnToPrevious());
-    }
-
-    private void returnToPrevious() {
-        database.close();
-        this.finish();
-    }
-
     @Override
     protected void buildSearchBar() {
         searchBar = new ThemeSearchBarHelper(this);
@@ -307,14 +261,6 @@ public class ThemeActivity extends AbstractActivity {
 
     private void buildActionBar() {
         actionBarLayout = findViewById(R.id.action_bar_layout);
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private void setupThemeTitle() {
-        themeTitleFrame = findViewById(R.id.theme_title_frame);
-
-        themeTitle = findViewById(R.id.theme_title);
-        themeTitle.setText(theme.title);
     }
 
     @Override

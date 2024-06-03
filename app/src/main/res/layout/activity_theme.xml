@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".Activities.MainActivity">
 
     <RelativeLayout
         android:id="@+id/action_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="73dp"
+        android:layout_height="87dp"
         android:background="@color/lightThemeBackground"
-        android:translationZ="25dp" >
+        android:translationZ="25dp"
+        android:paddingHorizontal="29dp">
 
         <RelativeLayout
             android:id="@+id/search_bar_layout"
-            android:layout_width="235dp"
+            android:layout_width="match_parent"
             android:layout_height="37dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="22dp"
             android:translationZ="1dp">
 
             <RelativeLayout
@@ -38,7 +38,6 @@
                 android:fontFamily="@font/advent_pro_bold"
                 android:inputType="text"
                 android:text=""
-                android:hint="Пошук ..."
                 android:textColor="@color/black"
                 android:textSize="13dp" />
 
@@ -50,66 +49,55 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"/>
         </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/emergent_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/emergent_widget_frame_light"
+        android:paddingHorizontal="27dp"
+        android:paddingVertical="16dp"
+        android:translationZ="15dp">
 
         <ImageButton
             android:id="@+id/theme_button"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@id/return_button"
-            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/theme_light"
-            android:translationZ="1dp"/>
+            android:translationZ="1dp" />
 
-        <ImageButton
-            android:id="@+id/return_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/return_light"
-            android:translationZ="1dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/theme_title_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignRight="@id/action_bar_layout"
-        android:layout_below="@id/action_bar_layout"
-        android:background="@drawable/theme_title_light"
-        android:translationZ="1dp">
-
-        <TextView
+        <EditText
             android:id="@+id/theme_title"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="7dp"
-            android:text="title of theme"
-            android:fontFamily="@font/advent_pro_bold"/>
+            android:layout_below="@id/theme_button"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/advent_pro_bold"
+            android:text="text"
+            android:textColor="@color/lightThemeActiveColor"
+            android:textSize="12dp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/edit_button_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/lightThemeBackground"
-        android:translationZ="1dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true">
+        android:id="@+id/unfold_button"
+        android:layout_width="48dp"
+        android:layout_height="16dp"
+        android:layout_centerHorizontal="true"
+        android:translationZ="20dp"
+        android:layout_below="@id/emergent_widget"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="18dp"
+        android:background="@drawable/unfold_frame_light">
 
-        <ImageButton
-            android:id="@+id/edit_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/edit_light"
-            android:layout_centerInParent="true"
-            android:translationZ="1dp"/>
+        <ImageView
+            android:id="@+id/unfold_icon"
+            android:layout_width="11dp"
+            android:layout_height="6dp"
+            android:src="@drawable/unfold_icon_light"/>
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView

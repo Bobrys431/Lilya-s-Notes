@@ -40,7 +40,6 @@ public class MainActivity extends AbstractActivity {
     private RecyclerView themesListView;
     private ImageView themesListBackground;
     private ImageButton themeButton;
-    private ImageButton exitButton;
     private RelativeLayout actionBarLayout;
 
 
@@ -118,7 +117,6 @@ public class MainActivity extends AbstractActivity {
     @Override
     protected void buildButtons() {
         buildThemeButton();
-        buildExitButton();
 
         buttonsManager = new MainButtonsManager(this);
         buttonsManager.addAndSetupButtonsByType(EditButton.class);
@@ -175,7 +173,6 @@ public class MainActivity extends AbstractActivity {
 
     private void changeAllButtonsColorByAppTheme() {
         changeRightButtonsColorByAppTheme();
-        changeExitButtonColorByAppTheme();
         changeThemeButtonColorByAppTheme();
     }
 
@@ -183,16 +180,6 @@ public class MainActivity extends AbstractActivity {
         for (Button button : buttonsManager.getButtons()) {
             button.changeByAppTheme();
         }
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private void changeExitButtonColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        exitButton.setBackgroundResource(getResources().getIdentifier(
-                "exit_" + appTheme,
-                "drawable",
-                getPackageName()));
     }
 
     @SuppressLint("DiscouragedApi")
@@ -222,18 +209,6 @@ public class MainActivity extends AbstractActivity {
 
     private void changeUndoEraseWidgetColorByAppTheme() {
         undoEraseWidget.changeColorByAppTheme();
-    }
-
-
-    @SuppressLint("DiscouragedApi")
-    private void buildExitButton() {
-        exitButton = findViewById(R.id.exit_button);
-        exitButton.setOnClickListener(view -> closeApp());
-    }
-
-    private void closeApp() {
-        database.close();
-        this.finish();
     }
 
     @Override
