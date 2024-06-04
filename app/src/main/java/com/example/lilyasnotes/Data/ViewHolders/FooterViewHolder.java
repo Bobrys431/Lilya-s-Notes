@@ -3,6 +3,7 @@ package com.example.lilyasnotes.Data.ViewHolders;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -40,80 +41,93 @@ public class FooterViewHolder extends AbstractViewHolder {
         deleteIcon = itemView.findViewById(R.id.delete_icon);
         deleteMark = itemView.findViewById(R.id.delete_mark);
 
-        addButton = new AddButton(addButtonFrame);
-        eraseButton = new EraseButton(deleteButtonFrame);
+        addButton = new AddButton();
+        eraseButton = new EraseButton();
     }
 
     @Override
     public void setup(int id, AbstractActivity activity) {
         this.activity = activity;
 
-        setupAddButton();
-        setupEraseButton();
+        addButton.setup(activity);
+        eraseButton.setup(activity);
+
+        setupAddButtonFrame();
+        setupDeleteButtonFrame();
 
         changeColorByAppTheme();
     }
 
-    private void setupAddButton() {
-        addButton.setup(activity, (view) -> {
-            ValueAnimator markDown = ValueAnimator.ofInt(addButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
-            markDown.setDuration(100);
-            markDown.addUpdateListener(valueAnimator -> {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) addButtonFrame.getLayoutParams();
-                params.height = (int) valueAnimator.getAnimatedValue();
-                addButtonFrame.setLayoutParams(params);
-            });
-
-            ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
-            markUp.setDuration(100);
-            markUp.addUpdateListener(valueAnimator -> {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) addButtonFrame.getLayoutParams();
-                params.height = (int) valueAnimator.getAnimatedValue();
-                addButtonFrame.setLayoutParams(params);
-            });
-
-            markDown.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(@NonNull Animator animator) {}
-
-                @Override
-                public void onAnimationEnd(@NonNull Animator animator) {
-                    markUp.start();
-                }
-
-                @Override
-                public void onAnimationCancel(@NonNull Animator animator) {}
-
-                @Override
-                public void onAnimationRepeat(@NonNull Animator animator) {}
-            });
-            markDown.start();
+    private void setupAddButtonFrame() {
+        addButtonFrame.setOnClickListener(view -> {
+            animateAddButtonFrame();
+            new Handler().postDelayed(addButton::requestInsertion, 200);
         });
     }
 
-    private void setupEraseButton() {
-        eraseButton.setup(activity, (view) -> {
-            if (activity.eraseMode) {
-                ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
-                markDown.setDuration(100);
-                markDown.addUpdateListener(valueAnimator -> {
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
-                    params.height = (int) valueAnimator.getAnimatedValue();
-                    deleteButtonFrame.setLayoutParams(params);
-                });
-                markDown.start();
+    private void animateAddButtonFrame() {
+        ValueAnimator markDown = ValueAnimator.ofInt(addButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
+        markDown.setDuration(100);
+        markDown.addUpdateListener(valueAnimator -> {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) addButtonFrame.getLayoutParams();
+            params.height = (int) valueAnimator.getAnimatedValue();
+            addButtonFrame.setLayoutParams(params);
+        });
 
-            } else {
-                ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
-                markUp.setDuration(100);
-                markUp.addUpdateListener(valueAnimator -> {
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
-                    params.height = (int) valueAnimator.getAnimatedValue();
-                    deleteButtonFrame.setLayoutParams(params);
-                });
+        ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
+        markUp.setDuration(100);
+        markUp.addUpdateListener(valueAnimator -> {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) addButtonFrame.getLayoutParams();
+            params.height = (int) valueAnimator.getAnimatedValue();
+            addButtonFrame.setLayoutParams(params);
+        });
+
+        markDown.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(@NonNull Animator animator) {}
+
+            @Override
+            public void onAnimationEnd(@NonNull Animator animator) {
                 markUp.start();
             }
+
+            @Override
+            public void onAnimationCancel(@NonNull Animator animator) {}
+
+            @Override
+            public void onAnimationRepeat(@NonNull Animator animator) {}
         });
+        markDown.start();
+    }
+
+    private void setupDeleteButtonFrame() {
+        deleteButtonFrame.setOnClickListener(view -> {
+            eraseButton.switchEraseMode();
+            animateDeleteButtonFrame();
+        });
+    }
+
+    private void animateDeleteButtonFrame() {
+        if (activity.eraseMode) {
+            ValueAnimator markDown = ValueAnimator.ofInt(deleteButtonFrame.getHeight(), (int) (Tools.getDensity(activity) * 78.75f));
+            markDown.setDuration(100);
+            markDown.addUpdateListener(valueAnimator -> {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
+                params.height = (int) valueAnimator.getAnimatedValue();
+                deleteButtonFrame.setLayoutParams(params);
+            });
+            markDown.start();
+
+        } else {
+            ValueAnimator markUp = ValueAnimator.ofInt((int) (Tools.getDensity(activity) * 78.75f), (int) (Tools.getDensity(activity) * 56.25f));
+            markUp.setDuration(100);
+            markUp.addUpdateListener(valueAnimator -> {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButtonFrame.getLayoutParams();
+                params.height = (int) valueAnimator.getAnimatedValue();
+                deleteButtonFrame.setLayoutParams(params);
+            });
+            markUp.start();
+        }
     }
 
     @Override

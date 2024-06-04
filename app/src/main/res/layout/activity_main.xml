@@ -55,7 +55,6 @@
         android:id="@+id/emergent_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/action_bar_layout"
         android:layout_centerHorizontal="true"
         android:translationZ="15dp"
         android:paddingVertical="16dp"

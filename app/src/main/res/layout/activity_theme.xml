@@ -71,13 +71,16 @@
             android:translationZ="1dp" />
 
         <EditText
-            android:id="@+id/theme_title"
-            android:layout_width="160dp"
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/theme_button"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/advent_pro_bold"
             android:text="text"
+            android:maxLines="3"
+            android:gravity="center"
+            android:maxWidth="160dp"
             android:textColor="@color/lightThemeActiveColor"
             android:textSize="12dp" />
     </RelativeLayout>

@@ -1,28 +1,20 @@
 package com.example.lilyasnotes.Buttons;
 
-import android.view.View;
-
 import com.example.lilyasnotes.Activities.AbstractActivity;
 
 public class EraseButton {
 
-    AbstractActivity activity;
-    View button;
+    private AbstractActivity activity;
 
-    public EraseButton(View button) {
-        this.button = button;
+    public EraseButton() {
+
     }
 
-    public void setup(AbstractActivity activity, View.OnClickListener onClickListener) {
+    public void setup(AbstractActivity activity) {
         this.activity = activity;
-
-        button.setOnClickListener((view) -> {
-            switchEraseMode();
-            onClickListener.onClick(button);
-        });
     }
 
-    private void switchEraseMode() {
+    public void switchEraseMode() {
         activity.eraseMode = !activity.eraseMode;
     }
 }

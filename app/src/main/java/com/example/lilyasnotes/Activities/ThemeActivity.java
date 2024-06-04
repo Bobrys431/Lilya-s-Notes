@@ -1,35 +1,28 @@
 package com.example.lilyasnotes.Activities;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.Buttons.ButtonManagers.AbstractButtonsManager;
-import com.example.lilyasnotes.Buttons.ButtonManagers.ThemeButtonsManager;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Note;
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
+import com.example.lilyasnotes.EmergentWidget.EmergentWidget;
 import com.example.lilyasnotes.EraseUndoUtils.UndoEraseWidget;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViewAdapters.RecyclerViewMoveCallback;
 import com.example.lilyasnotes.RecyclerViewAdapters.ThemeRecyclerViewAdapter;
 import com.example.lilyasnotes.Utilities.Tools;
-import com.example.lilyasnotes.Buttons.DTO.Button;
-import com.example.lilyasnotes.Buttons.DTO.EditButton;
 import com.example.lilyasnotes.SearchBars.AbstractSearchBarHelper;
 import com.example.lilyasnotes.SearchBars.ThemeSearchBarHelper;
 
@@ -39,14 +32,13 @@ public class ThemeActivity extends AbstractActivity {
 
     public Theme theme;
 
-    private ThemeButtonsManager buttonsManager;
     private ThemeRecyclerViewAdapter adapter;
     private ThemeSearchBarHelper searchBar;
     private UndoEraseWidget undoEraseWidget;
+    private EmergentWidget emergentWidget;
 
     private RecyclerView dataListView;
     private ImageView dataListBackground;
-    private ImageButton themeButton;
     private RelativeLayout actionBarLayout;
 
     @Override
@@ -59,15 +51,15 @@ public class ThemeActivity extends AbstractActivity {
         SQLiteDatabaseAdapter.printTable(null, this);
         loadDataFromDatabaseIntoDataList();
 
+        buildStatusBar();
+        buildActionBar();
         buildRecyclerView();
         buildScrollingBackground();
-        buildButtons();
         buildSearchBar();
+        buildEmergentWidget();
         buildEraseUndoSystem();
-        buildStatusAndActionBars();
 
-        changeByAppTheme();
-        buttonsManager.updateButtonsDisplay();
+        emergentWidget.getThemeButton().changeByAppTheme();
     }
 
 
@@ -100,6 +92,17 @@ public class ThemeActivity extends AbstractActivity {
         }
 
         data.addAll(Arrays.asList(jointData));
+    }
+
+    @Override
+    protected void buildStatusBar() {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    }
+
+    @Override
+    protected void buildActionBar() {
+        actionBarLayout = findViewById(R.id.action_bar_layout);
     }
 
     @Override
@@ -139,128 +142,20 @@ public class ThemeActivity extends AbstractActivity {
     }
 
     @Override
-    protected void buildButtons() {
-        buildThemeButton();
-
-        buttonsManager = new ThemeButtonsManager(this);
-        buttonsManager.addAndSetupButtonsByType(EditButton.class);
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private void buildThemeButton() {
-        themeButton = findViewById(R.id.theme_button);
-        themeButton.setOnClickListener(view -> changeAppTheme());
-    }
-
-    private void changeAppTheme() {
-        database.execSQL("UPDATE " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + " SET " + SQLiteDatabaseAdapter.APP_THEME + " = CASE WHEN " + SQLiteDatabaseAdapter.APP_THEME + " = 'LIGHT' THEN 'DARK' ELSE 'LIGHT' END");
-        changeByAppTheme();
-    }
-
-    private void changeByAppTheme() {
-        changeWindowColorByAppTheme();
-        changeActionBarColorByAppTheme();
-        changeStatusBarColorByAppTheme();
-        changeAllButtonsColorByAppTheme();
-        changeAllViewHoldersColorByAppTheme();
-        changeSearchBarColorByAppTheme();
-        changeUndoEraseWidgetColorByAppTheme();
-    }
-
-    private void changeWindowColorByAppTheme() {
-        Window window = getWindow();
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        window.setBackgroundDrawableResource(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground);
-    }
-
-    private void changeActionBarColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        actionBarLayout.setBackgroundResource(
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground);
-    }
-
-    private void changeStatusBarColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        Window window = getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(this,
-                appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground));
-    }
-
-    private void changeAllButtonsColorByAppTheme() {
-        changeRightButtonsColorByAppTheme();
-        changeThemeButtonColorByAppTheme();
-    }
-
-    private void changeRightButtonsColorByAppTheme() {
-        for (Button button : buttonsManager.getButtons()) {
-            button.changeByAppTheme();
-        }
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private void changeThemeButtonColorByAppTheme() {
-        String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(this);
-
-        themeButton.setBackgroundResource(getResources().getIdentifier(
-                "theme_" + appTheme,
-                "drawable",
-                getPackageName())
-        );
-    }
-
-    private void changeAllViewHoldersColorByAppTheme() {
-        for (int i = 0; i < adapter.getItemCount(); i++) {
-            AbstractViewHolder holder = (AbstractViewHolder) dataListView.findViewHolderForAdapterPosition(i);
-
-            if (holder != null) {
-                holder.changeColorByAppTheme();
-            }
-        }
-    }
-
-    private void changeSearchBarColorByAppTheme() {
-        searchBar.changeColorByAppTheme();
-    }
-
-    private void changeUndoEraseWidgetColorByAppTheme() {
-        undoEraseWidget.changeColorByAppTheme();
+    protected void buildSearchBar() {
+        searchBar = new ThemeSearchBarHelper(this);
+        searchBar.build();
     }
 
     @Override
-    protected void buildSearchBar() {
-        searchBar = new ThemeSearchBarHelper(this);
-        searchBar.setOnDataRecordedListener(() -> buttonsManager.updateButtonsDisplay());
-        searchBar.build();
+    protected void buildEmergentWidget() {
+        emergentWidget = new EmergentWidget(this);
+        emergentWidget.setup();
     }
 
     @Override
     protected void buildEraseUndoSystem() {
         undoEraseWidget = new UndoEraseWidget(this);
-    }
-
-    @Override
-    protected void buildStatusAndActionBars() {
-        buildStatusBar();
-        buildActionBar();
-    }
-
-    private void buildStatusBar() {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    }
-
-    private void buildActionBar() {
-        actionBarLayout = findViewById(R.id.action_bar_layout);
     }
 
     @Override
@@ -274,18 +169,28 @@ public class ThemeActivity extends AbstractActivity {
     }
 
     @Override
-    public AbstractButtonsManager getButtonsManager() {
-        return buttonsManager;
-    }
-
-    @Override
     public AbstractSearchBarHelper getSearchBar() {
         return searchBar;
     }
 
     @Override
+    public EmergentWidget getEmergentWidget() {
+        return emergentWidget;
+    }
+
+    @Override
     public UndoEraseWidget getUndoEraseWidget() {
         return undoEraseWidget;
+    }
+
+    @Override
+    public RecyclerView getDataListView() {
+        return dataListView;
+    }
+
+    @Override
+    public RelativeLayout getActionBarLayout() {
+        return actionBarLayout;
     }
 
     @Override
@@ -296,6 +201,10 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        changeByAppTheme();
+        emergentWidget.getThemeButton().changeByAppTheme();
+        reloadDataComparedToSearchBar();
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            adapter.notifyItemChanged(i);
+        }
     }
 }

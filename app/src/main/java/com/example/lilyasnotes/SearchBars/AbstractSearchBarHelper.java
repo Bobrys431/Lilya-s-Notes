@@ -25,9 +25,6 @@ public abstract class AbstractSearchBarHelper {
     private final RelativeLayout searchField;
     private final ImageView searchIcon;
 
-    OnDataRecordedListener onDataRecordedListener;
-
-
     public AbstractSearchBarHelper(AbstractActivity activity) {
         this.activity = activity;
 
@@ -36,10 +33,6 @@ public abstract class AbstractSearchBarHelper {
         this.searchIcon = activity.findViewById(R.id.search);
 
         visibleData = new ArrayList<>();
-    }
-
-    public void setOnDataRecordedListener(OnDataRecordedListener onDataRecordedListener) {
-        this.onDataRecordedListener = onDataRecordedListener;
     }
 
     public void build() {
@@ -51,7 +44,6 @@ public abstract class AbstractSearchBarHelper {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 updateVisibleDataAccordingSequence(charSequence);
                 recordToRecordingListAndNotifyAdapter();
-                onDataRecordedListener.onDataRecorded();
             }
 
             @Override

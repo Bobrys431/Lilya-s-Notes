@@ -15,23 +15,14 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.R;
 
 public class ThemeWidgetEditor extends Dialog {
 
-    private final int id;
-
     private EditText title;
-
-    public ThemeWidgetEditor(@NonNull Context Context, int id) {
-        super(Context);
-        this.id = id;
-    }
 
     public ThemeWidgetEditor(@NonNull Context Context) {
         super(Context);
-        this.id = -1;
     }
 
     @Override
@@ -89,8 +80,5 @@ public class ThemeWidgetEditor extends Dialog {
             public void afterTextChanged(Editable editable) {
             }
         });
-
-        if (id != -1)
-            title.setText(ThemeManager.getTitle(id));
     }
 }

@@ -14,25 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.lilyasnotes.DatabaseManagement.NoteManager;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
 public class NoteWidgetEditor extends Dialog {
 
-    private final int id;
-
     private EditText title;
     private EditText text;
 
-    public NoteWidgetEditor(@NonNull Context context, int id) {
-        super(context);
-        this.id = id;
-    }
-
     public NoteWidgetEditor(@NonNull Context context) {
         super(context);
-        this.id = -1;
     }
 
     @Override
@@ -95,16 +86,11 @@ public class NoteWidgetEditor extends Dialog {
             }
         });
 
-        if (id != -1)
-            title.setText(NoteManager.getTitle(id));
-
         text = findViewById(R.id.text);
         text.setTypeface(ResourcesCompat.getFont(getContext(), R.font.advent_pro_bold));
         text.setTextColor(getContext().getColor(
                 appTheme.equals("light") ?
                         R.color.black :
                         R.color.white));
-        if (id != -1)
-            text.setText(NoteManager.getText(id));
     }
 }

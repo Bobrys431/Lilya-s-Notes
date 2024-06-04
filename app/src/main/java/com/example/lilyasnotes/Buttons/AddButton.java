@@ -1,8 +1,5 @@
 package com.example.lilyasnotes.Buttons;
 
-import android.os.Handler;
-import android.view.View;
-
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Activities.ThemeActivity;
@@ -18,30 +15,37 @@ import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
 
 public class AddButton {
 
-    AbstractActivity activity;
-    View button;
+    private AbstractActivity activity;
 
-    public AddButton(View button) {
-        this.button = button;
+    public AddButton() {
+
     }
 
-    public void setup(AbstractActivity activity, View.OnClickListener onClickListener) {
+    public void setup(AbstractActivity activity) {
         this.activity = activity;
-
-        button.setOnClickListener((view) -> {
-            onClickListener.onClick(button);
-
-            new Handler().postDelayed(() -> {
-                if (activity instanceof ThemeActivity)
-                { requestInsertionToTheme(); }
-
-                else if (activity instanceof MainActivity)
-                { requestInsertionToThemes(); }
-            }, 200);
-        });
     }
 
-    private void requestInsertionToTheme() {
+    public void requestInsertion() {
+        if (activity instanceof MainActivity) {
+            requestInsertionInThemes();
+        } else if (activity instanceof ThemeActivity) {
+            requestInsertionInTheme();
+        }
+    }
+
+    private void requestInsertionInThemes() {
+        MainAddingChoice mac = new MainAddingChoice(activity);
+        mac.setOnChoiceSelectedListener(() -> {
+            mac.dismiss();
+
+            int choiceType = mac.getChoiceType();
+            if (choiceType == MainAddingChoice.THEME_CHOICE)
+                { addNewTheme(); }
+        });
+        mac.show();
+    }
+
+    private void requestInsertionInTheme() {
         ThemeAddingChoice tac = new ThemeAddingChoice(activity);
         tac.setOnChoiceSelectedListener(() -> {
             tac.dismiss();
@@ -53,18 +57,6 @@ public class AddButton {
                 { addNewNote(); }
         });
         tac.show();
-    }
-
-    private void requestInsertionToThemes() {
-        MainAddingChoice mac = new MainAddingChoice(activity);
-        mac.setOnChoiceSelectedListener(() -> {
-            mac.dismiss();
-
-            int choiceType = mac.getChoiceType();
-            if (choiceType == MainAddingChoice.THEME_CHOICE)
-                { addNewTheme(); }
-        });
-        mac.show();
     }
 
     private void addNewTheme() {
