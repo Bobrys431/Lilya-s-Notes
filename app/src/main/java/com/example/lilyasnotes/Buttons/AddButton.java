@@ -10,8 +10,8 @@ import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemesManager;
 import com.example.lilyasnotes.AuxiliaryDialogs.MainAddingChoice;
 import com.example.lilyasnotes.AuxiliaryDialogs.ThemeAddingChoice;
-import com.example.lilyasnotes.Widgets.WidgetEditors.NoteWidgetEditor;
-import com.example.lilyasnotes.Widgets.WidgetEditors.ThemeWidgetEditor;
+import com.example.lilyasnotes.Widgets.NoteWidgetEditor;
+import com.example.lilyasnotes.Widgets.ThemeWidgetEditor;
 
 public class AddButton {
 

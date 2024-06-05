@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.EmergentWidget.EmergentWidget;
-import com.example.lilyasnotes.EraseUndoUtils.UndoEraseWidget;
+import com.example.lilyasnotes.Widgets.EmergentWidget;
+import com.example.lilyasnotes.Widgets.UndoEraseWidget;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViewAdapters.MainRecyclerViewAdapter;
 import com.example.lilyasnotes.R;

@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.EraseUndoUtils;
+package com.example.lilyasnotes.Widgets;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

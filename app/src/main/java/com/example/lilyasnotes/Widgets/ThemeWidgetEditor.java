@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.Widgets.WidgetEditors;
+package com.example.lilyasnotes.Widgets;
 
 import android.app.Dialog;
 import android.content.Context;

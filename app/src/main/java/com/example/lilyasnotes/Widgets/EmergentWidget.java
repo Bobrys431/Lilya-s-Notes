@@ -1,4 +1,4 @@
-package com.example.lilyasnotes.EmergentWidget;
+package com.example.lilyasnotes.Widgets;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
