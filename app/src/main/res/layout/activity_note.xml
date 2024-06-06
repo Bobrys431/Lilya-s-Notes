@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/basement"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightThemeAdditionalColor">
+
+    <RelativeLayout
+        android:id="@+id/emergent_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/emergent_widget_frame_light"
+        android:paddingHorizontal="27dp"
+        android:paddingVertical="16dp"
+        android:translationZ="15dp">
+
+        <ImageButton
+            android:id="@+id/theme_button"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/theme_light"
+            android:translationZ="1dp" />
+
+        <EditText
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/theme_button"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/advent_pro_bold"
+            android:text="text"
+            android:maxLines="3"
+            android:gravity="center"
+            android:maxWidth="160dp"
+            android:textColor="@color/lightThemeActiveColor"
+            android:textSize="12dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/unfold_button"
+        android:layout_width="48dp"
+        android:layout_height="16dp"
+        android:layout_centerHorizontal="true"
+        android:translationZ="20dp"
+        android:layout_below="@id/emergent_widget"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="18dp"
+        android:background="@drawable/unfold_frame_light">
+
+        <ImageView
+            android:id="@+id/unfold_icon"
+            android:layout_width="11dp"
+            android:layout_height="6dp"
+            android:src="@drawable/unfold_icon_light"/>
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="20dp"
+        android:background="@drawable/no_underline"
+        android:textColor="@color/lightThemeActiveColor"
+        android:fontFamily="@font/advent_pro_bold"
+        android:layout_margin="40dp"/>
+
+</RelativeLayout>

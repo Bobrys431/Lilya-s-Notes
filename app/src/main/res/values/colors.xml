@@ -6,6 +6,8 @@
     <color name="splashScreenText">#DDDDDD</color>
     <color name="lightThemeBackground">#FFE6FF</color>
     <color name="lightThemeActiveColor">#330533</color>
+    <color name="lightThemeAdditionalColor">#FFF0FF</color>
     <color name="darkThemeBackground">#191927</color>
     <color name="darkThemeActiveColor">#D7D8DA</color>
+    <color name="darkThemeAdditionalColor">#0F0F17</color>
 </resources>
