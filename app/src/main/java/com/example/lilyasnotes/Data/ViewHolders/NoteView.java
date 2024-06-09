@@ -17,7 +17,7 @@ import com.example.lilyasnotes.DatabaseManagement.NoteManager;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
-public class NoteViewHolder extends AbstractViewHolder {
+public class NoteView extends DataView {
 
     private int id;
 
@@ -27,7 +27,7 @@ public class NoteViewHolder extends AbstractViewHolder {
     private final TextView note;
     private final RelativeLayout noteFrame;
 
-    public NoteViewHolder(@NonNull View itemView) {
+    public NoteView(@NonNull View itemView) {
         super(itemView);
 
         basement = itemView.findViewById(R.id.basement);

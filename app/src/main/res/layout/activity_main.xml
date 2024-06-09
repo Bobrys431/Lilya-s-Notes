@@ -37,9 +37,9 @@
                 android:layout_toRightOf="@id/search"
                 android:fontFamily="@font/advent_pro_bold"
                 android:inputType="text"
-                android:text=""
                 android:textColor="@color/black"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageView
                 android:id="@+id/search"
@@ -67,13 +67,15 @@
             android:layout_height="26dp"
             android:layout_centerInParent="true"
             android:background="@drawable/theme_light"
-            android:translationZ="1dp" />
+            android:contentDescription="@null"
+            android:translationZ="1dp"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </RelativeLayout>
     
     <RelativeLayout
         android:id="@+id/unfold_button"
-        android:layout_width="48dp"
-        android:layout_height="16dp"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
         android:layout_centerHorizontal="true"
         android:translationZ="20dp"
         android:layout_below="@id/emergent_widget"
@@ -85,23 +87,25 @@
             android:id="@+id/unfold_icon"
             android:layout_width="11dp"
             android:layout_height="6dp"
-            android:src="@drawable/unfold_icon_light"/>
+            android:layout_centerInParent="true"
+            android:background="@drawable/unfold_icon_light"/>
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/background_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/action_bar_layout">
+        android:layout_below="@id/action_bar_layout"
+        tools:ignore="SpeakableTextPresentCheck">
 
         <ImageView
             android:id="@+id/themes_list_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bg_to_show"
             android:layout_below="@id/action_bar_layout"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_to_show" />
 
     </androidx.core.widget.NestedScrollView>
 

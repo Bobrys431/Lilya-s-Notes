@@ -16,7 +16,8 @@ import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Note;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.Widgets.EmergentWidget;
+import com.example.lilyasnotes.EmergentWidgets.EmergentWidget;
+import com.example.lilyasnotes.EmergentWidgets.ThemeEmergentWidget;
 import com.example.lilyasnotes.Widgets.UndoEraseWidget;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
@@ -59,7 +60,7 @@ public class ThemeActivity extends AbstractActivity {
         buildEmergentWidget();
         buildEraseUndoSystem();
 
-        emergentWidget.getThemeButton().changeByAppTheme();
+        emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
 
 
@@ -149,7 +150,7 @@ public class ThemeActivity extends AbstractActivity {
 
     @Override
     protected void buildEmergentWidget() {
-        emergentWidget = new EmergentWidget(this);
+        emergentWidget = new ThemeEmergentWidget(this);
         emergentWidget.setup();
     }
 
@@ -201,7 +202,7 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        emergentWidget.getThemeButton().changeByAppTheme();
+        emergentWidget.getThemeButton().changeAllViewsByAppTheme();
         reloadDataComparedToSearchBar();
         for (int i = 0; i < adapter.getItemCount(); i++) {
             adapter.notifyItemChanged(i);

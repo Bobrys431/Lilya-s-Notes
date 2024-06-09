@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/basement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,21 +23,22 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
             android:background="@drawable/theme_light"
-            android:translationZ="1dp" />
+            android:translationZ="1dp"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <EditText
-            android:id="@+id/item_title"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/theme_button"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/advent_pro_bold"
-            android:text="text"
-            android:maxLines="3"
             android:gravity="center"
             android:maxWidth="160dp"
+            android:maxLines="3"
             android:textColor="@color/lightThemeActiveColor"
-            android:textSize="12dp" />
+            android:textSize="12dp"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -54,17 +56,20 @@
             android:id="@+id/unfold_icon"
             android:layout_width="11dp"
             android:layout_height="6dp"
-            android:src="@drawable/unfold_icon_light"/>
+            android:background="@drawable/unfold_icon_light"/>
     </RelativeLayout>
 
     <EditText
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="20dp"
-        android:background="@drawable/no_underline"
-        android:textColor="@color/lightThemeActiveColor"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
         android:fontFamily="@font/advent_pro_bold"
-        android:layout_margin="40dp"/>
+        android:textColor="@color/lightThemeActiveColor"
+        android:textSize="20dp"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 </RelativeLayout>

@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lilyasnotes.Data.ViewHolders.FooterViewHolder;
-import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
-import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.FooterView;
+import com.example.lilyasnotes.Data.ViewHolders.NoteView;
+import com.example.lilyasnotes.Data.ViewHolders.ThemeView;
 
 public class RecyclerViewMoveCallback extends ItemTouchHelper.Callback {
 
@@ -38,11 +38,11 @@ public class RecyclerViewMoveCallback extends ItemTouchHelper.Callback {
         System.out.println("onMove");
         byte type = 0;
 
-        if (viewHolder instanceof ThemeViewHolder)
+        if (viewHolder instanceof ThemeView)
             { type = AbstractRecyclerViewAdapter.VIEW_TYPE_THEME; }
-        else if (viewHolder instanceof NoteViewHolder)
+        else if (viewHolder instanceof NoteView)
             { type = AbstractRecyclerViewAdapter.VIEW_TYPE_NOTE; }
-        else if (viewHolder instanceof FooterViewHolder)
+        else if (viewHolder instanceof FooterView)
             { type = AbstractRecyclerViewAdapter.VIEW_TYPE_FOOTER; }
 
         touchHelperContract.onMoved(type, viewHolder.getAdapterPosition(), target.getAdapterPosition());

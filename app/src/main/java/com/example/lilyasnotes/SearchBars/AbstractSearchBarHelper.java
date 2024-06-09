@@ -78,20 +78,33 @@ public abstract class AbstractSearchBarHelper {
 
     protected abstract void recordToRecordingListAndNotifyAdapter();
 
-    @SuppressLint("DiscouragedApi")
     public void changeColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
+        changeSearchBarColor(appTheme);
+        changeSearchFieldColor(appTheme);
+        changeSearchIconColor(appTheme);
+    }
+
+    private void changeSearchBarColor(String appTheme) {
         searchBar.setTextColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
                         R.color.darkThemeBackground
         ));
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void changeSearchFieldColor(String appTheme) {
         searchField.setBackgroundResource(activity.getResources().getIdentifier(
                 "search_field_" + appTheme,
                 "drawable",
                 activity.getPackageName()
         ));
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void changeSearchIconColor(String appTheme) {
         searchIcon.setImageResource(activity.getResources().getIdentifier(
                 "search_" + appTheme,
                 "drawable",

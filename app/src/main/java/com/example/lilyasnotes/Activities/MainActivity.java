@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.Widgets.EmergentWidget;
+import com.example.lilyasnotes.EmergentWidgets.EmergentWidget;
+import com.example.lilyasnotes.EmergentWidgets.MainEmergentWidget;
 import com.example.lilyasnotes.Widgets.UndoEraseWidget;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.RecyclerViewAdapters.MainRecyclerViewAdapter;
@@ -51,7 +52,7 @@ public class MainActivity extends AbstractActivity {
         buildEmergentWidget();
         buildEraseUndoSystem();
 
-        emergentWidget.getThemeButton().changeByAppTheme();
+        emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
 
 
@@ -125,7 +126,7 @@ public class MainActivity extends AbstractActivity {
 
     @Override
     protected void buildEmergentWidget() {
-        emergentWidget = new EmergentWidget(this);
+        emergentWidget = new MainEmergentWidget(this);
         emergentWidget.setup();
     }
 
@@ -177,7 +178,7 @@ public class MainActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        emergentWidget.getThemeButton().changeByAppTheme();
+        emergentWidget.getThemeButton().changeAllViewsByAppTheme();
         reloadDataComparedToSearchBar();
         for (int i = 0; i < adapter.getItemCount(); i++) {
             adapter.notifyItemChanged(i);

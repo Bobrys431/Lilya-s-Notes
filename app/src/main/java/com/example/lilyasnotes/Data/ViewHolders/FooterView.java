@@ -17,7 +17,7 @@ import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.Utilities.Tools;
 
-public class FooterViewHolder extends AbstractViewHolder {
+public class FooterView extends DataView {
 
     private final AddButton addButton;
     private final EraseButton eraseButton;
@@ -30,7 +30,7 @@ public class FooterViewHolder extends AbstractViewHolder {
     private final ImageView deleteIcon;
     private final ImageView deleteMark;
 
-    public FooterViewHolder(@NonNull View itemView) {
+    public FooterView(@NonNull View itemView) {
         super(itemView);
 
         itemsManagementFrame = itemView.findViewById(R.id.items_management_frame);

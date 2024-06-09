@@ -9,10 +9,10 @@ import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Note;
 import com.example.lilyasnotes.Data.DTO.Theme;
-import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
-import com.example.lilyasnotes.Data.ViewHolders.FooterViewHolder;
-import com.example.lilyasnotes.Data.ViewHolders.NoteViewHolder;
-import com.example.lilyasnotes.Data.ViewHolders.ThemeViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.DataView;
+import com.example.lilyasnotes.Data.ViewHolders.FooterView;
+import com.example.lilyasnotes.Data.ViewHolders.NoteView;
+import com.example.lilyasnotes.Data.ViewHolders.ThemeView;
 import com.example.lilyasnotes.DatabaseManagement.ThemeIntoManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
 import com.example.lilyasnotes.R;
@@ -46,19 +46,19 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
 
     @NonNull
     @Override
-    public AbstractViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        AbstractViewHolder holder;
+    public DataView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        DataView holder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         switch (viewType) {
             case VIEW_TYPE_THEME:
-                holder = new ThemeViewHolder(inflater.inflate(R.layout.theme_view, parent, false));
+                holder = new ThemeView(inflater.inflate(R.layout.theme_view, parent, false));
                 break;
             case VIEW_TYPE_NOTE:
-                holder = new NoteViewHolder(inflater.inflate(R.layout.note_view, parent, false));
+                holder = new NoteView(inflater.inflate(R.layout.note_view, parent, false));
                 break;
             case VIEW_TYPE_FOOTER:
-                holder = new FooterViewHolder(inflater.inflate(R.layout.item_management_view, parent, false));
+                holder = new FooterView(inflater.inflate(R.layout.item_management_view, parent, false));
                 break;
             default:
                 throw new IllegalArgumentException("Invalid view type");
@@ -68,7 +68,7 @@ public class ThemeRecyclerViewAdapter extends AbstractRecyclerViewAdapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AbstractViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DataView holder, int position) {
         System.out.println("ThemeRecyclerViewAdapter onBindViewHolder");
 
         switch (holder.getItemViewType()) {
