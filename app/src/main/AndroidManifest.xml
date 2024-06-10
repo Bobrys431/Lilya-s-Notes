@@ -28,7 +28,7 @@
             android:name=".Activities.ThemeActivity"
             android:exported="true" />
         <activity
-            android:name=".Data.DTO.Theme"
+            android:name=".Activities.NoteActivity"
             android:exported="true" />
 
         <meta-data

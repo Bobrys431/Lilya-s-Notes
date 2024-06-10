@@ -37,6 +37,11 @@ public class NoteThemeButton extends ThemeButton {
                 appTheme.equals("light") ?
                         R.color.lightThemeAdditionalColor :
                         R.color.darkThemeAdditionalColor));
+
+        window.setNavigationBarColor(activity.getColor(
+                appTheme.equals("light") ?
+                        R.color.lightThemeBackground :
+                        R.color.darkThemeBackground));
     }
 
     private void changeBasementByAppTheme(String appTheme) {
@@ -51,6 +56,11 @@ public class NoteThemeButton extends ThemeButton {
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
                         R.color.darkThemeActiveColor));
+
+        activity.getEditText().setHintTextColor(activity.getColor(
+                appTheme.equals("light") ?
+                        R.color.lightThemeHintColor :
+                        R.color.darkThemeHintColor));
     }
 
     private void changeEmergentWidgetByAppTheme() {

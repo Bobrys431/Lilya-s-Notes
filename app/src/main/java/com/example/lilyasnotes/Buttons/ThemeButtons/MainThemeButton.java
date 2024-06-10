@@ -40,6 +40,11 @@ public class MainThemeButton extends ThemeButton {
                 appTheme.equals("light") ?
                         R.color.lightThemeAdditionalColor :
                         R.color.darkThemeAdditionalColor));
+
+        window.setNavigationBarColor(activity.getColor(
+                appTheme.equals("light") ?
+                        R.color.lightThemeBackground :
+                        R.color.darkThemeBackground));
     }
 
     private void changeActionBarLayoutByAppTheme(String appTheme) {

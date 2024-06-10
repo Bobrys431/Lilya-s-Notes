@@ -39,6 +39,7 @@
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="13dp"
+                android:hint="Пошук ..."
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageView

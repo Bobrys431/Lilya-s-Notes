@@ -64,8 +64,8 @@ public class NoteActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                NoteManager.setText(note.id, (String) charSequence);
-                note.text = (String) charSequence;
+                NoteManager.setText(note.id, charSequence.toString());
+                note.text = charSequence.toString();
             }
 
             @Override

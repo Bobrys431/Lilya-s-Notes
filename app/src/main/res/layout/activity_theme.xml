@@ -37,9 +37,9 @@
                 android:layout_toRightOf="@id/search"
                 android:fontFamily="@font/advent_pro_bold"
                 android:inputType="text"
-                android:text=""
                 android:textColor="@color/black"
                 android:textSize="13dp"
+                android:hint="Пошук ..."
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageView
