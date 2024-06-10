@@ -108,23 +108,23 @@
             android:background="@drawable/unfold_icon_light"/>
     </RelativeLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <RelativeLayout
         android:id="@+id/background_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/action_bar_layout"
-        tools:ignore="SpeakableTextPresentCheck">
+        tools:ignore="SpeakableTextPresentCheck"
+        android:clipChildren="false">
 
         <ImageView
             android:id="@+id/data_list_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/action_bar_layout"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@drawable/bg_to_show" />
 
-    </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView

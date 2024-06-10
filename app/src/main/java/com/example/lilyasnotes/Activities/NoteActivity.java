@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
@@ -23,8 +24,9 @@ public class NoteActivity extends AppCompatActivity {
 
     private EmergentWidget emergentWidget;
 
-    private RelativeLayout basement;
+    private RelativeLayout textFrame;
     private EditText text;
+    private ImageView backgroundImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,8 +38,8 @@ public class NoteActivity extends AppCompatActivity {
         SQLiteDatabaseAdapter.printTable(null, this);
 
         buildEmergentWidget();
-        buildBasement();
         buildTextEntering();
+        buildScrollingBackground();
 
         emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
@@ -47,11 +49,9 @@ public class NoteActivity extends AppCompatActivity {
         emergentWidget.setup();
     }
 
-    private void buildBasement() {
-        basement = findViewById(R.id.basement);
-    }
-
     private void buildTextEntering() {
+        textFrame = findViewById(R.id.text_frame);
+
         text = findViewById(R.id.text);
         text.setTypeface(ResourcesCompat.getFont(this, R.font.advent_pro_bold));
         text.setText(note.text);
@@ -75,12 +75,25 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
+    protected void buildScrollingBackground() {
+        backgroundImage = findViewById(R.id.background_image);
+
+        text.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
+            float translationY = backgroundImage.getTranslationY() - (i1 - i3) * 0.5f;
+            backgroundImage.setTranslationY(translationY);
+
+            float scaleFactor = 1 - 0.2f * translationY / backgroundImage.getHeight();
+            backgroundImage.setScaleX(scaleFactor);
+            backgroundImage.setScaleY(scaleFactor);
+        });
+    }
+
     public EmergentWidget getEmergentWidget() {
         return emergentWidget;
     }
 
-    public RelativeLayout getBasement() {
-        return basement;
+    public RelativeLayout getTextFrame() {
+        return textFrame;
     }
 
     public EditText getEditText() {
