@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/basement"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lightThemeAdditionalColor">
 
     <RelativeLayout
         android:id="@+id/emergent_widget"
@@ -58,43 +59,18 @@
             android:background="@drawable/unfold_icon_light"/>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/text_frame"
+    <EditText
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:paddingHorizontal="20dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
-        android:background="@color/lightThemeBackground"
-        android:translationZ="1dp"
-        android:layout_marginBottom="40dp">
-
-        <EditText
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/advent_pro_bold"
-            android:textColor="@color/lightThemeActiveColor"
-            android:textSize="20dp"
-            android:hint="Записуй в нотатку"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/background_frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:clipChildren="false">
-
-        <ImageView
-            android:id="@+id/background_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bg_to_show" />
-
-    </RelativeLayout>
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/advent_pro_bold"
+        android:textColor="@color/lightThemeActiveColor"
+        android:textSize="20dp"
+        android:hint="Записуй в нотатку"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 </RelativeLayout>

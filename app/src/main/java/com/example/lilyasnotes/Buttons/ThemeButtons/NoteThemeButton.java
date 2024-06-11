@@ -20,7 +20,7 @@ public class NoteThemeButton extends ThemeButton {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
         changeWindowSettingsByAppTheme(appTheme);
-        changeTextFrameByAppTheme(appTheme);
+        changeBasementByAppTheme(appTheme);
         changeTextByAppTheme(appTheme);
         changeEmergentWidgetByAppTheme();
     }
@@ -44,11 +44,11 @@ public class NoteThemeButton extends ThemeButton {
                         R.color.darkThemeBackground));
     }
 
-    private void changeTextFrameByAppTheme(String appTheme) {
-        activity.getTextFrame().setBackgroundColor(activity.getColor(
+    private void changeBasementByAppTheme(String appTheme) {
+        activity.getBasement().setBackgroundColor(activity.getColor(
                 appTheme.equals("light") ?
-                        R.color.lightThemeBackground :
-                        R.color.darkThemeBackground));
+                        R.color.lightThemeAdditionalColor :
+                        R.color.darkThemeAdditionalColor));
     }
 
     private void changeTextByAppTheme(String appTheme) {
