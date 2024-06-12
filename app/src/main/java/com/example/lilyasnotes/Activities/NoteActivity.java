@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -38,6 +39,7 @@ public class NoteActivity extends AppCompatActivity {
         buildEmergentWidget();
         buildBasement();
         buildTextEntering();
+        buildOnBackPressed();
 
         emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
@@ -71,6 +73,22 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+    }
+
+    public void buildOnBackPressed() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (text.isFocused()) {
+                    text.setEnabled(false);
+                    text.setEnabled(true);
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
             }
         });
     }

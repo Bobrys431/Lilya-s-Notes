@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.lilyasnotes.Activities.NoteActivity;
@@ -35,6 +36,7 @@ public class NoteEmergentWidget extends EmergentWidget {
     @Override
     public void setup() {
         setupTitle();
+        setupOnBackPressed();
         super.setup();
     }
 
@@ -78,6 +80,24 @@ public class NoteEmergentWidget extends EmergentWidget {
         return isActive ?
                 0f :
                 -emergentWidgetFrame.getHeight();
+    }
+
+    private void setupOnBackPressed() {
+        activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (title.isFocused()) {
+                    title.setEnabled(false);
+                    title.setEnabled(true);
+                } else if (isActive) {
+                    unfold();
+                } else {
+                    setEnabled(false);
+                    activity.getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
     }
 
     @Override

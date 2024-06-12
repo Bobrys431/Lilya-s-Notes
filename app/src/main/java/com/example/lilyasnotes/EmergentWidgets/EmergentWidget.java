@@ -31,10 +31,9 @@ public abstract class EmergentWidget {
             unfoldButtonFrame.setTranslationY(getTranslation());
             unfoldIcon.setRotation(getRotation());
         }, 50);
-
     }
 
-    private void unfold() {
+    protected void unfold() {
         isActive = !isActive;
         enable();
         animate();

@@ -2,6 +2,8 @@ package com.example.lilyasnotes.EmergentWidgets;
 
 import android.annotation.SuppressLint;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.example.lilyasnotes.Activities.MainActivity;
 import com.example.lilyasnotes.Buttons.ThemeButtons.MainThemeButton;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
@@ -23,10 +25,31 @@ public class MainEmergentWidget extends EmergentWidget {
     }
 
     @Override
+    public void setup() {
+        setupOnBackPressed();
+        super.setup();
+    }
+
+    @Override
     protected float getTranslation() {
         return isActive ?
                 activity.getActionBarLayout().getHeight() :
                 activity.getActionBarLayout().getHeight() - emergentWidgetFrame.getHeight();
+    }
+
+    private void setupOnBackPressed() {
+        activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isActive) {
+                    unfold();
+                } else {
+                    setEnabled(false);
+                    activity.getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
     }
 
     @Override

@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
@@ -49,6 +51,8 @@ public abstract class AbstractSearchBarHelper {
             @Override
             public void afterTextChanged(Editable editable) { /* **NOTHING** */ }
         });
+
+        buildOnBackPressed();
     }
 
     public void updateVisibleData() {
@@ -77,6 +81,22 @@ public abstract class AbstractSearchBarHelper {
     protected abstract void recordToRecordingList();
 
     protected abstract void recordToRecordingListAndNotifyAdapter();
+
+    private void buildOnBackPressed() {
+        activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (searchBar.isFocused()) {
+                    searchBar.setEnabled(false);
+                    searchBar.setEnabled(true);
+                } else {
+                    setEnabled(false);
+                    activity.getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
+    }
 
     public void changeColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
