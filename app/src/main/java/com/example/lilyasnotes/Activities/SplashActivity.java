@@ -6,8 +6,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import com.example.lilyasnotes.DatabaseManagement.NoteManager;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
@@ -27,6 +29,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        Handler handler = new Handler();
+        Runnable runnable = () -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        };
+
         ThemeManager.build(this);
         ThemesManager.build(this);
         ThemeIntoManager.build(this);
@@ -39,14 +48,24 @@ public class SplashActivity extends AppCompatActivity {
         if (SQLiteDatabaseAdapter.getCurrentAppTheme(this) == null)
             { SQLiteDatabaseAdapter.getDatabase(this).execSQL("INSERT INTO " + SQLiteDatabaseAdapter.ADDITIONAL_DATA + "(" + SQLiteDatabaseAdapter.APP_THEME + ") VALUES ('LIGHT')"); }
 
+        ImageButton consoleButton = findViewById(R.id.console_button);
+        consoleButton.setOnClickListener(view -> {
+            handler.removeCallbacks(runnable);
+            Intent intent = new Intent(this, ConsoleActivity.class);
+            intent.putExtra("type", ConsoleActivity.THEMES_TYPE);
+            intent.putExtra("id", ConsoleActivity.THEMES_TYPE);
+            this.startActivity(intent);
+        });
+
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getColor(R.color.splashScreenBackground));
 
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }, 5000);
+        View decorView = window.getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        handler.postDelayed(runnable, 5000);
     }
 }

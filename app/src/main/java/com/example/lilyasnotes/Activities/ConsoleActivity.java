@@ -3,6 +3,8 @@ package com.example.lilyasnotes.Activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -33,6 +35,7 @@ public class ConsoleActivity extends AppCompatActivity {
 
         buildCommandsHistory();
         buildInputLine();
+        buildStatusBar();
     }
 
     private void buildCommandsHistory() {
@@ -65,5 +68,11 @@ public class ConsoleActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void buildStatusBar() {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getColor(R.color.black));
     }
 }
