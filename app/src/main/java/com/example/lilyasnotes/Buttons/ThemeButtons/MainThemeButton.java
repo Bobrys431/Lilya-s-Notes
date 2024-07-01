@@ -50,8 +50,8 @@ public class MainThemeButton extends ThemeButton {
     private void changeActionBarLayoutByAppTheme(String appTheme) {
         activity.getActionBarLayout().setBackgroundColor(activity.getColor(
                 appTheme.equals("light") ?
-                        R.color.lightThemeAdditionalColor :
-                        R.color.darkThemeAdditionalColor));
+                        R.color.lightThemeBackground :
+                        R.color.darkThemeBackground));
     }
 
     private void changeDataViewsByAppTheme() {

@@ -2,6 +2,7 @@ package com.example.lilyasnotes.Activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -51,6 +52,7 @@ public class MainActivity extends AbstractActivity {
         buildSearchBar();
         buildEmergentWidget();
         buildEraseUndoSystem();
+        buildKeyguardBehavior();
 
         emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
@@ -133,6 +135,13 @@ public class MainActivity extends AbstractActivity {
     @Override
     protected void buildEraseUndoSystem() {
         undoEraseWidget = new UndoEraseWidget(this);
+    }
+
+    private void buildKeyguardBehavior() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     @Override

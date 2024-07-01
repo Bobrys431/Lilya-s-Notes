@@ -3,6 +3,7 @@ package com.example.lilyasnotes.Activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -40,9 +41,11 @@ public class NoteActivity extends AppCompatActivity {
         buildBasement();
         buildTextEntering();
         buildOnBackPressed();
+        buildKeyguardBehavior();
 
         emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
+
 
     private void buildEmergentWidget() {
         emergentWidget = new NoteEmergentWidget(this);
@@ -91,6 +94,13 @@ public class NoteActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void buildKeyguardBehavior() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     public EmergentWidget getEmergentWidget() {

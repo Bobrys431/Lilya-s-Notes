@@ -110,7 +110,7 @@ public abstract class AbstractSearchBarHelper {
         searchBar.setTextColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
-                        R.color.darkThemeBackground));
+                        R.color.darkThemeActiveColor));
 
         searchBar.setHintTextColor(activity.getColor(R.color.lightThemeHintColor));
     }
