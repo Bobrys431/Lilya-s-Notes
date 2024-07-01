@@ -1,6 +1,7 @@
 package com.example.lilyasnotes.Data.ViewHolders;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -11,11 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
+import com.example.lilyasnotes.Activities.NoteActivity;
 import com.example.lilyasnotes.DatabaseManagement.NoteManager;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
-public class NoteViewHolder extends AbstractViewHolder {
+public class NoteView extends DataView {
 
     private int id;
 
@@ -25,7 +27,7 @@ public class NoteViewHolder extends AbstractViewHolder {
     private final TextView note;
     private final RelativeLayout noteFrame;
 
-    public NoteViewHolder(@NonNull View itemView) {
+    public NoteView(@NonNull View itemView) {
         super(itemView);
 
         basement = itemView.findViewById(R.id.basement);
@@ -72,7 +74,9 @@ public class NoteViewHolder extends AbstractViewHolder {
     }
 
     private void openNote() {
-        // TODO  *******OPEN**NOTE**FUNCTIONAL******   D:<<    <----
+        Intent intent = new Intent(activity, NoteActivity.class);
+        intent.putExtra("noteId", id);
+        activity.startActivity(intent);
     }
 
     private void setupTitle() {

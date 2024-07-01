@@ -18,7 +18,7 @@ import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 
-public class ThemeViewHolder extends AbstractViewHolder {
+public class ThemeView extends DataView {
 
     private int id;
 
@@ -27,7 +27,7 @@ public class ThemeViewHolder extends AbstractViewHolder {
     private final TextView title;
     private final RelativeLayout titleFrame;
 
-    public ThemeViewHolder(@NonNull View itemView) {
+    public ThemeView(@NonNull View itemView) {
         super(itemView);
 
         basement = itemView.findViewById(R.id.basement);

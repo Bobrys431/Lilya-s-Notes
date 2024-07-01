@@ -4,11 +4,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
-import com.example.lilyasnotes.Data.ViewHolders.AbstractViewHolder;
+import com.example.lilyasnotes.Data.ViewHolders.DataView;
 
 import java.util.List;
 
-public abstract class AbstractRecyclerViewAdapter extends RecyclerView.Adapter<AbstractViewHolder>
+public abstract class AbstractRecyclerViewAdapter extends RecyclerView.Adapter<DataView>
         implements RecyclerViewMoveCallback.TouchHelperContract {
 
     protected static final int VIEW_TYPE_FOOTER = -1;

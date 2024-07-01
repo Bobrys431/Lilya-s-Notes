@@ -2,6 +2,7 @@ package com.example.lilyasnotes.Activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -16,7 +17,8 @@ import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.DTO.Note;
 import com.example.lilyasnotes.Data.DTO.Theme;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
-import com.example.lilyasnotes.Widgets.EmergentWidget;
+import com.example.lilyasnotes.EmergentWidgets.EmergentWidget;
+import com.example.lilyasnotes.EmergentWidgets.ThemeEmergentWidget;
 import com.example.lilyasnotes.Widgets.UndoEraseWidget;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
@@ -58,8 +60,9 @@ public class ThemeActivity extends AbstractActivity {
         buildSearchBar();
         buildEmergentWidget();
         buildEraseUndoSystem();
+        buildKeyguardBehavior();
 
-        emergentWidget.getThemeButton().changeByAppTheme();
+        emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
 
 
@@ -149,13 +152,20 @@ public class ThemeActivity extends AbstractActivity {
 
     @Override
     protected void buildEmergentWidget() {
-        emergentWidget = new EmergentWidget(this);
+        emergentWidget = new ThemeEmergentWidget(this);
         emergentWidget.setup();
     }
 
     @Override
     protected void buildEraseUndoSystem() {
         undoEraseWidget = new UndoEraseWidget(this);
+    }
+
+    private void buildKeyguardBehavior() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     @Override
@@ -201,7 +211,7 @@ public class ThemeActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        emergentWidget.getThemeButton().changeByAppTheme();
+        emergentWidget.getThemeButton().changeAllViewsByAppTheme();
         reloadDataComparedToSearchBar();
         for (int i = 0; i < adapter.getItemCount(); i++) {
             adapter.notifyItemChanged(i);

@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.example.lilyasnotes.Activities.AbstractActivity;
 import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
@@ -49,6 +51,8 @@ public abstract class AbstractSearchBarHelper {
             @Override
             public void afterTextChanged(Editable editable) { /* **NOTHING** */ }
         });
+
+        buildOnBackPressed();
     }
 
     public void updateVisibleData() {
@@ -78,20 +82,50 @@ public abstract class AbstractSearchBarHelper {
 
     protected abstract void recordToRecordingListAndNotifyAdapter();
 
-    @SuppressLint("DiscouragedApi")
+    private void buildOnBackPressed() {
+        activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (searchBar.isFocused()) {
+                    searchBar.setEnabled(false);
+                    searchBar.setEnabled(true);
+                } else {
+                    setEnabled(false);
+                    activity.getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
+    }
+
     public void changeColorByAppTheme() {
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(activity);
 
+        changeSearchBarColor(appTheme);
+        changeSearchFieldColor(appTheme);
+        changeSearchIconColor(appTheme);
+    }
+
+    private void changeSearchBarColor(String appTheme) {
         searchBar.setTextColor(activity.getColor(
                 appTheme.equals("light") ?
                         R.color.lightThemeActiveColor :
-                        R.color.darkThemeBackground
-        ));
+                        R.color.darkThemeActiveColor));
+
+        searchBar.setHintTextColor(activity.getColor(R.color.lightThemeHintColor));
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void changeSearchFieldColor(String appTheme) {
         searchField.setBackgroundResource(activity.getResources().getIdentifier(
                 "search_field_" + appTheme,
                 "drawable",
                 activity.getPackageName()
         ));
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void changeSearchIconColor(String appTheme) {
         searchIcon.setImageResource(activity.getResources().getIdentifier(
                 "search_" + appTheme,
                 "drawable",

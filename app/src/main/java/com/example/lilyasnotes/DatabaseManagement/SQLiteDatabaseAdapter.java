@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLiteDatabaseAdapter extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Notes";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
 
     public static final String ADDITIONAL_DATA = "additional_data";
     public static final String APP_THEME = "app_theme";

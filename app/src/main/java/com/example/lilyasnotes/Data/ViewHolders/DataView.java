@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Activities.AbstractActivity;
 
-public abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
+public abstract class DataView extends RecyclerView.ViewHolder {
     protected AbstractActivity activity;
 
-    public AbstractViewHolder(@NonNull View itemView) {
+    public DataView(@NonNull View itemView) {
         super(itemView);
     }
 

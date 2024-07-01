@@ -37,9 +37,10 @@
                 android:layout_toRightOf="@id/search"
                 android:fontFamily="@font/advent_pro_bold"
                 android:inputType="text"
-                android:text=""
                 android:textColor="@color/black"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:hint="Пошук ..."
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageView
                 android:id="@+id/search"
@@ -59,6 +60,7 @@
         android:background="@drawable/emergent_widget_frame_light"
         android:paddingHorizontal="27dp"
         android:paddingVertical="16dp"
+        android:minWidth="94dp"
         android:translationZ="15dp">
 
         <ImageButton
@@ -68,27 +70,29 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
             android:background="@drawable/theme_light"
-            android:translationZ="1dp" />
+            android:translationZ="1dp"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <EditText
-            android:id="@+id/item_title"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/theme_button"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/advent_pro_bold"
-            android:text="text"
-            android:maxLines="3"
             android:gravity="center"
             android:maxWidth="160dp"
+            android:maxLines="3"
+            android:text="text"
             android:textColor="@color/lightThemeActiveColor"
-            android:textSize="12dp" />
+            android:textSize="14sp"
+            tools:ignore="TouchTargetSizeCheck" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/unfold_button"
-        android:layout_width="48dp"
-        android:layout_height="16dp"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
         android:layout_centerHorizontal="true"
         android:translationZ="20dp"
         android:layout_below="@id/emergent_widget"
@@ -100,25 +104,25 @@
             android:id="@+id/unfold_icon"
             android:layout_width="11dp"
             android:layout_height="6dp"
-            android:src="@drawable/unfold_icon_light"/>
+            android:layout_centerInParent="true"
+            android:background="@drawable/unfold_icon_light"/>
     </RelativeLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/background_scroll_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/action_bar_layout">
+        android:layout_below="@id/action_bar_layout"
+        android:clipChildren="false">
 
         <ImageView
             android:id="@+id/data_list_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_to_show"
-            android:layout_below="@id/action_bar_layout"
-            android:adjustViewBounds="true" />
+            android:src="@drawable/bg_to_show" />
 
-    </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
