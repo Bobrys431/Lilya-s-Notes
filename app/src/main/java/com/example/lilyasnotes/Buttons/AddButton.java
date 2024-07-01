@@ -10,8 +10,7 @@ import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemesManager;
 import com.example.lilyasnotes.AuxiliaryDialogs.MainAddingChoice;
 import com.example.lilyasnotes.AuxiliaryDialogs.ThemeAddingChoice;
-import com.example.lilyasnotes.Widgets.NoteWidgetEditor;
-import com.example.lilyasnotes.Widgets.ThemeWidgetEditor;
+import com.example.lilyasnotes.Widgets.TitleReceiver;
 
 public class AddButton {
 
@@ -60,10 +59,10 @@ public class AddButton {
     }
 
     private void addNewTheme() {
-        ThemeWidgetEditor themeEditor = new ThemeWidgetEditor(activity);
+        TitleReceiver titleReceiver = new TitleReceiver(activity);
 
-        themeEditor.setOnDismissListener((dialogInterface) -> {
-            ThemeManager.addNewTheme(themeEditor.getTitle());
+        titleReceiver.setOnDismissListener((dialogInterface) -> {
+            ThemeManager.addNewTheme(titleReceiver.getTitle());
 
             if (activity instanceof MainActivity)
                 { ThemesManager.addConnection(ThemeManager.getLastThemeId()); }
@@ -73,21 +72,21 @@ public class AddButton {
             updateAdapterSequence();
         });
 
-        themeEditor.show();
+        titleReceiver.show();
     }
 
     private void addNewNote() {
-        NoteWidgetEditor noteEditor = new NoteWidgetEditor(activity);
+        TitleReceiver titleReceiver = new TitleReceiver(activity);
 
-        noteEditor.setOnDismissListener((dialogInterface -> {
-            NoteManager.addNewNote(noteEditor.getTitle(), noteEditor.getText());
+        titleReceiver.setOnDismissListener((dialogInterface -> {
+            NoteManager.addNewNote(titleReceiver.getTitle(), "");
             if (activity instanceof ThemeActivity)
                 { ThemeNoteManager.addConnection(((ThemeActivity) activity).theme.id, NoteManager.getLastNoteId()); }
 
             updateAdapterSequence();
         }));
 
-        noteEditor.show();
+        titleReceiver.show();
     }
 
     private void updateAdapterSequence() {

@@ -78,6 +78,19 @@ public class NoteActivity extends AppCompatActivity {
 
             }
         });
+
+        text.setOnFocusChangeListener((view, b) -> {
+            View decorView = getWindow().getDecorView();
+            if (b) {
+                decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            } else {
+                decorView.setSystemUiVisibility
+                        (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
+        });
     }
 
     public void buildOnBackPressed() {

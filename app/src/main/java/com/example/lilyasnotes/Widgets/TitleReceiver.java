@@ -17,11 +17,11 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.R;
 
-public class ThemeWidgetEditor extends Dialog {
+public class TitleReceiver extends Dialog {
 
     private EditText title;
 
-    public ThemeWidgetEditor(@NonNull Context Context) {
+    public TitleReceiver(@NonNull Context Context) {
         super(Context);
     }
 
@@ -37,7 +37,7 @@ public class ThemeWidgetEditor extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_theme);
+        setContentView(R.layout.enter_title);
 
         String appTheme = SQLiteDatabaseAdapter.getCurrentAppTheme(getContext());
 
