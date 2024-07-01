@@ -215,6 +215,98 @@ public class SQLiteDatabaseAdapter extends SQLiteOpenHelper {
         }
     }
 
+    public static void printTable(String tableName, Context context, StringBuilder stringBuilder) {
+        if (tableName != null) {
+            Cursor printCursor;
+
+            switch (tableName) {
+                case ADDITIONAL_DATA:
+                    printCursor = getDatabase(context).rawQuery("SELECT * FROM " + ADDITIONAL_DATA, null);
+                    stringBuilder.append("\n").append(ADDITIONAL_DATA + ":").append("\n");
+                    stringBuilder.append(APP_THEME).append("\n");
+                    if (printCursor != null) {
+                        while (printCursor.moveToNext()) {
+                            stringBuilder.append(printCursor.getString(printCursor.getColumnIndexOrThrow(APP_THEME))).append("\n");
+                        }
+                        printCursor.close();
+                    }
+                    break;
+                case THEME:
+                    printCursor = getDatabase(context).rawQuery("SELECT * FROM " + THEME + " ORDER BY " + THEME_ID, null);
+                    stringBuilder.append("\n").append(THEME + ":").append("\n");
+                    stringBuilder.append(THEME_ID + "\t\t" + THEME_TITLE).append("\n");
+                    if (printCursor != null) {
+                        while (printCursor.moveToNext()) {
+                            stringBuilder.append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_ID)))
+                                    .append("\t\t").append(printCursor.getString(printCursor.getColumnIndexOrThrow(THEME_TITLE))).append("\n");
+                        }
+                        printCursor.close();
+                    }
+                    break;
+                case NOTE:
+                    printCursor = getDatabase(context).rawQuery("SELECT * FROM " + NOTE + " ORDER BY " + NOTE_ID, null);
+                    stringBuilder.append("\n").append(NOTE + ":").append("\n");
+                    stringBuilder.append(NOTE_ID + "\t\t" + NOTE_TITLE + "\t\t" + NOTE_TEXT).append("\n");
+                    if (printCursor != null) {
+                        while (printCursor.moveToNext()) {
+                            stringBuilder.append(printCursor.getInt(printCursor.getColumnIndexOrThrow(NOTE_ID)))
+                                    .append("\t\t").append(printCursor.getString(printCursor.getColumnIndexOrThrow(NOTE_TITLE)))
+                                    .append("\t\t").append(printCursor.getString(printCursor.getColumnIndexOrThrow(NOTE_TEXT))).append("\n");
+                        }
+                        printCursor.close();
+                    }
+                case THEMES:
+                    printCursor = getDatabase(context).rawQuery("SELECT * FROM " + THEMES + " ORDER BY " + THEMES_ID, null);
+                    stringBuilder.append("\n").append(THEMES + ":").append("\n");
+                    stringBuilder.append(THEMES_ID + "\t\t" + THEMES_THEME_ID + "\t\t" + THEMES_THEME_INDEX).append("\n");
+                    if (printCursor != null) {
+                        while (printCursor.moveToNext()) {
+                            stringBuilder.append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEMES_ID)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEMES_THEME_ID)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEMES_THEME_INDEX))).append("\n");
+                        }
+                        printCursor.close();
+                    }
+                    break;
+                case THEME_NOTE:
+                    printCursor = getDatabase(context).rawQuery("SELECT * FROM " + THEME_NOTE + " ORDER BY " + THEME_NOTE_ID, null);
+                    stringBuilder.append("\n").append(THEME_NOTE + ":").append("\n");
+                    stringBuilder.append(THEME_NOTE_ID + "\t\t" + THEME_NOTE_THEME_ID + "\t\t" + THEME_NOTE_INDEX + "\t\t" + THEME_NOTE_IN_ID).append("\n");
+                    if (printCursor != null) {
+                        while (printCursor.moveToNext()) {
+                            stringBuilder.append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_NOTE_ID)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_NOTE_THEME_ID)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_NOTE_INDEX)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_NOTE_IN_ID))).append("\n");
+                        }
+                        printCursor.close();
+                    }
+                    break;
+                case THEME_INTO:
+                    printCursor = getDatabase(context).rawQuery("SELECT * FROM " + THEME_INTO + " ORDER BY " + THEME_INTO_ID, null);
+                    stringBuilder.append("\n").append(THEME_INTO + ":").append("\n");
+                    stringBuilder.append(THEME_INTO_ID + "\t\t" + THEME_INTO_THEME_ID + "\t\t" + THEME_INTO_INDEX + "\t\t" + THEME_INTO_IN_ID).append("\n");
+                    if (printCursor != null) {
+                        while (printCursor.moveToNext()) {
+                            stringBuilder.append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_INTO_ID)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_INTO_THEME_ID)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_INTO_INDEX)))
+                                    .append("\t\t").append(printCursor.getInt(printCursor.getColumnIndexOrThrow(THEME_INTO_IN_ID))).append("\n");
+                        }
+                        printCursor.close();
+                    }
+                    break;
+            }
+        } else {
+            printTable(ADDITIONAL_DATA, context, stringBuilder);
+            printTable(THEME, context, stringBuilder);
+            printTable(NOTE, context, stringBuilder);
+            printTable(THEMES, context, stringBuilder);
+            printTable(THEME_NOTE, context, stringBuilder);
+            printTable(THEME_INTO, context, stringBuilder);
+        }
+    }
+
     public static String getCurrentAppTheme(Context context) {
         SQLiteDatabase database = getDatabase(context);
         Cursor cursor = database.rawQuery("SELECT " + APP_THEME + " FROM " + ADDITIONAL_DATA, null);

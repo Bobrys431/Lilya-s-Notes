@@ -23,4 +23,13 @@
         android:layout_height="250dp"
         android:src="@drawable/loading"
         android:layout_centerInParent="true"/>
+
+    <ImageButton
+        android:id="@+id/console_button"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/console_dark"
+        android:layout_margin="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"/>
 </RelativeLayout>

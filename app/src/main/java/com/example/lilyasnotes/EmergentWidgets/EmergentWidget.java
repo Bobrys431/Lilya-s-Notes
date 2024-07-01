@@ -17,6 +17,7 @@ public abstract class EmergentWidget {
     protected RelativeLayout unfoldButtonFrame;
     protected ImageView unfoldIcon;
     protected ImageButton themeButtonView;
+    protected ImageButton consoleButtonView;
 
     public EmergentWidget() {
         isActive = false;
@@ -25,6 +26,7 @@ public abstract class EmergentWidget {
     public void setup() {
         unfoldButtonFrame.setOnClickListener(view -> unfold());
         themeButtonView.setOnClickListener(view -> themeButton.changeAppTheme());
+        consoleButtonView.setOnClickListener(view -> openConsole());
 
         new Handler().postDelayed(() -> {
             emergentWidgetFrame.setTranslationY(getTranslation());
@@ -65,6 +67,8 @@ public abstract class EmergentWidget {
     }
 
     protected abstract float getTranslation();
+
+    protected abstract void openConsole();
 
     public abstract void changeByAppTheme();
 

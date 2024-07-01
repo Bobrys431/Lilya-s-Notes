@@ -3,6 +3,7 @@ package com.example.lilyasnotes.SearchBars;
 import android.annotation.SuppressLint;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -50,6 +51,19 @@ public abstract class AbstractSearchBarHelper {
 
             @Override
             public void afterTextChanged(Editable editable) { /* **NOTHING** */ }
+        });
+
+        searchBar.setOnFocusChangeListener((view, b) -> {
+            View decorView = activity.getWindow().getDecorView();
+            if (b) {
+                decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            } else {
+                decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
         });
 
         buildOnBackPressed();
