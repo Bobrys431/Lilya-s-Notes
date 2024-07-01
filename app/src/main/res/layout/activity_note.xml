@@ -12,32 +12,51 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:background="@drawable/emergent_widget_frame_light"
-        android:paddingHorizontal="27dp"
-        android:paddingVertical="16dp"
+        android:paddingHorizontal="22dp"
+        android:paddingVertical="18dp"
         android:translationZ="15dp">
 
-        <ImageButton
-            android:id="@+id/theme_button"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+        <LinearLayout
+            android:id="@+id/buttons_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/theme_light"
-            android:translationZ="1dp"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/theme_button"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/theme_light"
+                android:contentDescription="@null"
+                android:translationZ="1dp"
+                android:layout_marginHorizontal="8dp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <ImageButton
+                android:id="@+id/console_button"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/console_light"
+                android:contentDescription="@null"
+                android:translationZ="1dp"
+                android:layout_marginHorizontal="8dp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/theme_button"
+            android:layout_below="@id/buttons_frame"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/advent_pro_bold"
             android:gravity="center"
             android:maxWidth="160dp"
             android:maxLines="3"
             android:textColor="@color/lightThemeActiveColor"
-            android:textSize="12dp"
+            android:textSize="12sp"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </RelativeLayout>
 

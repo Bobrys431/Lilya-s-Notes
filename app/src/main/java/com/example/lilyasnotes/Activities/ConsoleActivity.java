@@ -26,7 +26,7 @@ public class ConsoleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_console);
+        setContentView(R.layout.activity_console);
 
         type = getIntent().getIntExtra("type", -2);
         id = getIntent().getIntExtra("id", -2);
@@ -36,12 +36,12 @@ public class ConsoleActivity extends AppCompatActivity {
     }
 
     private void buildCommandsHistory() {
-        // commandsHistory = findViewById(R.id.commands_history);
+        commandsHistory = findViewById(R.id.commands_history);
         commandsHistory.setText(Console.getCommandsHistory());
     }
 
     private void buildInputLine() {
-        // inputLine = findViewById(R.id.input_line);
+        inputLine = findViewById(R.id.input_line);
 
         inputLine.addTextChangedListener(new TextWatcher() {
             @Override

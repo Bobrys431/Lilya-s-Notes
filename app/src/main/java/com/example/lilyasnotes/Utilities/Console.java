@@ -39,6 +39,7 @@ public class Console {
     }
 
     public static void executeCommandLine(int type, int id) {
+        commandsHistory += "\n\n-------------------------------------------------------------------------------";
         StringBuilder sb = new StringBuilder(commandLine);
         int index = sb.indexOf("current");
         if (index != -1) {
@@ -127,6 +128,8 @@ public class Console {
             }
             line.deleteCharAt(line.lastIndexOf(" "));
             addToCommandsHistory("Невдалий запит: ”" + line + "”.");
+            addToCommandsHistory(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -139,7 +142,7 @@ public class Console {
                         "Очистити всі данні" + "\n" +
                         "\n" +
                         "reset" + "\n" +
-                        "" + "\n" +
+                        "Перезапуск програми" + "\n" +
                         "\n" +
                         "print all" + "\n" +
                         "Вивести на екран всю Базу Данних" + "\n" +
@@ -150,8 +153,8 @@ public class Console {
                         "\n" +
                         "add <type> <id> <title>" + "\n" +
                         "Створити новий об’єкт у вказаному, де:" + "\n" +
-                        "<id>\t-\tідентифікатор теми ( id ), всередині якої буде розташований новий об’єкт" + "\n" +
                         "<type>\t-\tтип нового об’єкту" + "\n" +
+                        "<id>\t-\tідентифікатор теми ( id ), всередині якої буде розташований новий об’єкт" + "\n" +
                         "<title>\t-\tназва нового об’єкту" + "\n" +
                         "\n" +
                         "set <table> <id> <property> <value>" + "\n" +
@@ -178,7 +181,7 @@ public class Console {
                         "Примітки:" + "\n" +
                         "Щоб підтвердити команду - введи ”*”" + "\n" +
                         "Ключове слово “current” здатне замінити комбінацію з <type> і <id> на об’єкт, в якому користувач розташовний прямо зараз" + "\n" +
-                        "Користуючись консоллю рекомендується виконати перезапуск програми ( команда “reset”)" + "\n" +
+                        "Користуючись консоллю рекомендується виконати перезапуск програми ( команда “reset” )" + "\n" +
                         "Коли користувача запитують id таблички ”themes” - він вводить ”-1”" + "\n";
 
         addToCommandsHistory(instructions);
@@ -197,15 +200,17 @@ public class Console {
 
     private static void onPrintAll() {
         StringBuilder sb = new StringBuilder();
-        // SQLiteDatabaseAdapter.printTable(null, context, sb);
+        SQLiteDatabaseAdapter.printTable(null, context, sb);
         addToCommandsHistory(sb.toString());
+        sb.setLength(0);
     }
 
     private static void onPrintTable(String tableName) {
         StringBuilder sb = new StringBuilder();
-        // SQLiteDatabaseAdapter.printTable(tableName, context, sb);
+        SQLiteDatabaseAdapter.printTable(tableName, context, sb);
         if (sb.length() == 0) addToCommandsHistory("Такого імені не існує: ”" + tableName + "”.");
         else addToCommandsHistory(sb.toString());
+        sb.setLength(0);
     }
 
     private static void onAdd(String type, int id, String title) {
@@ -282,7 +287,7 @@ public class Console {
     }
 
     private static void addToCommandsHistory(String executionResult) {
-        commandsHistory += "\n\n" + commandLine + "\n" + executionResult;
+        commandsHistory += "\n\n" + commandLine + "\n\n" + executionResult;
     }
 
     public static String getCommandsHistory() {

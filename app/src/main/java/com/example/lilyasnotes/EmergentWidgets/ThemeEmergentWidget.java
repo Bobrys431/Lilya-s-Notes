@@ -1,6 +1,7 @@
 package com.example.lilyasnotes.EmergentWidgets;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.lilyasnotes.Activities.ConsoleActivity;
 import com.example.lilyasnotes.Activities.ThemeActivity;
 import com.example.lilyasnotes.Buttons.ThemeButtons.ThemeThemeButton;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
@@ -31,6 +33,7 @@ public class ThemeEmergentWidget extends EmergentWidget {
         unfoldIcon = activity.findViewById(R.id.unfold_icon);
         themeButtonView = activity.findViewById(R.id.theme_button);
         title = activity.findViewById(R.id.title);
+        consoleButtonView = activity.findViewById(R.id.console_button);
     }
 
     @Override
@@ -82,6 +85,14 @@ public class ThemeEmergentWidget extends EmergentWidget {
                 activity.getActionBarLayout().getHeight() - emergentWidgetFrame.getHeight();
     }
 
+    @Override
+    protected void openConsole() {
+        Intent intent = new Intent(activity, ConsoleActivity.class);
+        intent.putExtra("type", ConsoleActivity.THEME_TYPE);
+        intent.putExtra("id", activity.theme.id);
+        activity.startActivity(intent);
+    }
+
     private void setupOnBackPressed() {
         activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
             @Override
@@ -108,6 +119,7 @@ public class ThemeEmergentWidget extends EmergentWidget {
         changeUnfoldButtonColor(appTheme);
         changeUnfoldIconColor(appTheme);
         changeThemeButtonColor(appTheme);
+        changeConsoleButtonColor(appTheme);
         changeDataTitleColor(appTheme);
     }
 
@@ -139,6 +151,14 @@ public class ThemeEmergentWidget extends EmergentWidget {
     private void changeThemeButtonColor(String appTheme) {
         themeButtonView.setBackgroundResource(activity.getResources().getIdentifier(
                 "theme_" + appTheme,
+                "drawable",
+                activity.getPackageName()));
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void changeConsoleButtonColor(String appTheme) {
+        consoleButtonView.setBackgroundResource(activity.getResources().getIdentifier(
+                "console_" + appTheme,
                 "drawable",
                 activity.getPackageName()));
     }
