@@ -82,15 +82,11 @@ public class ThemeView extends DataView {
 
     private void setupMark() {
         ViewTreeObserver vto = titleFrame.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                titleFrame.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
-                markLayoutParams.height = titleFrame.getHeight();
-                markLayoutParams.width = titleFrame.getHeight() / 2;
-                mark.setLayoutParams(markLayoutParams);
-            }
+        vto.addOnGlobalLayoutListener(() -> {
+            ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
+            markLayoutParams.height = titleFrame.getHeight();
+            markLayoutParams.width = titleFrame.getHeight() / 2;
+            mark.setLayoutParams(markLayoutParams);
         });
     }
 
