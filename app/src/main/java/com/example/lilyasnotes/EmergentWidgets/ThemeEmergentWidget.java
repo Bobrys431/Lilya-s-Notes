@@ -78,7 +78,9 @@ public class ThemeEmergentWidget extends EmergentWidget {
                 decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                activity.onNavigationBarShown();
             } else {
+                activity.onNavigationBarHiden();
                 decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -95,8 +97,8 @@ public class ThemeEmergentWidget extends EmergentWidget {
     @Override
     protected float getTranslation() {
         return isActive ?
-                activity.getActionBarLayout().getHeight() :
-                activity.getActionBarLayout().getHeight() - emergentWidgetFrame.getHeight();
+                activity.getActionBarLayout().getTranslationY() + activity.getActionBarLayout().getHeight() :
+                activity.getActionBarLayout().getTranslationY() + activity.getActionBarLayout().getHeight() - emergentWidgetFrame.getHeight();
     }
 
     @Override

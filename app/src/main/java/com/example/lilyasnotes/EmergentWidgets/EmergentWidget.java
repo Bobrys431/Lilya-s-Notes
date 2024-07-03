@@ -75,4 +75,9 @@ public abstract class EmergentWidget {
     public ThemeButton getThemeButton() {
         return themeButton;
     }
+
+    public void addTranslation(int translation) {
+        emergentWidgetFrame.setTranslationY(emergentWidgetFrame.getTranslationY() + translation);
+        unfoldButtonFrame.setTranslationY(unfoldButtonFrame.getTranslationY() + translation);
+    }
 }

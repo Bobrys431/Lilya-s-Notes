@@ -13,6 +13,7 @@ import com.example.lilyasnotes.Data.DTO.Data;
 import com.example.lilyasnotes.Data.ViewHolders.FooterView;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.EmergentWidgets.EmergentWidget;
+import com.example.lilyasnotes.Utilities.Tools;
 import com.example.lilyasnotes.Widgets.UndoEraseWidget;
 import com.example.lilyasnotes.RecyclerViewAdapters.AbstractRecyclerViewAdapter;
 import com.example.lilyasnotes.SearchBars.AbstractSearchBarHelper;
@@ -36,6 +37,24 @@ AbstractActivity extends AppCompatActivity {
 
         database = SQLiteDatabaseAdapter.getDatabase(this);
     }
+
+    public void onNavigationBarHiden() {
+        int translation = - Tools.getNavigationBarHeight(this) + 37;
+
+        getActionBarLayout().setTranslationY(getActionBarLayout().getTranslationY() + translation);
+        getDataListView().setTranslationY(getDataListView().getTranslationY() + translation);
+        getBackground().setTranslationY(getBackground().getTranslationY() + translation);
+        getEmergentWidget().addTranslation(translation);
+    }
+    public void onNavigationBarShown() {
+        int translation = Tools.getNavigationBarHeight(this) - 37;
+
+        getActionBarLayout().setTranslationY(getActionBarLayout().getTranslationY() + translation);
+        getDataListView().setTranslationY(getDataListView().getTranslationY() + translation);
+        getBackground().setTranslationY(getBackground().getTranslationY() + translation);
+        getEmergentWidget().addTranslation(translation);
+    }
+
 
     public FooterView getFooterView() {
         return (FooterView) getDataListView().findViewHolderForAdapterPosition(data.size());

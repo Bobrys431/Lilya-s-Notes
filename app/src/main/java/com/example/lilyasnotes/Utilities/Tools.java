@@ -1,6 +1,8 @@
 package com.example.lilyasnotes.Utilities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -34,5 +36,15 @@ public class Tools {
             noteCount.close();
         }
         return count;
+    }
+
+    @SuppressLint({"DiscouragedApi", "InternalInsetResource"})
+    public static int getNavigationBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
     }
 }

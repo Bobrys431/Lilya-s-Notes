@@ -18,6 +18,7 @@ import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.EmergentWidgets.NoteEmergentWidget;
 import com.example.lilyasnotes.R;
 import com.example.lilyasnotes.EmergentWidgets.EmergentWidget;
+import com.example.lilyasnotes.Utilities.Tools;
 
 public class NoteActivity extends AppCompatActivity {
 
@@ -85,7 +86,9 @@ public class NoteActivity extends AppCompatActivity {
                 decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                onNavigationBarShown();
             } else {
+                onNavigationBarHidden();
                 decorView.setSystemUiVisibility
                         (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -114,6 +117,19 @@ public class NoteActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    public void onNavigationBarHidden() {
+        int translation = - Tools.getNavigationBarHeight(this) + 37;
+
+        text.setTranslationY(text.getTranslationY() + translation);
+        getEmergentWidget().addTranslation(translation);
+    }
+    public void onNavigationBarShown() {
+        int translation = Tools.getNavigationBarHeight(this) - 37;
+
+        text.setTranslationY(text.getTranslationY() + translation);
+        getEmergentWidget().addTranslation(translation);
     }
 
     public EmergentWidget getEmergentWidget() {

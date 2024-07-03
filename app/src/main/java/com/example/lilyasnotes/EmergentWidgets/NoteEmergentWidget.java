@@ -78,7 +78,9 @@ public class NoteEmergentWidget extends EmergentWidget {
                 decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                activity.onNavigationBarShown();
             } else {
+                activity.onNavigationBarHidden();
                 decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -95,8 +97,8 @@ public class NoteEmergentWidget extends EmergentWidget {
     @Override
     protected float getTranslation() {
         return isActive ?
-                0f :
-                -emergentWidgetFrame.getHeight();
+                activity.getEditText().getTranslationY() + 0f :
+                activity.getEditText().getTranslationY() - emergentWidgetFrame.getHeight();
     }
 
     @Override
