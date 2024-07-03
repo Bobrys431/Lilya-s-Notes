@@ -64,6 +64,12 @@ public class ThemeView extends DataView {
     }
 
     private void removeTheme() {
+        new Handler().postDelayed(() -> activity.eraseMode = false, 10);
+        new Handler().postDelayed(() -> {
+            activity.eraseMode = true;
+            activity.getFooterView().notifyEraseModeChanged();
+        }, 140);
+
         activity.getUndoEraseWidget().activate(activity.data.get(getAdapterPosition()));
 
         activity.data.remove(getAdapterPosition());
