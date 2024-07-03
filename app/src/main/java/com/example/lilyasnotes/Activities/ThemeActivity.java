@@ -133,13 +133,8 @@ public class ThemeActivity extends AbstractActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                // Background translation
                 float translationY = dataListBackground.getTranslationY() - dy * 0.5f;
                 dataListBackground.setTranslationY(translationY);
-
-                float scaleFactor = 1 - 0.2f * translationY / dataListBackground.getHeight();
-                dataListBackground.setScaleX(scaleFactor);
-                dataListBackground.setScaleY(scaleFactor);
             }
         });
     }

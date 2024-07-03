@@ -112,10 +112,6 @@ public class MainActivity extends AbstractActivity {
 
                 float translationY = dataListBackground.getTranslationY() - dy * 0.5f;
                 dataListBackground.setTranslationY(translationY);
-
-                float scaleFactor = 1 - 0.2f * translationY / dataListBackground.getHeight();
-                dataListBackground.setScaleX(scaleFactor);
-                dataListBackground.setScaleY(scaleFactor);
             }
         });
     }
