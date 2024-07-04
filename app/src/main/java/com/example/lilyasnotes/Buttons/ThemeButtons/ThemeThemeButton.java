@@ -1,5 +1,6 @@
 package com.example.lilyasnotes.Buttons.ThemeButtons;
 
+import android.os.Handler;
 import android.view.Window;
 
 import com.example.lilyasnotes.Activities.ThemeActivity;
@@ -14,6 +15,18 @@ public class ThemeThemeButton extends ThemeButton {
     public ThemeThemeButton(ThemeActivity activity) {
         super(activity);
         this.activity = activity;
+    }
+
+    @Override
+    public void changeAppTheme() {
+        if (activity.eraseMode) {
+            activity.eraseMode = false;
+            new Handler().postDelayed(() -> {
+                activity.eraseMode = true;
+                activity.getFooterView().notifyEraseModeChanged();
+            }, 180);
+        }
+        super.changeAppTheme();
     }
 
     @Override
