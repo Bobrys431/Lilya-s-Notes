@@ -188,7 +188,7 @@ public class Console {
     }
 
     private static void onClear() {
-        ActionsSimulator.clearDB();
+        Tools.clearDB(context);
         addToCommandsHistory("База Данних була очищена");
     }
 

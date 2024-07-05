@@ -18,7 +18,6 @@ import com.example.lilyasnotes.DatabaseManagement.ThemeManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemeNoteManager;
 import com.example.lilyasnotes.DatabaseManagement.ThemesManager;
 import com.example.lilyasnotes.R;
-import com.example.lilyasnotes.Utilities.ActionsSimulator;
 import com.example.lilyasnotes.Utilities.Console;
 
 @SuppressLint("CustomSplashScreen")
@@ -42,7 +41,6 @@ public class SplashActivity extends AppCompatActivity {
         NoteManager.build(this);
         ThemeNoteManager.build(this);
 
-        ActionsSimulator.build(this);
         Console.build(this);
 
         if (SQLiteDatabaseAdapter.getCurrentAppTheme(this) == null)

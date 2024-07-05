@@ -1,8 +1,6 @@
 package com.example.lilyasnotes.Utilities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -36,5 +34,16 @@ public class Tools {
             noteCount.close();
         }
         return count;
+    }
+
+    public static void clearDB(Context context) {
+        SQLiteDatabase database = SQLiteDatabaseAdapter.getDatabase(context);
+
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.ADDITIONAL_DATA);
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME);
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.NOTE);
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEMES);
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_NOTE);
+        database.execSQL("DELETE FROM " + SQLiteDatabaseAdapter.THEME_INTO);
     }
 }
