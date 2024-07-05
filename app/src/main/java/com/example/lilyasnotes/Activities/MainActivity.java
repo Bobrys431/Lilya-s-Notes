@@ -2,7 +2,6 @@ package com.example.lilyasnotes.Activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -52,7 +51,6 @@ public class MainActivity extends AbstractActivity {
         buildSearchBar();
         buildEmergentWidget();
         buildEraseUndoSystem();
-        buildKeyguardBehavior();
 
         emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
@@ -112,10 +110,6 @@ public class MainActivity extends AbstractActivity {
 
                 float translationY = dataListBackground.getTranslationY() - dy * 0.5f;
                 dataListBackground.setTranslationY(translationY);
-
-                float scaleFactor = 1 - 0.2f * translationY / dataListBackground.getHeight();
-                dataListBackground.setScaleX(scaleFactor);
-                dataListBackground.setScaleY(scaleFactor);
             }
         });
     }
@@ -135,13 +129,6 @@ public class MainActivity extends AbstractActivity {
     @Override
     protected void buildEraseUndoSystem() {
         undoEraseWidget = new UndoEraseWidget(this);
-    }
-
-    private void buildKeyguardBehavior() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility
-                (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     @Override

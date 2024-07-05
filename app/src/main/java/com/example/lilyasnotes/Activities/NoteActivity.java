@@ -3,7 +3,6 @@ package com.example.lilyasnotes.Activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -41,7 +40,6 @@ public class NoteActivity extends AppCompatActivity {
         buildBasement();
         buildTextEntering();
         buildOnBackPressed();
-        buildKeyguardBehavior();
 
         emergentWidget.getThemeButton().changeAllViewsByAppTheme();
     }
@@ -78,19 +76,6 @@ public class NoteActivity extends AppCompatActivity {
 
             }
         });
-
-        text.setOnFocusChangeListener((view, b) -> {
-            View decorView = getWindow().getDecorView();
-            if (b) {
-                decorView.setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-            } else {
-                decorView.setSystemUiVisibility
-                        (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            }
-        });
     }
 
     public void buildOnBackPressed() {
@@ -107,13 +92,6 @@ public class NoteActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void buildKeyguardBehavior() {
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(uiOptions);
     }
 
     public EmergentWidget getEmergentWidget() {

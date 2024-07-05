@@ -36,8 +36,8 @@ public class MainEmergentWidget extends EmergentWidget {
     @Override
     protected float getTranslation() {
         return isActive ?
-                activity.getActionBarLayout().getHeight() :
-                activity.getActionBarLayout().getHeight() - emergentWidgetFrame.getHeight();
+                activity.getActionBarLayout().getTranslationY() + activity.getActionBarLayout().getHeight() :
+                activity.getActionBarLayout().getTranslationY() + activity.getActionBarLayout().getHeight() - emergentWidgetFrame.getHeight();
     }
 
     @Override

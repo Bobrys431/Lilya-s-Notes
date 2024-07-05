@@ -101,6 +101,7 @@ public class FooterView extends DataView {
     }
 
     private void setupDeleteButtonFrame() {
+        animateDeleteButtonFrame();
         deleteButtonFrame.setOnClickListener(view -> {
             eraseButton.switchEraseMode();
             animateDeleteButtonFrame();
@@ -128,6 +129,10 @@ public class FooterView extends DataView {
             });
             markUp.start();
         }
+    }
+
+    public void notifyEraseModeChanged() {
+        animateDeleteButtonFrame();
     }
 
     @Override

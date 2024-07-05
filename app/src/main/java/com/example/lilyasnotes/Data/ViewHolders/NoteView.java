@@ -2,6 +2,7 @@ package com.example.lilyasnotes.Data.ViewHolders;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -67,6 +68,12 @@ public class NoteView extends DataView {
     }
 
     private void deleteNote() {
+        new Handler().postDelayed(() -> activity.eraseMode = false, 10);
+        new Handler().postDelayed(() -> {
+            activity.eraseMode = true;
+            activity.getFooterView().notifyEraseModeChanged();
+        }, 140);
+
         activity.getUndoEraseWidget().activate(activity.data.get(getAdapterPosition()));
 
         activity.data.remove(getAdapterPosition());

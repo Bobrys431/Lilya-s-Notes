@@ -1,6 +1,8 @@
 package com.example.lilyasnotes.Utilities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 

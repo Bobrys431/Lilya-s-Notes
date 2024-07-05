@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lilyasnotes.Data.DTO.Data;
+import com.example.lilyasnotes.Data.ViewHolders.FooterView;
 import com.example.lilyasnotes.DatabaseManagement.SQLiteDatabaseAdapter;
 import com.example.lilyasnotes.EmergentWidgets.EmergentWidget;
 import com.example.lilyasnotes.Widgets.UndoEraseWidget;
@@ -34,6 +35,10 @@ AbstractActivity extends AppCompatActivity {
         eraseMode = false;
 
         database = SQLiteDatabaseAdapter.getDatabase(this);
+    }
+
+    public FooterView getFooterView() {
+        return (FooterView) getDataListView().findViewHolderForAdapterPosition(data.size());
     }
 
     protected abstract void buildStatusBar();

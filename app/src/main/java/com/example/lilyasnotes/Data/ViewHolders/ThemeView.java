@@ -2,6 +2,7 @@ package com.example.lilyasnotes.Data.ViewHolders;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -63,6 +64,12 @@ public class ThemeView extends DataView {
     }
 
     private void removeTheme() {
+        activity.eraseMode = false;
+        new Handler().postDelayed(() -> {
+            activity.eraseMode = true;
+            activity.getFooterView().notifyEraseModeChanged();
+        }, 180);
+
         activity.getUndoEraseWidget().activate(activity.data.get(getAdapterPosition()));
 
         activity.data.remove(getAdapterPosition());
@@ -82,6 +89,14 @@ public class ThemeView extends DataView {
 
     private void setupMark() {
         ViewTreeObserver vto = titleFrame.getViewTreeObserver();
+
+        new Handler().postDelayed(() -> {
+            ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
+            markLayoutParams.height = titleFrame.getHeight();
+            markLayoutParams.width = titleFrame.getHeight() / 2;
+            mark.setLayoutParams(markLayoutParams);
+        }, 33);
+
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -92,7 +107,24 @@ public class ThemeView extends DataView {
                 mark.setLayoutParams(markLayoutParams);
             }
         });
+
+        mark.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View view) {
+                ViewGroup.LayoutParams markLayoutParams = mark.getLayoutParams();
+                markLayoutParams.height = titleFrame.getHeight();
+                markLayoutParams.width = titleFrame.getHeight() / 2;
+                mark.setLayoutParams(markLayoutParams);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View view) {
+
+            }
+        });
     }
+
+
 
     @Override
     public void changeColorByAppTheme() {
