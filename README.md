@@ -15,6 +15,6 @@ It's important to note: the program may not be suitable for all devices ( at lea
 
 A bit of personal context:
 I developed this program specifically for a girl ( whom I once liked ), so I wanted to do a good job.
-There was also a goal to learn in the process: how to use SQL, how to design.
+There was also a goal to learn in the process: how to use SQL, how to design, how to use Git, how to use GitHub.
 The program lacks microservice architecture ( I haven't studied this topic yet ) and overall everything is done at a fairly low level ( in my opinion ).
 I just wanted to test my capabilities...
